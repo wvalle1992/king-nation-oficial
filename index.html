@@ -18,6 +18,7 @@
   <link href="./css/base.css" rel="stylesheet">
   <link href="./css/theme.css" rel="stylesheet">
   <link href="./css/tabs.css" rel="stylesheet">
+  <link href="./css/sensi-generator.css" rel="stylesheet">
 
   <!-- React + Babel -->
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
@@ -30,30 +31,6 @@
 
   <!-- Sensi theming -->
   <style>
-    .sensi-scope{ color:#1f2937 }
-    .sensi-scope .wrap{max-width:1000px; margin:0 auto; padding:0}
-    .sensi-scope header{display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:14px}
-    .sensi-scope .title{display:flex; align-items:center; gap:12px}
-    .sensi-scope .title h1{margin:0; font-size:clamp(20px,4vw,28px); font-weight:800; color:#111827}
-    .sensi-scope .subtitle{margin:0; color:#6b7280; font-size:14px}
-    .sensi-scope .card{background:#ffffff; border:1px solid rgba(167,139,250,.22); border-radius:14px; padding:16px; box-shadow:0 10px 26px rgba(15,23,42,.06)}
-    .sensi-scope .controls{display:grid; grid-template-columns:1fr; gap:12px}
-    @media(min-width:860px){ .sensi-scope .controls{grid-template-columns:1fr 1fr 1fr auto auto} }
-    .sensi-scope label{display:block; font-size:12px; color:#6b7280; margin-bottom:6px}
-    .sensi-scope select, .sensi-scope input[type="text"]{width:100%; padding:12px; border-radius:12px; border:1px solid #e5e7eb; background:#fafafa; color:#111827; outline:none}
-    .sensi-scope select:focus, .sensi-scope input[type="text"]:focus{border-color:#a78bfa; box-shadow:0 0 0 4px rgba(167,139,250,.22)}
-    .sensi-scope .btn{padding:12px 14px; border-radius:12px; border:1px solid #e5e7eb; background:#ffffff; color:#111827; font-weight:700; cursor:pointer}
-    .sensi-scope .btn[disabled]{opacity:.5; cursor:not-allowed}
-    .sensi-scope .btn-primary{background:#111827; color:#fff}
-    .sensi-scope .stack{display:grid; gap:12px}
-    .sensi-scope .result-head{display:flex; align-items:center; justify-content:space-between; gap:10px}
-    .sensi-scope .tags{display:flex; flex-wrap:wrap; gap:8px}
-    .sensi-scope .tag{font-size:12px; padding:4px 10px; border:1px solid #e5e7eb; border-radius:999px; color:#374151; background:#f9fafb}
-    .sensi-scope .muted{color:#6b7280; font-size:12px}
-    .sensi-scope table{width:100%; border-collapse:collapse; margin-top:8px; border:1px solid #e5e7eb; border-radius:12px; overflow:hidden; background:#fff}
-    .sensi-scope thead th{background:#f3f4f6; color:#374151; text-align:left; font-weight:600; padding:10px 12px; border-bottom:1px solid #e5e7eb}
-    .sensi-scope tbody td{padding:10px 12px; border-bottom:1px solid #e5e7eb; color:#111827}
-    .sensi-scope tbody tr:last-child td{border-bottom:0}
   </style>
 </head>
 <body class="kn-intake text-gray-900">
