@@ -114,65 +114,93 @@ function App(){
     navigator.clipboard.writeText(url.toString()).then(()=>alert("Enlace con ajustes copiado."));
   };
   return (
-    <div className="min-h-screen w-full bg-transparent text-gray-900 p-6 md:p-10">
-      <div className="mx-auto max-w-3xl">
-        <header className="mb-6 flex items-center gap-4 justify-center relative z-10"></header>
-        <p className="text-pink-600 font-semibold mt-2 text-center">🔥 ¡Crea tu nombre único de clan y destaca en Free Fire! 🔥</p>
-        <p className="mt-4 text-sm md:text-base text-gray-600 text-center" style={{ fontFamily: GLYPH_FONT }}>
-          Iniciales v2: ejemplo → <b>{buildInitialsV2Styled({ base: "Soldado", gender: "king", insertInvisibleSpace: true, smallCaps: true })}</b>
-        </p>
-        <div className="grid gap-4 md:gap-5 mt-6">
-          <div className="grid md:grid-cols-4 gap-3 items-end">
-            <div className="md:col-span-2">
-              <label className="block text-sm font-medium mb-1">Nombre base</label>
-              <input className="w-full rounded-2xl border border-gray-300 px-4 py-3" placeholder="Ej.: Soldado" value={baseName} onChange={(e)=>setBaseName(e.target.value)} />
-            </div>
+    <div className="namegen-scope">
+      <div className="namegen-wrap">
+        <section className="kn-card namegen-shell">
+          <header className="kn-section-head">
             <div>
-              <label className="block text-sm font-medium mb-1">Prefijo</label>
-              <select value={gender} onChange={(e)=>setGender(e.target.value)} className="w-full rounded-2xl border border-gray-300 px-3 py-3">
-                <option value="king">King</option>
-                <option value="queen">Queen</option>
-                <option value="none">Sin prefijo</option>
-              </select>
+              <h1 className="kn-section-title">King Nation — Generador de Nombres</h1>
+              <p className="kn-section-subtitle">Crea un nombre estilizado para Free Fire, compártelo rápido y copia tanto la versión decorada como la versión ASCII.</p>
             </div>
-            <button className="rounded-2xl px-4 py-3 shadow-sm border" onClick={()=>{setBaseName("Soldado"); setGender("king"); setInsertInv(true); setSmallCaps(true); setAddKNSuffix(false);}}>
-              Restablecer
-            </button>
+          </header>
+
+          <section className="kn-panel" aria-label="Controles del generador">
+            <div className="namegen-controls-grid">
+              <div>
+                <label className="kn-field-label">Nombre base</label>
+                <input className="kn-input" placeholder="Ej.: Soldado" value={baseName} onChange={(e)=>setBaseName(e.target.value)} />
+              </div>
+              <div>
+                <label className="kn-field-label">Prefijo</label>
+                <select value={gender} onChange={(e)=>setGender(e.target.value)} className="kn-select">
+                  <option value="king">King</option>
+                  <option value="queen">Queen</option>
+                  <option value="none">Sin prefijo</option>
+                </select>
+              </div>
+              <button className="kn-btn kn-btn-secondary" onClick={()=>{setBaseName("Soldado"); setGender("king"); setInsertInv(true); setSmallCaps(true); setAddKNSuffix(false);}}>
+                Restablecer
+              </button>
+            </div>
+          </section>
+
+          <section className="kn-panel" style={{marginTop:'14px'}}>
+            <div className="namegen-results-grid">
+              <div>
+                <h2 className="kn-helper-title">Vista previa</h2>
+                <p className="kn-helper-text" style={{fontFamily: GLYPH_FONT}}>Ejemplo base: <strong>{buildInitialsV2Styled({ base: "Soldado", gender: "king", insertInvisibleSpace: true, smallCaps: true })}</strong></p>
+                <div className={`namegen-preview-value ${styled ? '' : 'namegen-preview-fallback'}`} style={{fontFamily:GLYPH_FONT, marginTop:'14px'}}>{styled || "SoʟᴅɑᴅoそӃɪɴɢ"}</div>
+              </div>
+              <div>
+                <h2 className="kn-helper-title">Acciones</h2>
+                <p className="kn-helper-text">Comparte el nombre actual o genera un enlace con tus ajustes activos sin salir de la página.</p>
+                <div className="namegen-social">
+                  <button onClick={()=>share("whatsapp", styled)} className="icon-btn" aria-label="WhatsApp"><IcoWA/></button>
+                  <button onClick={()=>share("x", styled)} className="icon-btn" aria-label="X / Twitter"><IcoX/></button>
+                  <button onClick={()=>share("native", styled)} className="icon-btn" aria-label="Compartir nativo"><IcoShare/></button>
+                  <button onClick={copyLinkWithSettings} className="icon-btn" aria-label="Copiar enlace con ajustes"><IcoLink/></button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <div className="namegen-output-grid">
+            <section className="kn-panel namegen-output-card">
+              <h3 className="kn-helper-title">Estilizado</h3>
+              <button onClick={()=>navigator.clipboard.writeText(styled).then(()=>alert('¡Copiado!'))} className="kn-btn-icon namegen-copy-btn" aria-label="Copiar estilizado">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="w-5 h-5"><rect x="9" y="9" width="10" height="12" rx="2"/><path d="M5 15V7a2 2 0 0 1 2-2h8"/></svg>
+              </button>
+              <textarea className="kn-textarea namegen-textarea" style={{fontFamily:GLYPH_FONT}} readOnly value={styled}></textarea>
+            </section>
+
+            <section className="kn-panel namegen-output-card">
+              <h3 className="kn-helper-title">ASCII</h3>
+              <button onClick={()=>navigator.clipboard.writeText(asciiOut).then(()=>alert('¡Copiado!'))} className="kn-btn-icon namegen-copy-btn" aria-label="Copiar ASCII">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="w-5 h-5"><rect x="9" y="9" width="10" height="12" rx="2"/><path d="M5 15V7a2 2 0 0 1 2-2h8"/></svg>
+              </button>
+              <textarea className="kn-textarea namegen-textarea" readOnly value={asciiOut}></textarea>
+            </section>
           </div>
-        </div>
-        <div className="mt-6 kn-card p-5">
-          <h2 className="text-xl font-semibold flex items-center gap-2">Vista previa <span>✨</span></h2>
-          <div className="mt-4 text-3xl md:text-4xl font-medium break-words leading-snug" style={{fontFamily:GLYPH_FONT}}>{styled || "SoʟᴅɑᴅoそӃɪɴɢ"}</div>
-          <div className="mt-4 flex gap-3 justify-center flex-wrap">
-            <button onClick={()=>share("whatsapp", styled)} className="icon-btn" aria-label="WhatsApp"><IcoWA/></button>
-            <button onClick={()=>share("x", styled)} className="icon-btn" aria-label="X / Twitter"><IcoX/></button>
-            <button onClick={()=>share("native", styled)} className="icon-btn" aria-label="Compartir nativo"><IcoShare/></button>
-            <button onClick={copyLinkWithSettings} className="icon-btn" aria-label="Copiar enlace con ajustes"><IcoLink/></button>
-          </div>
-        </div>
-        <div className="mt-6 grid md:grid-cols-2 gap-5">
-          <div className="kn-card p-5 relative">
-            <h3 className="text-base font-semibold">Estilizado</h3>
-            <button onClick={()=>navigator.clipboard.writeText(styled).then(()=>alert('¡Copiado!'))} className="absolute top-3 right-3 inline-flex items-center justify-center w-10 h-10 rounded-full border bg-white hover:bg-gray-50" aria-label="Copiar estilizado">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="w-5 h-5"><rect x="9" y="9" width="10" height="12" rx="2"/><path d="M5 15V7a2 2 0 0 1 2-2h8"/></svg>
-            </button>
-            <textarea className="w-full h-28 rounded-xl border mt-3 p-3" readOnly value={styled}></textarea>
-          </div>
-          <div className="kn-card p-5 relative">
-            <h3 className="text-base font-semibold">ASCII</h3>
-            <button onClick={()=>navigator.clipboard.writeText(asciiOut).then(()=>alert('¡Copiado!'))} className="absolute top-3 right-3 inline-flex items-center justify-center w-10 h-10 rounded-full border bg-white hover:bg-gray-50" aria-label="Copiar ASCII">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="w-5 h-5"><rect x="9" y="9" width="10" height="12" rx="2"/><path d="M5 15V7a2 2 0 0 1 2-2h8"/></svg>
-            </button>
-            <textarea className="w-full h-28 rounded-xl border mt-3 p-3" readOnly value={asciiOut}></textarea>
-          </div>
-        </div>
-        <footer className="mt-6 text-center text-xs text-gray-500 flex flex-col items-center gap-2">
-          <div className="flex items-center gap-2">
-            <img src="./assets/king-nation-logo.png" alt="King Nation Logo" className="w-20 h-20 object-contain bg-white rounded-xl shadow-md p-1" />
-            <strong>King Nation</strong>
-          </div>
-          <span>Hecho para el Clan King Nation</span>
-        </footer>
+
+          <section className="kn-panel" style={{marginTop:'14px'}}>
+            <h3 className="kn-helper-title">Consejos rápidos</h3>
+            <ul className="namegen-helper-list kn-helper-text">
+              <li><strong>Nombres cortos:</strong> suelen verse mejor en partida y conservan mejor el estilo decorado.</li>
+              <li><strong>Versión ASCII:</strong> úsala si algún símbolo no se muestra bien en tu dispositivo o al compartir.</li>
+              <li><strong>Enlace con ajustes:</strong> te permite guardar la combinación actual y volver a abrirla rápido.</li>
+              <li><strong>Prefijo:</strong> cambia entre King, Queen o sin prefijo sin tocar el resto del formato.</li>
+            </ul>
+            <p className="kn-helper-text namegen-helper-note">Hecho para el Clan King Nation y alineado con el mismo estilo pastel del buscador de sensi.</p>
+          </section>
+
+          <footer className="namegen-footer">
+            <div className="namegen-footer-brand">
+              <img src="./assets/king-nation-logo.png" alt="King Nation Logo" />
+              <strong>King Nation</strong>
+            </div>
+            <span>Hecho para el Clan King Nation</span>
+          </footer>
+        </section>
       </div>
     </div>
   );
