@@ -1,0 +1,24 @@
+{
+  "name": "king-nation-oficial",
+  "version": "1.0.0",
+  "description": "King Nation Oficial - Free Fire tools hub",
+  "private": true,
+  "scripts": {
+    "dev": "serve .",
+    "start": "serve ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wvalle1992/king-nation-oficial.git"
+  },
+  "keywords": [
+    "free-fire",
+    "netlify",
+    "king-nation"
+  ],
+  "author": "Walter Valle",
+  "license": "ISC",
+  "devDependencies": {
+    "serve": "^14.2.6"
+  }
+}
