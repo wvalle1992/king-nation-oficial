@@ -754,11 +754,6 @@ const IcoWA = () => (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
   </script>
 
   <!-- Error surface -->
-  <script>
-    window.addEventListener('error', function(e){
-      var el = document.getElementById('err'); if(!el) return;
-      el.style.display='block'; el.textContent = 'Error: ' + (e.message || e.toString());
-    });
-  </script>
+  <script src="./js/error-handler.js"></script>
 </body>
 </html>
