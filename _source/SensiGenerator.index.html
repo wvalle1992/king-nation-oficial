@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>King Nation — Sensi Finder (Por Modelo)</title>
+  <meta name="description" content="Encuentra la mejor sensibilidad de Free Fire por marca y modelo de teléfono. Sensibilidad hasta 200. Página estática para Netlify." />
+  <style>
+    :root{
+      --bg:#0b0c10; --panel:#101217; --ink:#e8e8ea; --muted:#a9a9b2; --ring:#22252e; --line:#1c1f27; --ok:#2ecc71; --warn:#ffcc00;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0; font-family:system-ui,Segoe UI,Inter,Roboto,Helvetica,Arial,sans-serif; background:var(--bg); color:var(--ink)}
+    .wrap{max-width:1000px; margin:0 auto; padding:28px 18px 48px}
+    header{display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:18px}
+    .title{display:flex; align-items:center; gap:12px}
+    .title h1{margin:0; font-size:clamp(22px,4vw,30px); font-weight:700}
+    .subtitle{margin:0; color:var(--muted); font-size:14px}
+    .card{background:var(--panel); border:1px solid var(--ring); border-radius:14px; padding:16px; box-shadow:0 6px 20px rgb(0 0 0 / 0.25)}
+    .controls{display:grid; grid-template-columns:1fr; gap:12px}
+    @media(min-width:860px){ .controls{grid-template-columns:1fr 1fr 1fr auto auto} }
+    label{display:block; font-size:12px; color:var(--muted); margin-bottom:6px}
+    select, input[type="text"]{width:100%; padding:12px; border-radius:12px; border:1px solid var(--ring); background:#0f1218; color:var(--ink); outline:none}
+    select:focus, input[type="text"]:focus{border-color:#3a4255; box-shadow:0 0 0 4px rgb(58 66 85 / .35)}
+    .btn{padding:12px 14px; border-radius:12px; border:1px solid var(--ring); background:#171a22; color:var(--ink); font-weight:700; cursor:pointer}
+    .btn[disabled]{opacity:.5; cursor:not-allowed}
+    .btn-primary{background:#e8e8ea; color:#121212}
+    .btn-ghost{background:transparent}
+    .stack{display:grid; gap:12px}
+    .result-head{display:flex; align-items:center; justify-content:space-between; gap:10px}
+    .tags{display:flex; flex-wrap:wrap; gap:8px}
+    .tag{font-size:12px; padding:4px 10px; border:1px solid var(--ring); border-radius:999px; color:#d7d7dd}
+    .tag-ok{border-color:#2b3a2f; background:#0f1a13}
+    .muted{color:var(--muted); font-size:12px}
+    table{width:100%; border-collapse:collapse; margin-top:8px; border:1px solid var(--line); border-radius:12px; overflow:hidden}
+    thead th{background:#0f1117; color:#cfd1d6; text-align:left; font-weight:600; padding:10px 12px; border-bottom:1px solid var(--line)}
+    tbody td{padding:10px 12px; border-bottom:1px solid var(--line)}
+    tbody tr:last-child td{border-bottom:0}
+    .footer-tip{margin-top:10px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="title">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 18h18l-1-8-5 4-4-7-4 7-5-4 1 8z" fill="#e8e8ea"/></svg>
+        <div>
+          <h1>King Nation — Sensi Finder</h1>
+          <p class="subtitle">Sensibilidad hasta 200 · Elige Marca / Modelo / Perfil y copia los valores</p>
+        </div>
+      </div>
+    </header>
+
+    <section class="card controls" aria-label="Panel de controles">
+      <div>
+        <label for="q">Buscar (marca o modelo)</label>
+        <input id="q" type="text" placeholder="Ej: Galaxy A54, iPhone 16 Pro Max, Redmi Note 13" autocomplete="off" list="suggestions" />
+        <datalist id="suggestions"></datalist>
+      </div>
+      <div>
+        <label for="brand">Marca</label>
+        <select id="brand">
+          <option value="" disabled selected hidden>Selecciona marca</option>
+        </select>
+      </div>
+      <div>
+        <label for="model">Modelo</label>
+        <select id="model">
+          <option value="" disabled selected hidden>Selecciona modelo</option>
+        </select>
+      </div>
+      <div>
+        <label for="profile">Perfil</label>
+        <select id="profile">
+          <option value="" disabled selected hidden>Selecciona perfil</option>
+          <option value="low">Baja (control)</option>
+          <option value="mid">Media (equilibrada)</option>
+          <option value="high">Alta (rápida)</option>
+        </select>
+      </div>
+      <div>
+        <label for="dpi">Preferencia DPI</label>
+        <select id="dpi">
+          <option value="" disabled selected hidden>¿Con DPI?</option>
+          <option value="with">Con DPI sugerido</option>
+          <option value="without">Sin DPI</option>
+        </select>
+      </div>
+      <div style="align-self:end; display:flex; gap:8px">
+        <button id="btnShow" class="btn btn-primary" disabled>Mostrar</button>
+        <button id="btnCopy" class="btn" disabled>Copiar</button>
+        <button id="btnClear" class="btn btn-ghost">Limpiar</button>
+      </div>
+    </section>
+
+    <section class="card stack" style="margin-top:14px">
+      <div class="result-head">
+        <div>
+          <div id="resultTitle" style="font-weight:700; font-size:18px">Selecciona opciones para ver la Sensi…</div>
+          <div id="resultMeta" class="muted">—</div>
+        </div>
+        <div class="tags" id="badges"></div>
+      </div>
+
+      <table id="tbl" hidden>
+        <thead><tr><th>Ajuste</th><th>Valor</th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <p class="muted footer-tip">Tip: la **Alta** puede ir hasta 200. Ajusta ±5 según tu FPS y estilo.</p>
+    </section>
+
+    <section class="card" style="margin-top:14px">
+      <h3 style="margin:0 0 8px 0; font-size:16px">Consejos rápidos</h3>
+      <ul class="muted" style="margin:0; padding-left:18px; display:grid; gap:6px">
+        <li><strong>Escala hasta 200:</strong> si en Alta aún te falta velocidad, sube de 5 en 5 (General y Rojo) antes de tocar 2x/4x.</li>
+        <li><strong>FPS &amp; térmicas:</strong> si tu FPS cae, baja 3–5 puntos en General/Red; si sube, aumenta 2–3.</li>
+        <li><strong>Recoil vertical:</strong> arma se va arriba → baja General y Rojo; se queda corta → sube 2x/4x.</li>
+        <li><strong>Gyro:</strong> si tu equipo tiene giroscopio, pruébalo en Media; si mareas, apágalo y sube poco a poco.</li>
+        <li><strong>DPI externo:</strong> evita valores extremos fuera de stock; si usas, acompasa subiendo/bajando 10–20 puntos en la Sensi.</li>
+        <li><strong>Claw vs pulgares:</strong> jugadores claw suelen preferir Media/Alta; pulgares, Baja/Media para más control.</li>
+        <li><strong>Mirada Libre:</strong> útil para loot y rotaciones; no afecta el recoil de disparo.</li>
+        <li><strong>Prueba 10 partidas:</strong> mantén un perfil estable 8–10 partidas antes de decidir ajustes finos.</li>
+      </ul>
+    </section>
+  </div>
+
+<script>
+// ========================= CLEAN SCRIPT =========================
+// Catalog helper
+const CATALOG = [];
+function addBatch(brand, models, opts={}){
+  const base = opts.base || {
+    low:{general:120, red:110, x2:105, x4:95, sniper:90, freelook:100},
+    mid:{general:160, red:150, x2:140, x4:130, sniper:120, freelook:130},
+    high:{general:200, red:190, x2:180, x4:170, sniper:160, freelook:170}
+  };
+  const gyroDefault = Boolean(opts.gyro);
+  for(const m of models){
+    const modelName = (typeof m === 'object' && m.name) ? m.name : m;
+    const gyro = (typeof m === 'object' && 'gyro' in m) ? Boolean(m.gyro) : gyroDefault;
+    const sensi = (typeof m === 'object' && m.sensi) ? m.sensi : base;
+    CATALOG.push({brand, model:modelName, gyro, sensi});
+  }
+}
+
+// Apple full set (iPhone 9 → 16 Pro Max) + iPads
+addBatch('Apple', [
+  'iPhone 9','iPhone SE (2nd Gen)','iPhone X','iPhone XR','iPhone XS','iPhone XS Max',
+  'iPhone 11','iPhone 11 Pro','iPhone 11 Pro Max',
+  'iPhone 12','iPhone 12 Mini','iPhone 12 Pro','iPhone 12 Pro Max',
+  'iPhone 13','iPhone 13 Mini','iPhone 13 Pro','iPhone 13 Pro Max',
+  'iPhone 14','iPhone 14 Plus','iPhone 14 Pro','iPhone 14 Pro Max',
+  'iPhone 15','iPhone 15 Plus','iPhone 15 Pro','iPhone 15 Pro Max',
+  'iPhone 16','iPhone 16 Plus','iPhone 16 Pro','iPhone 16 Pro Max',
+  'iPad 9th Gen','iPad 10th Gen','iPad Air 5','iPad Mini 6','iPad Pro 11"','iPad Pro 12.9"'
+], {gyro:true});
+
+// Samsung (A/M/S)
+addBatch('Samsung', [
+  'Galaxy A03','Galaxy A05s','Galaxy A14','Galaxy A24','Galaxy A34','Galaxy A54','Galaxy A55',
+  'Galaxy M14','Galaxy M34','Galaxy S20 FE','Galaxy S21 FE',
+  'Galaxy S22','Galaxy S22+','Galaxy S22 Ultra','Galaxy S23','Galaxy S23+','Galaxy S23 Ultra',
+  'Galaxy S24','Galaxy S24+','Galaxy S24 Ultra'
+], {gyro:true});
+
+// Xiaomi / Redmi / POCO
+addBatch('Xiaomi', [
+  'Redmi 9A','Redmi 10C','Redmi Note 9','Redmi Note 10','Redmi Note 11',
+  'Redmi Note 12','Redmi Note 12 Pro','Redmi Note 13','Redmi Note 13 Pro','Redmi Note 13 Pro+',
+  'POCO M4 Pro','POCO F4','POCO X3 Pro','POCO X5','POCO X6 Pro'
+]);
+
+// Others common in LATAM
+addBatch('Motorola', ['Moto E13','Moto E22','Moto G13','Moto G32','Moto G54','Moto G84','Edge 30','Edge 40']);
+addBatch('OPPO', ['A16','A57','A78','Reno 7','Reno 8','Reno 10']);
+addBatch('vivo', ['Y20','Y21','Y27','Y36','V21','V27']);
+addBatch('TECNO', ['Spark 10','Spark 20','Pova 5','Camon 20']);
+addBatch('Infinix', ['Hot 11','Hot 12','Hot 30','Hot 40','Note 12','Note 30']);
+addBatch('Huawei', ['P30 Lite','P40 Lite','nova 9','Y9s','Y9a'], {gyro:true});
+addBatch('realme', ['C25','C55','9i','10 Pro+','11 Pro+']);
+addBatch('OnePlus', ['7T','8','9','Nord','Nord 2','11R'], {gyro:true});
+addBatch('Google', ['Pixel 4a','Pixel 5a','Pixel 6a','Pixel 7','Pixel 7a'], {gyro:true});
+addBatch('Nokia', ['G10','G20','X10']);
+addBatch('ZTE', ['Blade A31','Blade A51']);
+addBatch('Alcatel', ['1','1S','3']);
+addBatch('BLU', ['G9 Pro','Studio X10']);
+addBatch('Sony', ['Xperia 10 III','Xperia 5 IV'], {gyro:true});
+addBatch('Honor', ['X8','50 Lite'], {gyro:true});
+addBatch('LG', ['K51S','K61']);
+
+// Map by brand (sorted)
+const byBrand = (() => {
+  const map = new Map();
+  for(const x of CATALOG){ if(!map.has(x.brand)) map.set(x.brand, []); map.get(x.brand).push(x); }
+  for(const [k, arr] of map){ arr.sort((a,b)=>a.model.localeCompare(b.model)); }
+  return new Map([...map.entries()].sort((a,b)=>a[0].localeCompare(b[0])));
+})();
+
+// DOM refs
+const $brand = document.getElementById('brand');
+const $model = document.getElementById('model');
+const $profile = document.getElementById('profile');
+const $dpi = document.getElementById('dpi');
+const $q = document.getElementById('q');
+const $suggestions = document.getElementById('suggestions');
+const $btnShow = document.getElementById('btnShow');
+const $btnCopy = document.getElementById('btnCopy');
+const $btnClear = document.getElementById('btnClear');
+const $tbl = document.getElementById('tbl');
+const $tbody = $tbl.querySelector('tbody');
+const $title = document.getElementById('resultTitle');
+const $meta = document.getElementById('resultMeta');
+const $badges = document.getElementById('badges');
+
+// Helpers
+function placeholder(text){ return `<option value="" disabled selected hidden>${text}</option>`; }
+function buildSuggestions(filterBrand=''){
+  const list = filterBrand ? (byBrand.get(filterBrand) || []) : CATALOG;
+  $suggestions.innerHTML = list.map(x=>`<option value="${x.brand} ${x.model}"></option>`).join('');
+}
+function fillBrands(){
+  const opts = [...byBrand.keys()].map(b=>`<option value="${b}">${b}</option>`).join('');
+  $brand.innerHTML = placeholder('Selecciona marca') + opts;
+}
+function fillModels(){
+  const b = $brand.value;
+  if(!b){ $model.innerHTML = placeholder('Selecciona modelo'); return; }
+  const list = byBrand.get(b) || [];
+  const opts = list.map(x=>`<option value="${x.model}">${x.model}</option>`).join('');
+  $model.innerHTML = placeholder('Selecciona modelo') + opts;
+  buildSuggestions(b);
+}
+function validate(){
+  const ok = Boolean($brand.value && $model.value && $profile.value && $dpi.value);
+  $btnShow.disabled = !ok; $btnCopy.disabled = !ok;
+}
+function searchSmart(q){
+  q = (q||'').trim().toLowerCase();
+  if(!q) return null;
+  return CATALOG.find(x => `${x.brand} ${x.model}`.toLowerCase().includes(q));
+}
+function suggestedDpi(brand, prof){
+  const p = prof||'mid';
+  const map = {
+    'Samsung': {low:600, mid:720, high:820},
+    'Xiaomi': {low:550, mid:700, high:820},
+    'Motorola': {low:520, mid:680, high:780},
+    'Infinix': {low:500, mid:650, high:750},
+    'TECNO': {low:500, mid:650, high:750},
+    'realme': {low:540, mid:680, high:780},
+    'OPPO': {low:540, mid:700, high:800},
+    'vivo': {low:520, mid:680, high:780},
+    'Huawei': {low:560, mid:700, high:800},
+    'OnePlus': {low:560, mid:720, high:820},
+    'Google': {low:560, mid:720, high:820},
+    'Nokia': {low:500, mid:650, high:740},
+    'ZTE': {low:500, mid:640, high:720},
+    'Alcatel': {low:480, mid:620, high:700},
+    'BLU': {low:480, mid:620, high:700},
+    'Sony': {low:560, mid:700, high:800},
+    'Honor': {low:560, mid:700, high:800}
+  };
+  const row = map[brand] || {low:520, mid:680, high:780};
+  return row[p] || row.mid;
+}
+function render(){
+  const b = $brand.value, m = $model.value, prof = $profile.value, dpip = $dpi.value;
+  if(!b || !m || !prof || !dpip){
+    $tbl.hidden = true; $tbody.innerHTML='';
+    $title.textContent='Selecciona opciones para ver la Sensi…';
+    $meta.textContent='—'; $badges.innerHTML='';
+    return;
+  }
+  const item = (byBrand.get(b) || []).find(x=>x.model===m);
+  if(!item){ $tbl.hidden = true; $tbody.innerHTML=''; return; }
+  const s = item.sensi[prof];
+  $title.textContent = `${b} ${m} — ${prof==='low'?'Baja':prof==='mid'?'Media':'Alta'}`;
+  const dpiBadge = (b==='Apple') ? 'DPI: N/A (iOS)' : (dpip==='with' ? `DPI sugerido: ${suggestedDpi(b, prof)}` : 'DPI: Sin ajustar');
+  $meta.textContent = 'Presets orientativos; ajusta según FPS y estilo.';
+  $badges.innerHTML = [ `Gyro: ${item.gyro? 'ON':'OFF'}`, dpiBadge ].map(t=>`<span class="tag">${t}</span>`).join('');
+
+  $tbody.innerHTML = '';
+  const rows = [ ['General', s.general], ['Punto Rojo', s.red], ['2x Scope', s.x2], ['4x Scope', s.x4], ['Franco (AWM)', s.sniper], ['Mirada Libre', s.freelook] ];
+  for(const [k,v] of rows){ const tr = document.createElement('tr'); tr.innerHTML = `<td>${k}</td><td>${v}</td>`; $tbody.appendChild(tr); }
+  $tbl.hidden = false;
+}
+function copySettings(){
+  const b = $brand.value, m = $model.value, prof = $profile.value, dpip = $dpi.value; if(!b||!m||!prof||!dpip) return;
+  const item = (byBrand.get(b) || []).find(x=>x.model===m); if(!item) return; const s = item.sensi[prof];
+  const header = `Sensi de ${b} ${m} (${prof==='low'?'Baja':prof==='mid'?'Media':'Alta'})`;
+  const dpiLine = (b==='Apple') ? 'DPI: N/A (iOS)' : (dpip==='with' ? `DPI sugerido: ${suggestedDpi(b, prof)}` : 'DPI: Sin ajustar');
+  const lines = [ header, dpiLine, `Gyro: ${item.gyro? 'ON':'OFF'}`, `General: ${s.general}`, `Punto Rojo: ${s.red}`, `2x: ${s.x2}`, `4x: ${s.x4}`, `Franco: ${s.sniper}`, `Mirada Libre: ${s.freelook}` ].join('\n');
+  if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(lines); }
+}
+
+// Events
+$brand.addEventListener('change', ()=>{ fillModels(); validate(); });
+$model.addEventListener('change', validate);
+$profile.addEventListener('change', validate);
+$dpi.addEventListener('change', validate);
+$btnShow.addEventListener('click', render);
+$btnCopy.addEventListener('click', copySettings);
+$btnClear.addEventListener('click', ()=>{ fillBrands(); fillModels(); buildSuggestions(''); $q.value=''; $profile.selectedIndex = 0; $dpi.selectedIndex = 0; validate(); render(); });
+
+// Search box
+$q.addEventListener('input', ()=>{
+  const hit = searchSmart($q.value);
+  if(hit){ $brand.value = hit.brand; fillModels(); $model.value = hit.model; validate(); }
+});
+$q.addEventListener('keydown', (e)=>{
+  if(e.key==='Enter'){
+    const hit = searchSmart($q.value);
+    if(hit){ $brand.value = hit.brand; fillModels(); $model.value = hit.model; }
+    validate(); if(!$btnShow.disabled){ e.preventDefault(); render(); }
+  }
+});
+
+// Global Enter shortcut
+window.addEventListener('keydown', (e)=>{ if(e.key==='Enter' && !$btnShow.disabled){ e.preventDefault(); render(); } });
+
+// Init
+fillBrands();
+fillModels();
+buildSuggestions('');
+validate();
+render();
+// ======================= END CLEAN SCRIPT =======================
+</script>
+</body>
+</html>

@@ -1,0 +1,262 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Generador de Nombres — King Nation</title>
+
+  <!-- Fonts & CSS -->
+  <!-- Favicons (use the same logo file so it shows in the tab) -->
+  <link rel="icon" href="./assets/king-nation-logo.png" />
+  <link rel="shortcut icon" href="./assets/king-nation-logo.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="./assets/king-nation-logo.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/king-nation-logo.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="./assets/king-nation-logo.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+  <!-- React + Babel (JSX) -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <style>
+    body{font-family:Noto Sans, 'Segoe UI', system-ui, -apple-system, sans-serif}
+    textarea{font-family:Noto Sans, 'Segoe UI Symbol', 'Apple SD Gothic Neo', system-ui, sans-serif}
+
+    /* Intake-style theme: soft white center + pink/lavender edges */
+    body.kn-intake{margin:0;min-height:100svh;background:radial-gradient(1200px 600px at 20% -10%, var(--bg-top) 0%, transparent 60%),radial-gradient(900px 600px at 80% 0%, var(--bg-mid) 0%, transparent 60%),linear-gradient(180deg, var(--bg-top), var(--bg-bot));position:relative;overflow-x:hidden}
+
+    /* Cards like Intake */
+    .kn-card{background:rgba(255,255,255,.95);border:1px solid #e5e7eb;border-radius:20px;backdrop-filter:saturate(1.1) blur(6px);box-shadow:0 10px 26px rgba(15,23,42,.06)}
+    .kn-logo{background:#fff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 6px 20px rgba(0,0,0,.08)}
+
+    /* Watermark: show full character on any device */
+    
+#root{position:relative;z-index:1}
+    #root{position:relative;z-index:1}
+
+    .icon-btn{border:1px solid rgba(17,24,39,.08);background:#fff;box-shadow:0 2px 8px rgba(2,6,23,.06)}
+.icon-btn:hover{background:#f9fafb}
+
+    #err{position:fixed;left:0;right:0;bottom:0;background:#fee2e2;color:#991b1b;padding:8px 12px;font-size:12px;display:none;z-index:9999}
+  </style>
+  <style>
+    :root{ --bg-top:#fff0f6; --bg-mid:#f7f2ff; --bg-bot:#eef7ff; --wm-opacity:.20; --wm-rotate:-6deg; --wm-size:min(92vw, 1200px); }
+    #root{ position:relative; z-index:1 }
+    /* Watermark via pseudo-element; uses your shared logo path */
+    body::before{
+      content:""; position:fixed; left:50%; top:50%; transform:translate(-50%,-50%) rotate(var(--wm-rotate));
+      width:var(--wm-size); height:var(--wm-size);
+      background:url('./assets/king-nation-logo.png') center / contain no-repeat;
+      opacity:var(--wm-opacity); filter:saturate(1.06) contrast(1.05);
+      -webkit-mask-image: radial-gradient(closest-side, rgba(0,0,0,1) 62%, rgba(0,0,0,0) 100%);
+              mask-image: radial-gradient(closest-side, rgba(0,0,0,1) 62%, rgba(0,0,0,0) 100%);
+      pointer-events:none; z-index:0;
+    }
+    @media (max-width:960px){ :root{ --wm-size: min(110vw, 1000px); --wm-opacity:.18; } }
+    @media (max-width:560px){ :root{ --wm-size: min(130vw, 900px);  --wm-opacity:.16; } }
+  </style>
+  <style>
+    @keyframes kn-float { 0%,100%{ transform: translateY(0) } 50%{ transform: translateY(-12px) } }
+    .floaty { animation: kn-float 1.4s ease-in-out infinite; will-change: transform; }
+  </style>
+  <style>
+    /* Accent palette to match the pastel background */
+    :root{ --accent1:#f472b6; --accent2:#a78bfa; --accent3:#60a5fa }
+    /* Gradient title text */
+    .kng-title{ background: linear-gradient(90deg, var(--accent1), var(--accent2), var(--accent3)); -webkit-background-clip:text; background-clip:text; color:transparent }
+    /* Gradient bordered cards */
+    .kn-card{background:linear-gradient(180deg, rgba(247,242,255,.86), rgba(238,247,255,.84));border:1px solid rgba(167,139,250,.22);border-radius:20px;box-shadow:0 12px 30px rgba(2,6,23,.06), 0 2px 6px rgba(2,6,23,.03);backdrop-filter:saturate(1.05) blur(6px)}
+    /* Icon buttons with gradient ring */
+    .icon-btn{ border:1px solid transparent; background: linear-gradient(#ffffff,#ffffff) padding-box, linear-gradient(120deg, var(--accent1), var(--accent2), var(--accent3)) border-box }
+    .icon-btn:hover{ background: linear-gradient(#f9fafb,#f9fafb) padding-box, linear-gradient(120deg, var(--accent1), var(--accent2), var(--accent3)) border-box }
+    /* Reset button matches theme */
+    .btn-reset{border:1px solid rgba(17,24,39,.08);background:#ffffffcc;box-shadow:0 2px 10px rgba(2,6,23,.06)}
+    .btn-reset:hover{filter:saturate(1.02)}
+    /* Inputs/selects with pastel border + focus ring */
+    input.input-accent, select.input-accent, textarea.input-accent{border:1px solid rgba(167,139,250,.25);background:linear-gradient(180deg, rgba(247,242,255,.86), rgba(247,242,255,.82));box-shadow:0 1px 0 rgba(2,6,23,.02)}
+    input.input-accent:focus, select.input-accent:focus, textarea.input-accent:focus{outline:none;box-shadow:0 0 0 4px rgba(167,139,250,.22)}
+  </style>
+</head>
+<body class="kn-intake text-gray-900">
+  <!-- Watermark image uses the SAME file as the header logo -->
+  
+
+  <div id="root"></div>
+  <div id="err"></div>
+  <script>
+    // Show runtime / JSX errors instead of a blank page
+    window.addEventListener('error', function(e){
+      var el = document.getElementById('err'); if(!el) return;
+      el.style.display='block'; el.textContent = 'Error: ' + (e.message || e.toString());
+    });
+  </script>
+
+  <script type="text/babel" data-presets="env,react">
+    // --------- Constants & helpers ---------
+    const INV_SPACE = "\u3164"; // ㅤ (Hangul Filler) — used by Free Fire
+    const SMALL_CAPS_MAP = {
+      a:"ɑ", b:"ʙ", c:"ᴄ", d:"ᴅ", e:"ᴇ", f:"ꜰ", g:"ɢ", h:"ʜ", i:"ɪ", j:"ᴊ",
+      k:"ᴋ", l:"ʟ", m:"ᴍ", n:"ɴ", o:"o", p:"ᴘ", q:"ǫ", r:"ʀ", s:"s", t:"ᴛ",
+      u:"ᴜ", v:"ᴠ", w:"ᴡ", x:"x", y:"ʏ", z:"ᴢ",
+      A:"A", B:"ʙ", C:"ᴄ", D:"ᴅ", E:"ᴇ", F:"ꜰ", G:"ɢ", H:"ʜ", I:"ɪ", J:"ᴊ",
+      K:"K", L:"ʟ", M:"ᴍ", N:"ɴ", O:"o", P:"ᴘ", Q:"Q", R:"ʀ", S:"S", T:"ᴛ",
+      U:"ᴜ", V:"ᴠ", W:"ᴡ", X:"x", Y:"ʏ", Z:"ᴢ"
+    };
+
+    function toSmallCaps(src){
+      const parts = src.split(new RegExp(`(${INV_SPACE}|\\s+)`, 'g'));
+      return parts.map(seg => {
+        if (seg === INV_SPACE || /^\s+$/.test(seg)) return seg;
+        if (!seg) return seg;
+        const firstRaw = seg[0];
+        const first = /[A-Za-z]/.test(firstRaw) ? firstRaw.toUpperCase() : firstRaw;
+        const rest  = [...seg.slice(1)].map(ch => SMALL_CAPS_MAP[ch] ?? ch).join("");
+        return first + rest;
+      }).join("");
+    }
+
+    const normalizeName = (raw) => raw.replace(/\s+/g," ").trim();
+
+    function withProtocol({ base, gender, insertInvisibleSpace }){
+      let name = normalizeName(base); if (!name) return "";
+      let prefix = gender === "queen" ? "Queen" : "King";
+      const lower = name.toLowerCase();
+      if (!lower.startsWith("king ") && !lower.startsWith("queen ")) name = `${prefix} ${name}`;
+      if (insertInvisibleSpace) name = name.replace(/\s+/g, INV_SPACE);
+      return name;
+    }
+
+    const applyStyle = (name, smallCaps) => !name ? "" : (smallCaps ? toSmallCaps(name) : name);
+
+    const makeAscii = (name) => name ? name.split(INV_SPACE).map(p => p ? (p[0].toUpperCase() + p.slice(1).toLowerCase()) : p).join(INV_SPACE) : "";
+
+    const IcoWA = () => (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="w-6 h-6" style={{color:"#25D366"}} aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.77 13.5L3 21l4.65-1.2A9 9 0 1 0 12 3Z"/><path d="M8.5 9.5c.2 2.3 3 4.8 5.2 5 .5.1 1.4-.3 1.7-.8l.6-1.1c.2-.4 0-.8-.4-1.1l-1-.5c-.3-.1-.7 0-.9.3l-.3.4c-.2.2-.6.3-.9.1-1-.5-2-1.4-2.5-2.4-.2-.3 0-.4.1-.5l.4-.3c.3-.2.4-.6.3-.9l-.5-1c-.3-.4-.7-.6-1.1-.4l-1.1.6c-.5.3-.9 1.2-.8 1.7Z"/></svg>);
+    const IcoX  = () => (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="w-6 h-6" aria-hidden="true"><path d="M4 4l16 16M20 4L4 20"/></svg>);
+    const IcoShare = () => (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="w-6 h-6" style={{color:"#008080"}} aria-hidden="true"><path d="M14 9l7-7m0 0h-5m5 0v5"/><path d="M21 13v5a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3h5"/></svg>);
+    const IcoLink  = () => (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="w-6 h-6" style={{color:"#FFD700"}} aria-hidden="true"><path d="M10 14a5 5 0 0 1 0-7l1.5-1.5a5 5 0 0 1 7 7L17 13"/><path d="M14 10a5 5 0 0 1 0 7L12.5 18.5a5 5 0 0 1-7-7L7 11"/></svg>);
+
+    function App(){
+      const GLYPH_FONT = "Noto Sans, 'Segoe UI Symbol', 'Apple SD Gothic Neo', system-ui, sans-serif";
+      const [baseName,setBaseName]   = React.useState("Soldado");
+      const [gender,setGender]       = React.useState("king");
+      const [insertInv,setInsertInv] = React.useState(true);
+      const [smallCaps,setSmallCaps] = React.useState(true);
+      const [addKNSuffix,setAddKNSuffix] = React.useState(false);
+
+      const protocolName = React.useMemo(() => withProtocol({base:baseName, gender, insertInvisibleSpace:insertInv}), [baseName, gender, insertInv]);
+      const styled = React.useMemo(() => (addKNSuffix ? `${applyStyle(protocolName, smallCaps)}${insertInv?INV_SPACE:""}ᴷᴺ` : applyStyle(protocolName, smallCaps)), [protocolName, smallCaps, addKNSuffix, insertInv]);
+      const asciiOut = React.useMemo(() => makeAscii(protocolName), [protocolName]);
+
+      const share = (platform, text) => {
+        const plain = String(text||"").replace(/<[^>]+>/g,"");
+        const encoded = encodeURIComponent(plain);
+        if(platform==="whatsapp"){
+          const wa = /Android|iPhone|iPad/i.test(navigator.userAgent) ? "https://wa.me/?text=" : "https://api.whatsapp.com/send?text=";
+          window.open(wa+encoded, "_blank");
+        }else if(platform==="x"){
+          window.open("https://twitter.com/intent/tweet?text="+encoded, "_blank");
+        }else if(platform==="native"){
+          if(navigator.share) navigator.share({ text: plain }).catch(()=>{}); else alert("Compartir nativo no soportado");
+        }
+      };
+
+      const copyLinkWithSettings = () => {
+        const url = new URL(window.location.href); const qp = url.searchParams;
+        qp.set("name", baseName || ""); qp.set("gender", gender);
+        qp.set("inv", insertInv?"1":"0"); qp.set("sc", smallCaps?"1":"0"); qp.set("kn", addKNSuffix?"1":"0");
+        url.search = qp.toString();
+        navigator.clipboard.writeText(url.toString()).then(()=>alert("Enlace con ajustes copiado."));
+      };
+
+      return (
+        <div className="min-h-screen w-full bg-transparent text-gray-900 p-6 md:p-10">
+          <div className="mx-auto max-w-3xl">
+            {/* Header */}
+            <header className="mb-6 flex items-center gap-4 justify-center relative z-10">
+              <img id="header-logo"
+                   src="./assets/king-nation-logo.png"
+                   onError={(e)=>{e.currentTarget.onerror=null; e.currentTarget.src='/assets/king-nation-logo.png'}}
+                   alt="King Nation Logo" className="w-16 h-16 md:w-20 md:h-20 object-contain kn-logo p-1" />
+              <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-gray-800"><span className="kng-title">King Nation</span> <span className="text-gray-900">— Generador de Nombres</span></h1>
+            </header>
+
+            <p className="text-pink-600 font-semibold mt-2 text-center floaty">🔥 ¡Crea tu nombre único de clan y destaca en Free Fire! 🔥</p>
+            <p className="mt-4 text-sm md:text-base text-gray-600 text-center" style={{ fontFamily: GLYPH_FONT }}>
+              Estilo legado: ejemplo → <b>{toSmallCaps(`King${INV_SPACE}Soldado`)}</b>
+            </p>
+
+            {/* ORIGINAL controls preserved (you asked to only tweak color + watermark) */}
+            <div className="grid gap-4 md:gap-5 mt-6">
+              <div className="grid md:grid-cols-4 gap-3 items-end">
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium mb-1">Nombre base</label>
+                  <input className="w-full rounded-2xl border border-gray-300 px-4 py-3 input-accent" placeholder="Ej.: Soldado" value={baseName} onChange={(e)=>setBaseName(e.target.value)} />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Prefijo</label>
+                  <select value={gender} onChange={(e)=>setGender(e.target.value)} className="w-full rounded-2xl border border-gray-300 px-3 py-3 input-accent">
+                    <option value="king">King</option>
+                    <option value="queen">Queen</option>
+                    <option value="none">Sin prefijo</option>
+                  </select>
+                </div>
+                <button className="rounded-2xl px-4 py-3 shadow-sm btn-reset" onClick={()=>{setBaseName("Soldado"); setGender("king"); setInsertInv(true); setSmallCaps(true); setAddKNSuffix(false);}}>
+                  Restablecer
+                </button>
+              </div>
+
+              
+            </div>
+
+            {/* Preview */}
+            <div className="mt-6 kn-card p-5">
+              <h2 className="text-xl font-semibold flex items-center gap-2">Vista previa <span>✨</span></h2>
+              <div className="mt-4 text-3xl md:text-4xl font-medium break-words leading-snug" style={{fontFamily:GLYPH_FONT}}>{styled || "KingㅤSoldado"}</div>
+
+              <div className="mt-4 flex gap-3 justify-center flex-wrap">
+                <button onClick={()=>share("whatsapp", styled)} className="icon-btn" aria-label="WhatsApp"><IcoWA/></button>
+                <button onClick={()=>share("x", styled)} className="icon-btn" aria-label="X / Twitter"><IcoX/></button>
+                <button onClick={()=>share("native", styled)} className="icon-btn" aria-label="Compartir nativo"><IcoShare/></button>
+                <button onClick={copyLinkWithSettings} className="icon-btn" aria-label="Copiar enlace con ajustes"><IcoLink/></button>
+              </div>
+            </div>
+
+            <div className="mt-6 grid md:grid-cols-2 gap-5">
+              <div className="kn-card p-5 relative">
+                <h3 className="text-base font-semibold">Estilizado</h3>
+                <button onClick={()=>navigator.clipboard.writeText(styled).then(()=>alert('¡Copiado!'))} className="absolute top-3 right-3 inline-flex items-center justify-center w-10 h-10 rounded-full border bg-white hover:bg-gray-50" aria-label="Copiar estilizado">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="w-5 h-5"><rect x="9" y="9" width="10" height="12" rx="2"/><path d="M5 15V7a2 2 0 0 1 2-2h8"/></svg>
+                </button>
+                <textarea className="w-full h-28 rounded-xl border mt-3 p-3 input-accent" readOnly value={styled}></textarea>
+                <p className="mt-2 text-xs text-gray-600">Incluye espacios invisibles para que funcione en Free Fire.</p>
+              </div>
+
+              <div className="kn-card p-5 relative">
+                <h3 className="text-base font-semibold">ASCII</h3>
+                <button onClick={()=>navigator.clipboard.writeText(asciiOut).then(()=>alert('¡Copiado!'))} className="absolute top-3 right-3 inline-flex items-center justify-center w-10 h-10 rounded-full border bg-white hover:bg-gray-50" aria-label="Copiar ASCII">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="w-5 h-5"><rect x="9" y="9" width="10" height="12" rx="2"/><path d="M5 15V7a2 2 0 0 1 2-2h8"/></svg>
+                </button>
+                <textarea className="w-full h-28 rounded-xl border mt-3 p-3 input-accent" readOnly value={asciiOut}></textarea>
+                <p className="mt-2 text-xs text-gray-600">Incluye espacios invisibles para que funcione en Free Fire.</p>
+              </div>
+            </div>
+
+            <footer className="mt-6 text-center text-xs text-gray-500 flex flex-col items-center gap-2">
+              <div className="flex items-center gap-2">
+                <img src="./assets/king-nation-logo.png" onError={(e)=>{e.currentTarget.onerror=null; e.currentTarget.src='/assets/king-nation-logo.png'}} alt="King Nation Logo" className="w-20 h-20 object-contain bg-white rounded-xl shadow-md p-1" />
+                <strong>King Nation</strong>
+              </div>
+              <span>Hecho para el Clan King Nation · Espaciado invisible</span>
+            </footer>
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+
+  </body>
+</html>

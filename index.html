@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>King Nation Oficial</title>
+
+  <!-- Favicons / Logo -->
+  <link rel="icon" href="./assets/king-nation-logo.png" />
+  <link rel="shortcut icon" href="./assets/king-nation-logo.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="./assets/king-nation-logo.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/king-nation-logo.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="./assets/king-nation-logo.png" />
+
+  <!-- Fonts & Tailwind -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+  <!-- React + Babel -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- Global Theme -->
+  <style>
+    body{font-family:Noto Sans, 'Segoe UI', system-ui, -apple-system, sans-serif}
+    textarea{font-family:Noto Sans, 'Segoe UI Symbol', 'Apple SD Gothic Neo', system-ui, sans-serif}
+    body.kn-intake{margin:0;min-height:100svh;background:radial-gradient(1200px 600px at 20% -10%, var(--bg-top) 0%, transparent 60%),radial-gradient(900px 600px at 80% 0%, var(--bg-mid) 0%, transparent 60%),linear-gradient(180deg, var(--bg-top), var(--bg-bot));position:relative;overflow-x:hidden}
+
+    .kn-card{background:linear-gradient(180deg, rgba(247,242,255,.86), rgba(238,247,255,.84));border:1px solid rgba(167,139,250,.22);border-radius:20px;box-shadow:0 12px 30px rgba(2,6,23,.06), 0 2px 6px rgba(2,6,23,.03);backdrop-filter:saturate(1.05) blur(6px)}
+    .kn-logo{background:#fff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 6px 20px rgba(0,0,0,.08)}
+
+    :root{ --bg-top:#fff0f6; --bg-mid:#f7f2ff; --bg-bot:#eef7ff; --wm-opacity:.20; --wm-rotate:-6deg; --wm-size:min(92vw, 1200px); --accent1:#f472b6; --accent2:#a78bfa; --accent3:#60a5fa }
+    body::before{
+      content:""; position:fixed; left:50%; top:50%; transform:translate(-50%,-50%) rotate(var(--wm-rotate));
+      width:var(--wm-size); height:var(--wm-size);
+      background:url('./assets/king-nation-logo.png') center / contain no-repeat;
+      opacity:var(--wm-opacity); filter:saturate(1.06) contrast(1.05);
+      -webkit-mask-image: radial-gradient(closest-side, rgba(0,0,0,1) 62%, rgba(0,0,0,0) 100%);
+              mask-image: radial-gradient(closest-side, rgba(0,0,0,1) 62%, rgba(0,0,0,0) 100%);
+      pointer-events:none; z-index:0;
+    }
+    @media (max-width:960px){ :root{ --wm-size: min(110vw, 1000px); --wm-opacity:.18; } }
+    @media (max-width:560px){ :root{ --wm-size: min(130vw, 900px);  --wm-opacity:.16; } }
+
+    .kng-title{ background: linear-gradient(90deg, var(--accent1), var(--accent2), var(--accent3)); -webkit-background-clip:text; background-clip:text; color:transparent }
+    .icon-btn{ border:1px solid transparent; background: linear-gradient(#ffffff,#ffffff) padding-box, linear-gradient(120deg, var(--accent1), var(--accent2), var(--accent3)) border-box }
+    .icon-btn:hover{ background: linear-gradient(#f9fafb,#f9fafb) padding-box, linear-gradient(120deg, var(--accent1), var(--accent2), var(--accent3)) border-box }
+
+    .tabs{ display:flex; gap:10px; margin: 8px 0 16px; flex-wrap:wrap; justify-content:center }
+    .tabbtn{ border:1px solid rgba(167,139,250,.35); background:#ffffffcc; padding:10px 14px; border-radius:12px; cursor:pointer; font-weight:600 }
+    .tabbtn[aria-selected="true"]{ box-shadow:0 0 0 3px rgba(167,139,250,.22) inset; }
+    .panel{ display:none }
+    .panel.active{ display:block }
+
+    #err{position:fixed;left:0;right:0;bottom:0;background:#fee2e2;color:#991b1b;padding:8px 12px;font-size:12px;display:none;z-index:9999}
+  </style>
+
+  <!-- Sensi theming -->
+  <style>
+    .sensi-scope{ color:#1f2937 }
+    .sensi-scope .wrap{max-width:1000px; margin:0 auto; padding:0}
+    .sensi-scope header{display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:14px}
+    .sensi-scope .title{display:flex; align-items:center; gap:12px}
+    .sensi-scope .title h1{margin:0; font-size:clamp(20px,4vw,28px); font-weight:800; color:#111827}
+    .sensi-scope .subtitle{margin:0; color:#6b7280; font-size:14px}
+    .sensi-scope .card{background:#ffffff; border:1px solid rgba(167,139,250,.22); border-radius:14px; padding:16px; box-shadow:0 10px 26px rgba(15,23,42,.06)}
+    .sensi-scope .controls{display:grid; grid-template-columns:1fr; gap:12px}
+    @media(min-width:860px){ .sensi-scope .controls{grid-template-columns:1fr 1fr 1fr auto auto} }
+    .sensi-scope label{display:block; font-size:12px; color:#6b7280; margin-bottom:6px}
+    .sensi-scope select, .sensi-scope input[type="text"]{width:100%; padding:12px; border-radius:12px; border:1px solid #e5e7eb; background:#fafafa; color:#111827; outline:none}
+    .sensi-scope select:focus, .sensi-scope input[type="text"]:focus{border-color:#a78bfa; box-shadow:0 0 0 4px rgba(167,139,250,.22)}
+    .sensi-scope .btn{padding:12px 14px; border-radius:12px; border:1px solid #e5e7eb; background:#ffffff; color:#111827; font-weight:700; cursor:pointer}
+    .sensi-scope .btn[disabled]{opacity:.5; cursor:not-allowed}
+    .sensi-scope .btn-primary{background:#111827; color:#fff}
+    .sensi-scope .stack{display:grid; gap:12px}
+    .sensi-scope .result-head{display:flex; align-items:center; justify-content:space-between; gap:10px}
+    .sensi-scope .tags{display:flex; flex-wrap:wrap; gap:8px}
+    .sensi-scope .tag{font-size:12px; padding:4px 10px; border:1px solid #e5e7eb; border-radius:999px; color:#374151; background:#f9fafb}
+    .sensi-scope .muted{color:#6b7280; font-size:12px}
+    .sensi-scope table{width:100%; border-collapse:collapse; margin-top:8px; border:1px solid #e5e7eb; border-radius:12px; overflow:hidden; background:#fff}
+    .sensi-scope thead th{background:#f3f4f6; color:#374151; text-align:left; font-weight:600; padding:10px 12px; border-bottom:1px solid #e5e7eb}
+    .sensi-scope tbody td{padding:10px 12px; border-bottom:1px solid #e5e7eb; color:#111827}
+    .sensi-scope tbody tr:last-child td{border-bottom:0}
+  </style>
+</head>
+<body class="kn-intake text-gray-900">
+  <div id="top"></div>
+  <div id="err"></div>
+
+  <!-- Top Nav -->
+  <div class="mx-auto max-w-5xl px-5 pt-3">
+    <nav class="w-full flex items-center justify-between gap-3 text-sm">
+      <div class="font-semibold text-gray-700">King Nation Oficial</div>
+      <div class="flex items-center gap-4">
+        <a href="#top" class="hover:underline">Inicio</a>
+        <a href="#nombres" class="hover:underline" onclick="document.getElementById('tab-name').click()">Generador de Nombres</a>
+        <a href="#sensi" class="hover:underline" onclick="document.getElementById('tab-sensi').click()">Sensi por modelo</a>
+        <a href="mailto:soldadoff@icloud.com" class="hover:underline">Contacto</a>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Page Shell -->
+  <div class="mx-auto max-w-5xl px-5 pt-6 pb-20 relative z-10">
+    <header class="mb-4 flex items-center gap-4 justify-center">
+      <img src="./assets/king-nation-logo.png" alt="King Nation Logo" class="w-16 h-16 md:w-20 md:h-20 object-contain kn-logo p-1" />
+      <div class="text-center">
+        <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight text-gray-800"><span class="kng-title">King Nation Oficial</span></h1>
+        <p class="text-sm text-gray-600">Nombre estilizado · Sensi por modelo</p>
+      </div>
+    </header>
+
+    <nav class="tabs" role="tablist" aria-label="Herramientas">
+      <button class="tabbtn" id="tab-name" role="tab" aria-controls="panel-name" aria-selected="true">Generador de Nombres</button>
+      <button class="tabbtn" id="tab-sensi" role="tab" aria-controls="panel-sensi" aria-selected="false">Sensi por modelo</button>
+    </nav>
+
+    <!-- Panel: Name Generator -->
+    <section id="panel-name" class="panel active" role="tabpanel" aria-labelledby="tab-name">
+      <div id="root"></div>
+    </section>
+
+    <!-- Panel: Sensi Finder -->
+    <section id="panel-sensi" class="panel" role="tabpanel" aria-labelledby="tab-sensi">
+      <div class="sensi-scope">
+        <div class="wrap">
+          <section class="kn-card p-5">
+            <header>
+              <div class="title">
+                <svg width="34" height="34" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 18h18l-1-8-5 4-4-7-4 7-5-4 1 8z" fill="#111827"/></svg>
+                <div>
+                  <h1>King Nation — Sensi por modelo</h1>
+                  <p class="subtitle">Sensibilidad hasta 200 · Elige Marca / Modelo / Perfil y copia los valores</p>
+                </div>
+              </div>
+            </header>
+
+            <section class="card controls" aria-label="Panel de controles">
+              <div>
+                <label for="q">Buscar (marca o modelo)</label>
+                <input id="q" type="text" placeholder="Ej: Galaxy A54, iPhone 16 Pro Max, Redmi Note 13" autocomplete="off" list="suggestions" />
+                <datalist id="suggestions"></datalist>
+              </div>
+              <div>
+                <label for="brand">Marca</label>
+                <select id="brand">
+                  <option value="" disabled selected hidden>Selecciona marca</option>
+                </select>
+              </div>
+              <div>
+                <label for="model">Modelo</label>
+                <select id="model">
+                  <option value="" disabled selected hidden>Selecciona modelo</option>
+                </select>
+              </div>
+              <div>
+                <label for="profile">Perfil</label>
+                <select id="profile">
+                  <option value="" disabled selected hidden>Selecciona perfil</option>
+                  <option value="low">Baja (control)</option>
+                  <option value="mid">Media (equilibrada)</option>
+                  <option value="high">Alta (rápida)</option>
+                </select>
+              </div>
+              <div>
+                <label for="dpi">Preferencia DPI</label>
+                <select id="dpi">
+                  <option value="" disabled selected hidden>¿Con DPI?</option>
+                  <option value="with">Con DPI sugerido</option>
+                  <option value="without">Sin DPI</option>
+                </select>
+              </div>
+              <div style="align-self:end; display:flex; gap:8px">
+                <button id="btnShow" class="btn btn-primary" disabled>Mostrar</button>
+                <button id="btnCopy" class="btn" disabled>Copiar</button>
+                <button id="btnClear" class="btn btn-ghost">Limpiar</button>
+              </div>
+            </section>
+
+            <section class="card stack" style="margin-top:14px">
+              <div class="result-head">
+                <div>
+                  <div id="resultTitle" style="font-weight:700; font-size:18px">Selecciona opciones para ver la Sensi…</div>
+                  <div id="resultMeta" class="muted">—</div>
+                </div>
+                <div class="tags" id="badges"></div>
+              </div>
+
+              <table id="tbl" hidden>
+                <thead><tr><th>Ajuste</th><th>Valor</th></tr></thead>
+                <tbody></tbody>
+              </table>
+              <p class="muted" style="margin-top:10px">Tip: la <strong>Alta</strong> puede ir hasta 200. Ajusta ±5 según tu FPS y estilo.</p>
+            </section>
+
+            <section class="card" style="margin-top:14px">
+              <h3 style="margin:0 0 8px 0; font-size:16px">Consejos rápidos</h3>
+              <ul class="muted" style="margin:0; padding-left:18px; display:grid; gap:6px">
+                <li><strong>Escala hasta 200:</strong> si en Alta aún te falta velocidad, sube de 5 en 5 (General y Rojo) antes de tocar 2x/4x.</li>
+                <li><strong>FPS &amp; térmicas:</strong> si tu FPS cae, baja 3–5 puntos en General/Red; si sube, aumenta 2–3.</li>
+                <li><strong>Recoil vertical:</strong> arma se va arriba → baja General y Rojo; se queda corta → sube 2x/4x.</li>
+                <li><strong>Gyro:</strong> si tu equipo tiene giroscopio, pruébalo en Media; si mareas, apágalo y sube poco a poco.</li>
+                <li><strong>DPI externo:</strong> evita valores extremos fuera de stock; si usas, acompasa subiendo/bajando 10–20 puntos en la Sensi.</li>
+                <li><strong>Claw vs pulgares:</strong> jugadores claw suelen preferir Media/Alta; pulgares, Baja/Media para más control.</li>
+                <li><strong>Mirada Libre:</strong> útil para loot y rotaciones; no afecta el recoil de disparo.</li>
+                <li><strong>Prueba 10 partidas:</strong> mantén un perfil estable 8–10 partidas antes de decidir ajustes finos.</li>
+              </ul>
+            </section>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="mt-10 text-center text-xs text-gray-600">
+      © 2025 <strong>King Nation Oficial</strong> · Todos los derechos reservados ·
+      <a href="mailto:soldadoff@icloud.com" class="underline">soldadoff@icloud.com</a>
+    </footer>
+  </div>
+
+  <!-- Tabs script -->
+  <script>
+    (function(){
+      const tabs = [
+        {btn: document.getElementById('tab-name'),  panel: document.getElementById('panel-name')},
+        {btn: document.getElementById('tab-sensi'), panel: document.getElementById('panel-sensi')}
+      ];
+      function select(idx){
+        tabs.forEach((t,i)=>{
+          const sel = i===idx;
+          t.btn.setAttribute('aria-selected', sel);
+          t.panel.classList.toggle('active', sel);
+        });
+        location.hash = idx===0 ? '#nombres' : '#sensi';
+        window.scrollTo({top:0, behavior:'instant'});
+      }
+      tabs.forEach((t,i)=> t.btn.addEventListener('click', ()=>select(i)));
+      if (location.hash === '#sensi') select(1); else select(0);
+    })();
+  </script>
+
+  <!-- React Name Generator App -->
+  <script type="text/babel" data-presets="env,react">
+    const INV_SPACE = "\u3164"; // ㅤ
+    const SEP = "そ";
+    const INITIALS_V2 = true; // current default output format
+    // Initials v2 suffixes (pre-styled to match your format)
+    const KING_SUFFIX_STYLED = `${SEP}Ӄɪɴɢ`;
+    const QUEEN_SUFFIX_STYLED = `${SEP}Qᴜᴇᴇɴ`;
+
+    const SMALL_CAPS_MAP = {
+      a:"ɑ", b:"ʙ", c:"ᴄ", d:"ᴅ", e:"ᴇ", f:"ꜰ", g:"ɢ", h:"ʜ", i:"ɪ", j:"ᴊ",
+      k:"ᴋ", l:"ʟ", m:"ᴍ", n:"ɴ", o:"o", p:"ᴘ", q:"ǫ", r:"ʀ", s:"s", t:"ᴛ",
+      u:"ᴜ", v:"ᴠ", w:"ᴡ", x:"x", y:"ʏ", z:"ᴢ",
+      A:"A", B:"ʙ", C:"ᴄ", D:"ᴅ", E:"ᴇ", F:"ꜰ", G:"ɢ", H:"ʜ", I:"ɪ", J:"ᴊ",
+      K:"K", L:"ʟ", M:"ᴍ", N:"ɴ", O:"o", P:"ᴘ", Q:"Q", R:"ʀ", S:"S", T:"ᴛ",
+      U:"ᴜ", V:"ᴠ", W:"ᴡ", X:"x", Y:"ʏ", Z:"ᴢ"
+    };
+
+    function toSmallCaps(src){
+      const parts = src.split(new RegExp(`(${INV_SPACE}|\\s+)`, 'g'));
+      return parts.map(seg => {
+        if (seg === INV_SPACE || /^\s+$/.test(seg)) return seg;
+        if (!seg) return seg;
+        const firstRaw = seg[0];
+        const first = /[A-Za-z]/.test(firstRaw) ? firstRaw.toUpperCase() : firstRaw;
+        const rest  = [...seg.slice(1)].map(ch => SMALL_CAPS_MAP[ch] ?? ch).join("");
+        return first + rest;
+      }).join("");
+    }
+
+    const normalizeName = (raw) => raw.replace(/\s+/g," ").trim();
+    const applyStyle = (name, smallCaps) => !name ? "" : (smallCaps ? toSmallCaps(name) : name);
+
+    // =========================
+    // Initials v1 (legacy: "KingㅤSoldado" style) — kept for reference
+    // =========================
+    function buildInitialsV1({ base, gender, insertInvisibleSpace }){
+      let name = normalizeName(base); if (!name) return "";
+      let prefix = gender === "queen" ? "Queen" : (gender === 'king' ? 'King' : '');
+      const lower = name.toLowerCase();
+      if (prefix && !lower.startsWith("king ") && !lower.startsWith("queen ")) name = `${prefix} ${name}`;
+      if (insertInvisibleSpace) name = name.replace(/\s+/g, INV_SPACE);
+      return name;
+    }
+    const makeAsciiV1 = (name) =>
+      name ? name.split(INV_SPACE).map(p => p ? (p[0].toUpperCase() + p.slice(1).toLowerCase()) : p).join(INV_SPACE) : "";
+
+    // =========================
+    // Initials v2 (current): "SoʟᴅɑᴅoそӃɪɴɢ" style
+    // =========================
+    function buildBaseV2({ base, insertInvisibleSpace }){
+      let name = normalizeName(base); if (!name) return "";
+      if (insertInvisibleSpace) name = name.replace(/\s+/g, INV_SPACE);
+      return name;
+    }
+    function buildSuffixV2Styled(gender){
+      if (gender === "queen") return QUEEN_SUFFIX_STYLED;
+      if (gender === "king")  return KING_SUFFIX_STYLED;
+      return "";
+    }
+    function buildInitialsV2Styled({ base, gender, insertInvisibleSpace, smallCaps }){
+      const basePart = buildBaseV2({ base, insertInvisibleSpace });
+      if (!basePart) return "";
+      const styledBase = applyStyle(basePart, smallCaps);
+      return styledBase + buildSuffixV2Styled(gender);
+    }
+    function buildInitialsV2Ascii({ base, gender }){
+      const clean = normalizeName(base);
+      if (!clean) return "";
+      const joined = clean.split(/\s+/g).filter(Boolean).map(w => w[0].toUpperCase() + w.slice(1).toLowerCase()).join("");
+      if (gender === "queen") return joined + "Queen";
+      if (gender === "king")  return joined + "King";
+      return joined;
+    }
+const IcoWA = () => (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="w-6 h-6" style={{color:"#25D366"}} aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.77 13.5L3 21l4.65-1.2A9 9 0 1 0 12 3Z"/><path d="M8.5 9.5c.2 2.3 3 4.8 5.2 5 .5.1 1.4-.3 1.7-.8l.6-1.1c.2-.4 0-.8-.4-1.1l-1-.5c-.3-.1-.7 0-.9.3l-.3.4c-.2.2-.6.3-.9.1-1-.5-2-1.4-2.5-2.4-.2-.3 0-.4.1-.5l.4-.3c.3-.2.4-.6.3-.9l-.5-1c-.3-.4-.7-.6-1.1-.4l-1.1.6c-.5.3-.9 1.2-.8 1.7Z"/></svg>);
+    const IcoX  = () => (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="w-6 h-6" aria-hidden="true"><path d="M4 4l16 16M20 4L4 20"/></svg>);
+    const IcoShare = () => (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="w-6 h-6" style={{color:"#008080"}} aria-hidden="true"><path d="M14 9l7-7m0 0h-5m5 0v5"/><path d="M21 13v5a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3h5"/></svg>);
+    const IcoLink  = () => (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="w-6 h-6" style={{color:"#FFD700"}} aria-hidden="true"><path d="M10 14a5 5 0 0 1 0-7l1.5-1.5a5 5 0 0 1 7 7L17 13"/><path d="M14 10a5 5 0 0 1 0 7L12.5 18.5a5 5 0 0 1-7-7L7 11"/></svg>);
+
+    function App(){
+      const GLYPH_FONT = "Noto Sans, 'Segoe UI Symbol', 'Apple SD Gothic Neo', system-ui, sans-serif";
+      const [baseName,setBaseName]   = React.useState("Soldado");
+      const [gender,setGender]       = React.useState("king");
+      const [insertInv,setInsertInv] = React.useState(true);
+      const [smallCaps,setSmallCaps] = React.useState(true);
+      const [addKNSuffix,setAddKNSuffix] = React.useState(false);
+      const styledCore = React.useMemo(() => {
+        // Initials v2 is the new default (SoʟᴅɑᴅoそӃɪɴɢ). Initials v1 is preserved above.
+        if (INITIALS_V2) return buildInitialsV2Styled({ base: baseName, gender, insertInvisibleSpace: insertInv, smallCaps });
+        const v1 = buildInitialsV1({ base: baseName, gender, insertInvisibleSpace: insertInv });
+        return applyStyle(v1, smallCaps);
+      }, [baseName, gender, insertInv, smallCaps]);
+      const styled = React.useMemo(() => (addKNSuffix ? `${styledCore}${insertInv?INV_SPACE:""}ᴷᴺ` : styledCore), [styledCore, addKNSuffix, insertInv]);
+      const asciiOut = React.useMemo(() => {
+        if (INITIALS_V2) return buildInitialsV2Ascii({ base: baseName, gender });
+        const v1 = buildInitialsV1({ base: baseName, gender, insertInvisibleSpace: insertInv });
+        return makeAsciiV1(v1);
+      }, [baseName, gender, insertInv]);
+      const share = (platform, text) => {
+        const plain = String(text||"").replace(/<[^>]+>/g,"");
+        const encoded = encodeURIComponent(plain);
+        if(platform==="whatsapp"){
+          const wa = /Android|iPhone|iPad/i.test(navigator.userAgent) ? "https://wa.me/?text=" : "https://api.whatsapp.com/send?text=";
+          window.open(wa+encoded, "_blank");
+        }else if(platform==="x"){
+          window.open("https://twitter.com/intent/tweet?text="+encoded, "_blank");
+        }else if(platform==="native"){
+          if(navigator.share) navigator.share({ text: plain }).catch(()=>{}); else alert("Compartir nativo no soportado");
+        }
+      };
+      const copyLinkWithSettings = () => {
+        const url = new URL(window.location.href); const qp = url.searchParams;
+        qp.set("name", baseName || ""); qp.set("gender", gender);
+        qp.set("inv", insertInv?"1":"0"); qp.set("sc", smallCaps?"1":"0"); qp.set("kn", addKNSuffix?"1":"0");
+        url.search = qp.toString();
+        navigator.clipboard.writeText(url.toString()).then(()=>alert("Enlace con ajustes copiado."));
+      };
+      return (
+        <div className="min-h-screen w-full bg-transparent text-gray-900 p-6 md:p-10">
+          <div className="mx-auto max-w-3xl">
+            <header className="mb-6 flex items-center gap-4 justify-center relative z-10"></header>
+            <p className="text-pink-600 font-semibold mt-2 text-center">🔥 ¡Crea tu nombre único de clan y destaca en Free Fire! 🔥</p>
+            <p className="mt-4 text-sm md:text-base text-gray-600 text-center" style={{ fontFamily: GLYPH_FONT }}>
+              Iniciales v2: ejemplo → <b>{buildInitialsV2Styled({ base: "Soldado", gender: "king", insertInvisibleSpace: true, smallCaps: true })}</b>
+            </p>
+            <div className="grid gap-4 md:gap-5 mt-6">
+              <div className="grid md:grid-cols-4 gap-3 items-end">
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium mb-1">Nombre base</label>
+                  <input className="w-full rounded-2xl border border-gray-300 px-4 py-3" placeholder="Ej.: Soldado" value={baseName} onChange={(e)=>setBaseName(e.target.value)} />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Prefijo</label>
+                  <select value={gender} onChange={(e)=>setGender(e.target.value)} className="w-full rounded-2xl border border-gray-300 px-3 py-3">
+                    <option value="king">King</option>
+                    <option value="queen">Queen</option>
+                    <option value="none">Sin prefijo</option>
+                  </select>
+                </div>
+                <button className="rounded-2xl px-4 py-3 shadow-sm border" onClick={()=>{setBaseName("Soldado"); setGender("king"); setInsertInv(true); setSmallCaps(true); setAddKNSuffix(false);}}>
+                  Restablecer
+                </button>
+              </div>
+            </div>
+            <div className="mt-6 kn-card p-5">
+              <h2 className="text-xl font-semibold flex items-center gap-2">Vista previa <span>✨</span></h2>
+              <div className="mt-4 text-3xl md:text-4xl font-medium break-words leading-snug" style={{fontFamily:GLYPH_FONT}}>{styled || "SoʟᴅɑᴅoそӃɪɴɢ"}</div>
+              <div className="mt-4 flex gap-3 justify-center flex-wrap">
+                <button onClick={()=>share("whatsapp", styled)} className="icon-btn" aria-label="WhatsApp"><IcoWA/></button>
+                <button onClick={()=>share("x", styled)} className="icon-btn" aria-label="X / Twitter"><IcoX/></button>
+                <button onClick={()=>share("native", styled)} className="icon-btn" aria-label="Compartir nativo"><IcoShare/></button>
+                <button onClick={copyLinkWithSettings} className="icon-btn" aria-label="Copiar enlace con ajustes"><IcoLink/></button>
+              </div>
+            </div>
+            <div className="mt-6 grid md:grid-cols-2 gap-5">
+              <div className="kn-card p-5 relative">
+                <h3 className="text-base font-semibold">Estilizado</h3>
+                <button onClick={()=>navigator.clipboard.writeText(styled).then(()=>alert('¡Copiado!'))} className="absolute top-3 right-3 inline-flex items-center justify-center w-10 h-10 rounded-full border bg-white hover:bg-gray-50" aria-label="Copiar estilizado">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="w-5 h-5"><rect x="9" y="9" width="10" height="12" rx="2"/><path d="M5 15V7a2 2 0 0 1 2-2h8"/></svg>
+                </button>
+                <textarea className="w-full h-28 rounded-xl border mt-3 p-3" readOnly value={styled}></textarea>
+              </div>
+              <div className="kn-card p-5 relative">
+                <h3 className="text-base font-semibold">ASCII</h3>
+                <button onClick={()=>navigator.clipboard.writeText(asciiOut).then(()=>alert('¡Copiado!'))} className="absolute top-3 right-3 inline-flex items-center justify-center w-10 h-10 rounded-full border bg-white hover:bg-gray-50" aria-label="Copiar ASCII">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="w-5 h-5"><rect x="9" y="9" width="10" height="12" rx="2"/><path d="M5 15V7a2 2 0 0 1 2-2h8"/></svg>
+                </button>
+                <textarea className="w-full h-28 rounded-xl border mt-3 p-3" readOnly value={asciiOut}></textarea>
+              </div>
+            </div>
+            <footer className="mt-6 text-center text-xs text-gray-500 flex flex-col items-center gap-2">
+              <div className="flex items-center gap-2">
+                <img src="./assets/king-nation-logo.png" alt="King Nation Logo" className="w-20 h-20 object-contain bg-white rounded-xl shadow-md p-1" />
+                <strong>King Nation</strong>
+              </div>
+              <span>Hecho para el Clan King Nation</span>
+            </footer>
+          </div>
+        </div>
+      );
+    }
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+
+  <!-- Sensi Finder script (device-aware) -->
+  <script>
+  // ========================= CLEAN SCRIPT (device-aware) =========================
+  const CATALOG = [];
+  function addBatch(brand, models, opts={}){
+    const base = opts.base || {
+      low:{general:120, red:110, x2:105, x4:95,  sniper:90,  freelook:100},
+      mid:{general:160, red:150, x2:140, x4:130, sniper:120, freelook:130},
+      high:{general:200, red:190, x2:180, x4:170, sniper:160, freelook:170}
+    };
+    const gyroDefault = Boolean(opts.gyro);
+    for(const m of models){
+      const modelName = (typeof m === 'object' && m.name) ? m.name : m;
+      const gyro = (typeof m === 'object' && 'gyro' in m) ? Boolean(m.gyro) : gyroDefault;
+      const sensi = (typeof m === 'object' && m.sensi) ? m.sensi : base;
+      CATALOG.push({brand, model:modelName, gyro, sensi});
+    }
+  }
+  // Catalog
+  addBatch('Apple', [
+    'iPhone 9','iPhone SE (2nd Gen)','iPhone X','iPhone XR','iPhone XS','iPhone XS Max',
+    'iPhone 11','iPhone 11 Pro','iPhone 11 Pro Max',
+    'iPhone 12','iPhone 12 Mini','iPhone 12 Pro','iPhone 12 Pro Max',
+    'iPhone 13','iPhone 13 Mini','iPhone 13 Pro','iPhone 13 Pro Max',
+    'iPhone 14','iPhone 14 Plus','iPhone 14 Pro','iPhone 14 Pro Max',
+    'iPhone 15','iPhone 15 Plus','iPhone 15 Pro','iPhone 15 Pro Max',
+    'iPhone 16','iPhone 16 Plus','iPhone 16 Pro','iPhone 16 Pro Max',
+    'iPad 9th Gen','iPad 10th Gen','iPad Air 5','iPad Mini 6','iPad Pro 11"','iPad Pro 12.9"'
+  ], {gyro:true});
+
+  // ✅ Added Samsung Galaxy A56 with a tuned sensi profile (keeps everything else unchanged)
+  addBatch('Samsung', [
+    'Galaxy A03','Galaxy A05s','Galaxy A14','Galaxy A24','Galaxy A34','Galaxy A54','Galaxy A55',
+    {
+      name:'Galaxy A56',
+      gyro:true,
+      sensi:{
+        // control
+        low:{general:135, red:125, x2:115, x4:105, sniper:95,  freelook:120},
+        // balanced
+        mid:{general:165, red:170, x2:145, x4:140, sniper:125, freelook:150},
+        // fast / headshot-ish (cap 200)
+        high:{general:180, red:195, x2:150, x4:160, sniper:135, freelook:200}
+      }
+    },
+    'Galaxy M14','Galaxy M34','Galaxy S20 FE','Galaxy S21 FE',
+    'Galaxy S22','Galaxy S22+','Galaxy S22 Ultra','Galaxy S23','Galaxy S23+','Galaxy S23 Ultra',
+    'Galaxy S24','Galaxy S24+','Galaxy S24 Ultra'
+  ], {gyro:true});
+
+  addBatch('Xiaomi', [
+    'Redmi 9A','Redmi 10C','Redmi 13C',
+    'Redmi Note 9','Redmi Note 10','Redmi Note 11',
+    'Redmi Note 12','Redmi Note 12 Pro',
+    'Redmi Note 13','Redmi Note 13 Pro','Redmi Note 13 Pro+',
+    'Redmi Note 8','Redmi Note 8 Pro','Redmi Note 8T (2019)','Redmi Note 8T (2021)',
+    'POCO M4 Pro','POCO F4','POCO X3 Pro','POCO X5','POCO X6 Pro'
+  ]);
+  addBatch('Motorola', ['Moto E13','Moto E22','Moto G13','Moto G32','Moto G54','Moto G84','Edge 30','Edge 40']);
+  addBatch('OPPO', ['A16','A57','A78','Reno 7','Reno 8','Reno 10']);
+  addBatch('vivo', ['Y20','Y21','Y27','Y36','V21','V27','V30','V30 Pro','V30e']);
+  addBatch('TECNO', ['Spark 10','Spark 20','Pova 5','Camon 20']);
+  addBatch('Infinix', ['Hot 11','Hot 12','Hot 30','Hot 40','Note 12','Note 30']);
+  addBatch('Huawei', ['P30 Lite','P40 Lite','nova 9','Y9s','Y9a'], {gyro:true});
+  addBatch('realme', ['C25','C55','9i','10 Pro+','11 Pro+']);
+  addBatch('OnePlus', ['7T','8','9','Nord','Nord 2','11R'], {gyro:true});
+  addBatch('Google', ['Pixel 4a','Pixel 5a','Pixel 6a','Pixel 7','Pixel 7a'], {gyro:true});
+  addBatch('Nokia', ['G10','G20','X10']);
+  addBatch('ZTE', ['Blade A31','Blade A51']);
+  addBatch('Alcatel', ['1','1S','3']);
+  addBatch('BLU', ['G9 Pro','Studio X10']);
+  addBatch('Sony', ['Xperia 10 III','Xperia 5 IV'], {gyro:true});
+  addBatch('Honor', ['X8','50 Lite'], {gyro:true});
+  addBatch('LG', ['K51S','K61']);
+
+  // Device specs (refresh/touch/instant)
+  const DEVICE_SPECS = new Map([
+    // Samsung S24 family (typical)
+    [["Samsung","Galaxy S24"].toString(),        {refresh:120, touch:240}],
+    [["Samsung","Galaxy S24+"].toString(),       {refresh:120, touch:240}],
+    [["Samsung","Galaxy S24 Ultra"].toString(),  {refresh:120, touch:240}],
+
+    // ✅ Added Galaxy A56 panel/touch baseline (120 / 240)
+    [["Samsung","Galaxy A56"].toString(),        {refresh:120, touch:240}],
+
+    // Motorola
+    [["Motorola","Moto G54"].toString(),         {refresh:120, touch:240}],
+
+    // Infinix
+    [["Infinix","Hot 40"].toString(),            {refresh:90,  touch:240}],
+
+    // Xiaomi / POCO with instant modes
+    [["Xiaomi","POCO X6 Pro"].toString(),        {refresh:120, touch:480, instant:2160}],
+    [["Xiaomi","Redmi Note 13 Pro+"].toString(), {refresh:120, touch:240, instant:2160}],
+
+    // Xiaomi Redmi 13C (added)
+    [["Xiaomi","Redmi 13C"].toString(),          {refresh:90,  touch:180}],
+
+    // Xiaomi Redmi Note 8 family
+    [["Xiaomi","Redmi Note 8"].toString(),       {refresh:60,  touch:120}],
+    [["Xiaomi","Redmi Note 8 Pro"].toString(),   {refresh:60,  touch:120}],
+    [["Xiaomi","Redmi Note 8T (2019)"].toString(), {refresh:60, touch:120}],
+    [["Xiaomi","Redmi Note 8T (2021)"].toString(), {refresh:60, touch:120}],
+
+    // Apple iPhone (representative)
+    [["Apple","iPhone 11 Pro"].toString(),       {refresh:60,  touch:120}],
+    [["Apple","iPhone 12 Pro Max"].toString(),   {refresh:60,  touch:240}],
+    [["Apple","iPhone 13 Pro"].toString(),       {refresh:120, touch:240}],
+    [["Apple","iPhone 14 Pro"].toString(),       {refresh:120, touch:240}],
+    [["Apple","iPhone 15 Pro Max"].toString(),   {refresh:120, touch:240}],
+    [["Apple","iPhone 16 Pro Max"].toString(),   {refresh:120, touch:240}],
+
+    // Apple iPad
+    [["Apple","iPad 9th Gen"].toString(),        {refresh:60,  touch:120}],
+    [["Apple","iPad 10th Gen"].toString(),       {refresh:60,  touch:120}],
+    [["Apple","iPad Air 5"].toString(),          {refresh:60,  touch:120}],
+    [["Apple","iPad Mini 6"].toString(),         {refresh:60,  touch:120}],
+    [["Apple","iPad Pro 11\""] .toString(),      {refresh:120, touch:240}],
+    [["Apple","iPad Pro 12.9\""] .toString(),    {refresh:120, touch:240}],
+  ]);
+
+  // Build brand map
+  const byBrand = (() => {
+    const map = new Map();
+    for(const x of CATALOG){ if(!map.has(x.brand)) map.set(x.brand, []); map.get(x.brand).push(x); }
+    for(const [k, arr] of map){ arr.sort((a,b)=>a.model.localeCompare(b.model)); }
+    return new Map([...map.entries()].sort((a,b)=>a[0].localeCompare(b[0])));
+  })();
+
+  // DOM refs
+  const $brand = document.getElementById('brand');
+  const $model = document.getElementById('model');
+  const $profile = document.getElementById('profile');
+  const $dpi = document.getElementById('dpi');
+  const $q = document.getElementById('q');
+  const $suggestions = document.getElementById('suggestions');
+  const $btnShow = document.getElementById('btnShow');
+  const $btnCopy = document.getElementById('btnCopy');
+  const $btnClear = document.getElementById('btnClear');
+  const $tbl = document.getElementById('tbl');
+  const $tbody = $tbl.querySelector('tbody');
+  const $title = document.getElementById('resultTitle');
+  const $meta = document.getElementById('resultMeta');
+  const $badges = document.getElementById('badges');
+
+  // ---------- Helpers that AVOID innerHTML so models with quotes (iPad Pro 11") work ----------
+  function setSelectOptions(selectEl, values, placeholderText){
+    while(selectEl.firstChild) selectEl.removeChild(selectEl.firstChild);
+    if(placeholderText){
+      const ph = document.createElement('option');
+      ph.value = ""; ph.textContent = placeholderText; ph.disabled = true; ph.selected = true; ph.hidden = true;
+      selectEl.appendChild(ph);
+    }
+    for(const v of values){
+      const opt = document.createElement('option');
+      opt.value = v; opt.textContent = v; selectEl.appendChild(opt);
+    }
+  }
+  function setDatalistOptions(datalistEl, values){
+    while(datalistEl.firstChild) datalistEl.removeChild(datalistEl.firstChild);
+    for(const v of values){
+      const opt = document.createElement('option');
+      opt.value = v; datalistEl.appendChild(opt);
+    }
+  }
+  function placeholder(text){ return text; }
+
+  function buildSuggestions(filterBrand=''){
+    const list = filterBrand ? (byBrand.get(filterBrand) || []) : CATALOG;
+    const vals = list.map(x=>`${x.brand} ${x.model}`);
+    setDatalistOptions($suggestions, vals);
+  }
+  function fillBrands(){
+    const brands = [...byBrand.keys()];
+    setSelectOptions($brand, brands, 'Selecciona marca');
+  }
+  function fillModels(){
+    const b = $brand.value;
+    if(!b){ setSelectOptions($model, [], 'Selecciona modelo'); return; }
+    const list = byBrand.get(b) || [];
+    const models = list.map(x=>x.model);
+    setSelectOptions($model, models, 'Selecciona modelo');
+    buildSuggestions(b);
+  }
+
+  function validate(){
+    const ok = Boolean($brand.value && $model.value && $profile.value && $dpi.value);
+    $btnShow.disabled = !ok; $btnCopy.disabled = !ok;
+  }
+  function searchSmart(q){
+    q = (q||'').trim().toLowerCase();
+    if(!q) return null;
+    return CATALOG.find(x => `${x.brand} ${x.model}`.toLowerCase().includes(q));
+  }
+
+  // Brand-based DPI helper
+  function suggestedDpi(brand, prof){
+    const p = prof||'mid';
+    const map = {
+      'Samsung': {low:600, mid:720, high:820},
+      'Xiaomi': {low:550, mid:700, high:820},
+      'Motorola': {low:520, mid:680, high:780},
+      'Infinix': {low:500, mid:650, high:750},
+      'TECNO': {low:500, mid:650, high:750},
+      'realme': {low:540, mid:680, high:780},
+      'OPPO': {low:540, mid:700, high:800},
+      'vivo': {low:520, mid:680, high:780},
+      'Huawei': {low:560, mid:700, high:800},
+      'OnePlus': {low:560, mid:720, high:820},
+      'Google': {low:560, mid:720, high:820},
+      'Nokia': {low:500, mid:650, high:740},
+      'ZTE': {low:500, mid:640, high:720},
+      'Alcatel': {low:480, mid:620, high:700},
+      'BLU': {low:480, mid:620, high:700},
+      'Sony': {low:560, mid:700, high:800},
+      'Honor': {low:560, mid:700, high:800},
+      'Apple': {low: 0, mid: 0, high: 0} // iOS: DPI externo no aplica
+    };
+    const row = map[brand] || {low:520, mid:680, high:780};
+    return row[p] || row.mid;
+  }
+
+  // Hardware-aware scaling
+  const BASELINE = {refresh:120, touch:240}; // reference
+  function clamp100_200(v){ return Math.max(1, Math.min(200, Math.round(v))); }
+  function getDeviceSpec(brand, model){
+    return DEVICE_SPECS.get([brand, model].toString()) || null;
+  }
+  function scaleByDevice(base, spec){
+    if(!spec) return {...base};
+    const refresh = spec.refresh || BASELINE.refresh;
+    const touch = spec.touch || BASELINE.touch;
+    const instant = spec.instant || null;
+
+    const dTouch = (touch - BASELINE.touch) / BASELINE.touch;
+    const dRef   = (refresh - BASELINE.refresh) / BASELINE.refresh;
+
+    const out = {...base};
+    const generalDelta = Math.round((-dTouch*10) + (-dRef*6));
+    const redDelta     = Math.round((-dTouch*10) + (-dRef*5));
+    const x2Delta      = Math.round((-dTouch*8)  + (-dRef*4));
+    const x4Delta      = Math.round((-dTouch*7)  + (-dRef*3));
+    const sniperDelta  = Math.round((-dTouch*6)  + (-dRef*2));
+    const freeDelta    = Math.round((-dTouch*6)  + (-dRef*2));
+
+    out.general   = clamp100_200(out.general + generalDelta);
+    out.red       = clamp100_200(out.red + redDelta);
+    out.x2        = clamp100_200(out.x2 + x2Delta);
+    out.x4        = clamp100_200(out.x4 + x4Delta);
+    out.sniper    = clamp100_200(out.sniper + sniperDelta);
+    out.freelook  = clamp100_200(out.freelook + freeDelta);
+
+    if(instant && instant >= 1000){
+      out.red   = clamp100_200(out.red - 2);
+      out.x2    = clamp100_200(out.x2 - 2);
+      out.x4    = clamp100_200(out.x4 - 2);
+      out.sniper= clamp100_200(out.sniper - 2);
+    }
+    return out;
+  }
+  function getSensiFor(brand, model, profile){
+    const item = (byBrand.get(brand) || []).find(x=>x.model===model);
+    if(!item) return null;
+    const base = item.sensi[profile];
+    const spec = getDeviceSpec(brand, model);
+    return scaleByDevice(base, spec);
+  }
+
+  function render(){
+    const b = $brand.value, m = $model.value, prof = $profile.value, dpip = $dpi.value;
+    if(!b || !m || !prof || !dpip){
+      $tbl.hidden = true; $tbody.innerHTML='';
+      $title.textContent='Selecciona opciones para ver la Sensi…';
+      $meta.textContent='—'; $badges.innerHTML='';
+      return;
+    }
+    const item = (byBrand.get(b) || []).find(x=>x.model===m);
+    if(!item){ $tbl.hidden = true; $tbody.innerHTML=''; return; }
+
+    const s = getSensiFor(b, m, prof);
+    $title.textContent = `${b} ${m} — ${prof==='low'?'Baja':prof==='mid'?'Media':'Alta'}`;
+    const dpiBadge = (b==='Apple') ? 'DPI: N/A (iOS)' : (dpip==='with' ? `DPI sugerido: ${suggestedDpi(b, prof)}` : 'DPI: Sin ajustar');
+    const spec = getDeviceSpec(b, m);
+    const specBadge = spec ? `Hz: ${spec.refresh || '-'} / Touch: ${spec.touch}${spec.instant?` (inst ${spec.instant})`:''}` : 'Hz/Touch: estándar';
+    $meta.textContent = 'Presets orientativos adaptados a tu hardware; ajusta según FPS y estilo.';
+    $badges.innerHTML = [ `Gyro: ${item.gyro? 'ON':'OFF'}`, dpiBadge, specBadge ].map(t=>`<span class="tag">${t}</span>`).join('');
+
+    $tbody.innerHTML = '';
+    const rows = [ ['General', s.general], ['Punto Rojo', s.red], ['2x Scope', s.x2], ['4x Scope', s.x4], ['Franco (AWM)', s.sniper], ['Mirada Libre', s.freelook] ];
+    for(const [k,v] of rows){ const tr = document.createElement('tr'); tr.innerHTML = `<td>${k}</td><td>${v}</td>`; $tbody.appendChild(tr); }
+    $tbl.hidden = false;
+  }
+  function copySettings(){
+    const b = $brand.value, m = $model.value, prof = $profile.value, dpip = $dpi.value; if(!b||!m||!prof||!dpip) return;
+    const item = (byBrand.get(b) || []).find(x=>x.model===m); if(!item) return; const s = getSensiFor(b, m, prof);
+    const header = `Sensi de ${b} ${m} (${prof==='low'?'Baja':prof==='mid'?'Media':'Alta'})`;
+    const dpiLine = (b==='Apple') ? 'DPI: N/A (iOS)' : (dpip==='with' ? `DPI sugerido: ${suggestedDpi(b, prof)}` : 'DPI: Sin ajustar');
+    const spec = getDeviceSpec(b,m);
+    const specLine = spec ? `Panel: ${spec.refresh||'-'}Hz · Touch: ${spec.touch}Hz${spec.instant?` (inst ${spec.instant}Hz)`:''}` : 'Panel: estándar';
+    const lines = [ header, dpiLine, specLine, `Gyro: ${item.gyro? 'ON':'OFF'}`, `General: ${s.general}`, `Punto Rojo: ${s.red}`, `2x: ${s.x2}`, `4x: ${s.x4}`, `Franco: ${s.sniper}`, `Mirada Libre: ${s.freelook}` ].join('\n');
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(lines); }
+  }
+  $brand.addEventListener('change', ()=>{ fillModels(); validate(); });
+  $model.addEventListener('change', validate);
+  $profile.addEventListener('change', validate);
+  $dpi.addEventListener('change', validate);
+  document.getElementById('btnShow').addEventListener('click', render);
+  document.getElementById('btnCopy').addEventListener('click', copySettings);
+  document.getElementById('btnClear').addEventListener('click', ()=>{ fillBrands(); fillModels(); buildSuggestions(''); $q.value=''; $profile.selectedIndex = 0; $dpi.selectedIndex = 0; validate(); render(); });
+  $q.addEventListener('input', ()=>{
+    const hit = searchSmart($q.value);
+    if(hit){ $brand.value = hit.brand; fillModels(); $model.value = hit.model; validate(); }
+  });
+  $q.addEventListener('keydown', (e)=>{
+    if(e.key==='Enter'){
+      const hit = searchSmart($q.value);
+      if(hit){ $brand.value = hit.brand; fillModels(); $model.value = hit.model; }
+      validate(); if(!document.getElementById('btnShow').disabled){ e.preventDefault(); render(); }
+    }
+  });
+  window.addEventListener('keydown', (e)=>{ if(e.key==='Enter' && !document.getElementById('btnShow').disabled){ e.preventDefault(); render(); } });
+  fillBrands();
+  fillModels();
+  buildSuggestions('');
+  validate();
+  render();
+  // ======================= END CLEAN SCRIPT =======================
+  </script>
+
+  <!-- Error surface -->
+  <script>
+    window.addEventListener('error', function(e){
+      var el = document.getElementById('err'); if(!el) return;
+      el.style.display='block'; el.textContent = 'Error: ' + (e.message || e.toString());
+    });
+  </script>
+</body>
+</html>

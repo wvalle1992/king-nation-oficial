@@ -1,0 +1,11 @@
+# netlify.toml — static site (no build step)
+
+[build]
+  publish = "."
+  command = ""  # leave empty so Netlify doesn't try to run anything
+
+# If later you add client-side routing (SPA), uncomment this:
+# [[redirects]]
+#   from = "/*"
+#   to = "/index.html"
+#   status = 200
