@@ -118,9 +118,12 @@ function App(){
       <div className="namegen-wrap">
         <section className="kn-card namegen-shell">
           <header className="kn-section-head">
-            <div>
-              <h1 className="kn-section-title">King Nation — Generador de Nombres</h1>
-              <p className="kn-section-subtitle">Crea un nombre estilizado para Free Fire, compártelo rápido y copia tanto la versión decorada como la versión ASCII.</p>
+            <div className="kn-section-brand">
+              <img src="./assets/king-nation-logo.png" alt="" className="kn-logo kn-section-badge" aria-hidden="true" />
+              <div>
+                <h1 className="kn-section-title">Generador de Nombres</h1>
+                <p className="kn-section-subtitle">Crea un nombre estilizado para Free Fire, compártelo rápido y copia tanto la versión decorada como la versión ASCII.</p>
+              </div>
             </div>
           </header>
 

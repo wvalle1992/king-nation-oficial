@@ -16,6 +16,8 @@ body::before{
 .kng-title{ background: linear-gradient(90deg, var(--accent1), var(--accent2), var(--accent3)); -webkit-background-clip:text; background-clip:text; color:transparent }
 .kn-panel{background:linear-gradient(180deg, rgba(255,255,255,.88), rgba(250,247,255,.82));border:1px solid rgba(167,139,250,.18);border-radius:18px;padding:18px;box-shadow:0 10px 24px rgba(15,23,42,.06);backdrop-filter:saturate(1.04) blur(6px)}
 .kn-section-head{display:flex; align-items:flex-start; justify-content:space-between; gap:16px; margin-bottom:16px}
+.kn-section-brand{display:flex; align-items:center; gap:12px}
+.kn-section-badge{width:40px; height:40px; object-fit:contain; flex:0 0 40px; padding:4px; border-radius:12px}
 .kn-section-title{margin:0; font-size:clamp(22px,4vw,30px); font-weight:800; line-height:1.1; color:#111827; letter-spacing:-.02em}
 .kn-section-subtitle{margin:6px 0 0; color:#6b7280; font-size:14px; line-height:1.55}
 .kn-field-label{display:block; margin-bottom:6px; font-size:12px; font-weight:700; letter-spacing:.02em; color:#6b7280}
