@@ -31,6 +31,17 @@ body::before{
 .icon-btn,.kn-btn-icon{display:inline-flex; align-items:center; justify-content:center; width:42px; height:42px; padding:0; border:0; border-radius:12px; background:rgba(255,255,255,.28); box-shadow:none; transition:transform .15s ease, background .18s ease, opacity .18s ease}
 .icon-btn:hover,.kn-btn-icon:hover{transform:translateY(-1px); background:rgba(255,255,255,.46)}
 .icon-btn svg,.kn-btn-icon svg{width:26px; height:26px}
+.icon-btn{position:relative}
+.icon-btn::after{
+  content:attr(data-tooltip); position:absolute; left:50%; bottom:calc(100% + 10px); transform:translateX(-50%) translateY(4px);
+  padding:6px 9px; border-radius:8px; background:rgba(17,24,39,.92); color:#fff; font-size:11px; font-weight:600; line-height:1; letter-spacing:.01em;
+  white-space:nowrap; pointer-events:none; opacity:0; box-shadow:0 8px 18px rgba(15,23,42,.16); transition:opacity .15s ease, transform .15s ease; z-index:5;
+}
+.icon-btn::before{
+  content:""; position:absolute; left:50%; bottom:calc(100% + 4px); transform:translateX(-50%) translateY(4px);
+  border:5px solid transparent; border-top-color:rgba(17,24,39,.92); pointer-events:none; opacity:0; transition:opacity .15s ease, transform .15s ease; z-index:5;
+}
+.icon-btn:hover::after,.icon-btn:hover::before,.icon-btn:focus-visible::after,.icon-btn:focus-visible::before,.icon-btn.is-tooltip-visible::after,.icon-btn.is-tooltip-visible::before{opacity:1; transform:translateX(-50%) translateY(0)}
 .kn-helper-title{margin:0 0 8px; font-size:16px; font-weight:700; color:#111827}
 .kn-helper-list{margin:0; padding-left:18px; color:#6b7280; display:grid; gap:6px}
 .kn-helper-text{color:#6b7280; font-size:13px; line-height:1.6}

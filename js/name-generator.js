@@ -70,13 +70,35 @@ function buildInitialsV2Ascii({ base, gender }){
   if (gender === "king")  return joined + "King";
   return joined;
 }
-const IcoWA = () => (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="w-6 h-6" style={{color:"#25D366"}} aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.77 13.5L3 21l4.65-1.2A9 9 0 1 0 12 3Z"/><path d="M8.5 9.5c.2 2.3 3 4.8 5.2 5 .5.1 1.4-.3 1.7-.8l.6-1.1c.2-.4 0-.8-.4-1.1l-1-.5c-.3-.1-.7 0-.9.3l-.3.4c-.2.2-.6.3-.9.1-1-.5-2-1.4-2.5-2.4-.2-.3 0-.4.1-.5l.4-.3c.3-.2.4-.6.3-.9l-.5-1c-.3-.4-.7-.6-1.1-.4l-1.1.6c-.5.3-.9 1.2-.8 1.7Z"/></svg>);
-const IcoX  = () => (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="w-6 h-6" aria-hidden="true"><path d="M4 4l16 16M20 4L4 20"/></svg>);
-const IcoShare = () => (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="w-6 h-6" style={{color:"#008080"}} aria-hidden="true"><path d="M14 9l7-7m0 0h-5m5 0v5"/><path d="M21 13v5a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3h5"/></svg>);
-const IcoLink  = () => (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="w-6 h-6" style={{color:"#FFD700"}} aria-hidden="true"><path d="M10 14a5 5 0 0 1 0-7l1.5-1.5a5 5 0 0 1 7 7L17 13"/><path d="M14 10a5 5 0 0 1 0 7L12.5 18.5a5 5 0 0 1-7-7L7 11"/></svg>);
+const IcoWA = () => (
+  <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6" style={{color:"#25D366"}} aria-hidden="true">
+    <path d="M12 3.25a8.75 8.75 0 0 0-7.57 13.16L3.4 20.6l4.33-1.1A8.75 8.75 0 1 0 12 3.25Z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M9.07 8.4c-.23.05-.47.2-.62.53-.18.39-.47 1.15-.47 1.26 0 .12.02.24.1.41.08.17.76 1.54 1.85 2.57 1.31 1.24 2.55 1.63 2.87 1.74.32.11.51.09.7-.07.2-.17.79-.92.99-1.23.2-.31.42-.26.71-.15.29.11 1.84.87 2.16 1.03.32.15.53.22.61.34.08.12.08.69-.16 1.35-.24.65-1.39 1.28-1.92 1.35-.5.07-1.13.1-1.82-.12-.42-.13-.97-.32-1.68-.63-2.96-1.29-4.88-4.3-5.03-4.5-.15-.2-1.2-1.6-1.2-3.06 0-1.45.76-2.17 1.03-2.46.26-.28.58-.35.77-.35h.55c.18 0 .43.04.65.56l.74 1.78c.06.15.1.32.03.49-.08.17-.12.28-.24.43-.11.15-.24.33-.34.44-.11.12-.22.25-.1.49.12.24.53.88 1.15 1.42.79.69 1.45.9 1.66 1 .2.09.31.08.42-.05.12-.13.49-.57.62-.76.13-.19.27-.16.45-.1.19.06 1.2.57 1.4.67.2.1.34.15.39.23" fill="currentColor"/>
+  </svg>
+);
+const IcoX  = () => (
+  <svg viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6" style={{color:"#111827"}} aria-hidden="true">
+    <path d="M5.48 4.75h3.33l3.64 5.07 4.29-5.07h1.78l-5.27 6.22 6.21 8.28h-3.33l-4.04-5.51-4.66 5.51H5.66l5.66-6.67-5.84-7.83Zm3 1.56H7.96l7.57 11.38h.52L8.48 6.31Z"/>
+  </svg>
+);
+const IcoShare = () => (
+  <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6" style={{color:"#0f766e"}} aria-hidden="true">
+    <path d="M14 5h5v5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M10 14 19 5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+    <path d="M19 13v3a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3V8a3 3 0 0 1 3-3h3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+const IcoLink  = () => (
+  <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6" style={{color:"#ca8a04"}} aria-hidden="true">
+    <path d="M10.2 13.8 8.4 15.6a3.1 3.1 0 1 1-4.38-4.38l3-3a3.1 3.1 0 0 1 4.38 0" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="m13.8 10.2 1.8-1.8a3.1 3.1 0 0 1 4.38 4.38l-3 3a3.1 3.1 0 0 1-4.38 0" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="m9 15 6-6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+  </svg>
+);
 
 function App(){
   const GLYPH_FONT = "Noto Sans, 'Segoe UI Symbol', 'Apple SD Gothic Neo', system-ui, sans-serif";
+  const tooltipTimersRef = React.useRef(new Map());
   const [baseName,setBaseName]   = React.useState("Soldado");
   const [gender,setGender]       = React.useState("king");
   const [insertInv,setInsertInv] = React.useState(true);
@@ -112,6 +134,21 @@ function App(){
     qp.set("inv", insertInv?"1":"0"); qp.set("sc", smallCaps?"1":"0"); qp.set("kn", addKNSuffix?"1":"0");
     url.search = qp.toString();
     navigator.clipboard.writeText(url.toString()).then(()=>alert("Enlace con ajustes copiado."));
+  };
+  React.useEffect(() => () => {
+    tooltipTimersRef.current.forEach((timerId) => window.clearTimeout(timerId));
+    tooltipTimersRef.current.clear();
+  }, []);
+  const showTooltipBriefly = (event) => {
+    const button = event.currentTarget;
+    button.classList.add("is-tooltip-visible");
+    const existingTimer = tooltipTimersRef.current.get(button);
+    if (existingTimer) window.clearTimeout(existingTimer);
+    const timerId = window.setTimeout(() => {
+      button.classList.remove("is-tooltip-visible");
+      tooltipTimersRef.current.delete(button);
+    }, 1400);
+    tooltipTimersRef.current.set(button, timerId);
   };
   return (
     <div className="namegen-scope">
@@ -158,10 +195,10 @@ function App(){
                 <h2 className="kn-helper-title">Acciones</h2>
                 <p className="kn-helper-text">Comparte el nombre actual o genera un enlace con tus ajustes activos sin salir de la página.</p>
                 <div className="namegen-social">
-                  <button onClick={()=>share("whatsapp", styled)} className="icon-btn" aria-label="WhatsApp"><IcoWA/></button>
-                  <button onClick={()=>share("x", styled)} className="icon-btn" aria-label="X / Twitter"><IcoX/></button>
-                  <button onClick={()=>share("native", styled)} className="icon-btn" aria-label="Compartir nativo"><IcoShare/></button>
-                  <button onClick={copyLinkWithSettings} className="icon-btn" aria-label="Copiar enlace con ajustes"><IcoLink/></button>
+                  <button onClick={(event)=>{showTooltipBriefly(event); share("whatsapp", styled);}} className="icon-btn" aria-label="Compartir por WhatsApp" data-tooltip="Compartir por WhatsApp"><IcoWA/></button>
+                  <button onClick={(event)=>{showTooltipBriefly(event); share("x", styled);}} className="icon-btn" aria-label="Compartir por X" data-tooltip="Compartir por X"><IcoX/></button>
+                  <button onClick={(event)=>{showTooltipBriefly(event); share("native", styled);}} className="icon-btn" aria-label="Compartir" data-tooltip="Compartir"><IcoShare/></button>
+                  <button onClick={(event)=>{showTooltipBriefly(event); copyLinkWithSettings();}} className="icon-btn" aria-label="Copiar enlace" data-tooltip="Copiar enlace"><IcoLink/></button>
                 </div>
               </div>
             </div>
