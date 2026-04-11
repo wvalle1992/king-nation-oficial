@@ -16,6 +16,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <link href="./css/base.css" rel="stylesheet">
+  <link href="./css/theme.css" rel="stylesheet">
 
   <!-- React + Babel -->
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
@@ -24,28 +25,6 @@
 
   <!-- Global Theme -->
   <style>
-    body.kn-intake{margin:0;min-height:100svh;background:radial-gradient(1200px 600px at 20% -10%, var(--bg-top) 0%, transparent 60%),radial-gradient(900px 600px at 80% 0%, var(--bg-mid) 0%, transparent 60%),linear-gradient(180deg, var(--bg-top), var(--bg-bot));position:relative;overflow-x:hidden}
-
-    .kn-card{background:linear-gradient(180deg, rgba(247,242,255,.86), rgba(238,247,255,.84));border:1px solid rgba(167,139,250,.22);border-radius:20px;box-shadow:0 12px 30px rgba(2,6,23,.06), 0 2px 6px rgba(2,6,23,.03);backdrop-filter:saturate(1.05) blur(6px)}
-    .kn-logo{background:#fff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 6px 20px rgba(0,0,0,.08)}
-
-    :root{ --bg-top:#fff0f6; --bg-mid:#f7f2ff; --bg-bot:#eef7ff; --wm-opacity:.20; --wm-rotate:-6deg; --wm-size:min(92vw, 1200px); --accent1:#f472b6; --accent2:#a78bfa; --accent3:#60a5fa }
-    body::before{
-      content:""; position:fixed; left:50%; top:50%; transform:translate(-50%,-50%) rotate(var(--wm-rotate));
-      width:var(--wm-size); height:var(--wm-size);
-      background:url('./assets/king-nation-logo.png') center / contain no-repeat;
-      opacity:var(--wm-opacity); filter:saturate(1.06) contrast(1.05);
-      -webkit-mask-image: radial-gradient(closest-side, rgba(0,0,0,1) 62%, rgba(0,0,0,0) 100%);
-              mask-image: radial-gradient(closest-side, rgba(0,0,0,1) 62%, rgba(0,0,0,0) 100%);
-      pointer-events:none; z-index:0;
-    }
-    @media (max-width:960px){ :root{ --wm-size: min(110vw, 1000px); --wm-opacity:.18; } }
-    @media (max-width:560px){ :root{ --wm-size: min(130vw, 900px);  --wm-opacity:.16; } }
-
-    .kng-title{ background: linear-gradient(90deg, var(--accent1), var(--accent2), var(--accent3)); -webkit-background-clip:text; background-clip:text; color:transparent }
-    .icon-btn{ border:1px solid transparent; background: linear-gradient(#ffffff,#ffffff) padding-box, linear-gradient(120deg, var(--accent1), var(--accent2), var(--accent3)) border-box }
-    .icon-btn:hover{ background: linear-gradient(#f9fafb,#f9fafb) padding-box, linear-gradient(120deg, var(--accent1), var(--accent2), var(--accent3)) border-box }
-
     .tabs{ display:flex; gap:10px; margin: 8px 0 16px; flex-wrap:wrap; justify-content:center }
     .tabbtn{ border:1px solid rgba(167,139,250,.35); background:#ffffffcc; padding:10px 14px; border-radius:12px; cursor:pointer; font-weight:600 }
     .tabbtn[aria-selected="true"]{ box-shadow:0 0 0 3px rgba(167,139,250,.22) inset; }
