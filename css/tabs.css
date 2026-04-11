@@ -1,0 +1,5 @@
+.tabs{ display:flex; gap:10px; margin: 8px 0 16px; flex-wrap:wrap; justify-content:center }
+.tabbtn{ border:1px solid rgba(167,139,250,.35); background:#ffffffcc; padding:10px 14px; border-radius:12px; cursor:pointer; font-weight:600 }
+.tabbtn[aria-selected="true"]{ box-shadow:0 0 0 3px rgba(167,139,250,.22) inset; }
+.panel{ display:none }
+.panel.active{ display:block }
