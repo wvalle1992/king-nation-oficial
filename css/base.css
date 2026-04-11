@@ -1,0 +1,3 @@
+body{font-family:Noto Sans, 'Segoe UI', system-ui, -apple-system, sans-serif}
+textarea{font-family:Noto Sans, 'Segoe UI Symbol', 'Apple SD Gothic Neo', system-ui, sans-serif}
+#err{position:fixed;left:0;right:0;bottom:0;background:#fee2e2;color:#991b1b;padding:8px 12px;font-size:12px;display:none;z-index:9999}
