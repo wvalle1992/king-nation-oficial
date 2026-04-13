@@ -361,7 +361,39 @@
         return;
       }
 
-      if (sessionData?.session) {
+      if (!sessionData?.session) {
+        applySignedOutTabState();
+        return;
+      }
+
+      const { data: userData, error: userError } = await supabaseClient.auth.getUser();
+
+      if (userError) {
+        console.error('Supabase user error:', userError);
+        applySignedOutTabState();
+        return;
+      }
+
+      const providerId = userData?.user?.user_metadata?.provider_id;
+
+      if (!providerId) {
+        applySignedOutTabState();
+        return;
+      }
+
+      const { data: playerMatch, error: playerMatchError } = await supabaseClient
+        .from('players')
+        .select('discord_user_id')
+        .eq('discord_user_id', providerId)
+        .maybeSingle();
+
+      if (playerMatchError) {
+        console.error('Players access check error:', playerMatchError);
+        applySignedOutTabState();
+        return;
+      }
+
+      if (playerMatch) {
         applySignedInTabState();
         return;
       }
