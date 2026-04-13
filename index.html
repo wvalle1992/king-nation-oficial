@@ -63,6 +63,7 @@
           Cerrar sesión
         </button>
       </div>
+      <div id="current-user-badge" class="hidden max-w-md mx-auto mb-4 rounded-2xl border border-gray-200 bg-white px-4 py-3 shadow-sm"></div>
       <div id="players-preview-card" class="max-w-md mx-auto rounded-2xl border border-gray-200 bg-white p-4 shadow-sm text-sm text-gray-600">
         Cargando vista previa del jugador...
       </div>
@@ -286,6 +287,7 @@
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     const discordLoginButton = document.getElementById('discord-login-btn');
     const signOutButton = document.getElementById('signout-btn');
+    const currentUserBadge = document.getElementById('current-user-badge');
     const playersRosterState = {
       players: [],
       filter: 'Todos',
@@ -360,6 +362,51 @@
       }
     }
 
+    function getRoleBadge(roleValue) {
+      const roleLabel = roleValue || 'MIEMBRO';
+      const badgeMap = {
+        'LÍDER': 'bg-yellow-100 text-yellow-800 border-yellow-200',
+        'ELDER': 'bg-blue-100 text-blue-800 border-blue-200',
+        '👑 | KING ELITE': 'bg-pink-100 text-pink-800 border-pink-200',
+        'MIEMBRO': 'bg-green-100 text-green-800 border-green-200'
+      };
+      const badgeClass = badgeMap[roleLabel] || 'bg-gray-100 text-gray-700 border-gray-200';
+
+      return `<span class="inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-semibold ${badgeClass}">${roleLabel}</span>`;
+    }
+
+    function setCurrentUserBadge(player) {
+      if (!currentUserBadge || !player) {
+        if (currentUserBadge) {
+          currentUserBadge.classList.add('hidden');
+          currentUserBadge.innerHTML = '';
+        }
+        return;
+      }
+
+      const avatarUrl = player.avatar_url || './assets/king-nation-logo.png';
+      const styledName = player.styled_name || 'Sin nombre estilizado';
+      const ffName = player.ff_name || 'Sin nombre de Free Fire';
+      const roleBadge = getRoleBadge(player.role || 'MIEMBRO');
+      const vipStatus = player.vip_status === true ? '👑 VIP' : '';
+
+      currentUserBadge.innerHTML = `
+        <div class="flex items-center gap-3">
+          <img src="${avatarUrl}" alt="${ffName}" class="w-12 h-12 rounded-xl object-cover border border-gray-200 bg-gray-100" />
+          <div class="min-w-0 flex-1">
+            <p class="text-xs uppercase tracking-wide text-gray-400">Sesión activa</p>
+            <p class="text-sm font-semibold text-gray-800 truncate">${styledName}</p>
+            <p class="text-xs text-gray-500 truncate">${ffName}</p>
+          </div>
+          <div class="flex flex-col items-end gap-2 text-right">
+            ${roleBadge}
+            ${vipStatus ? `<span class="text-xs font-semibold text-pink-600">${vipStatus}</span>` : ''}
+          </div>
+        </div>
+      `;
+      currentUserBadge.classList.remove('hidden');
+    }
+
     async function syncAuthUi() {
       const { data: sessionData, error: sessionError } = await supabaseClient.auth.getSession();
 
@@ -367,12 +414,14 @@
         console.error('Supabase session error:', sessionError);
         applySignedOutTabState();
         setLeaderToolsVisibility(false);
+        setCurrentUserBadge(null);
         return;
       }
 
       if (!sessionData?.session) {
         applySignedOutTabState();
         setLeaderToolsVisibility(false);
+        setCurrentUserBadge(null);
         return;
       }
 
@@ -382,6 +431,7 @@
         console.error('Supabase user error:', userError);
         applySignedOutTabState();
         setLeaderToolsVisibility(false);
+        setCurrentUserBadge(null);
         return;
       }
 
@@ -390,12 +440,13 @@
       if (!providerId) {
         applySignedOutTabState();
         setLeaderToolsVisibility(false);
+        setCurrentUserBadge(null);
         return;
       }
 
       const { data: playerMatch, error: playerMatchError } = await supabaseClient
         .from('players')
-        .select('discord_user_id')
+        .select('discord_user_id, avatar_url, styled_name, ff_name, role, vip_status')
         .eq('discord_user_id', providerId)
         .maybeSingle();
 
@@ -403,17 +454,20 @@
         console.error('Players access check error:', playerMatchError);
         applySignedOutTabState();
         setLeaderToolsVisibility(false);
+        setCurrentUserBadge(null);
         return;
       }
 
       if (playerMatch) {
         applySignedInTabState();
         setLeaderToolsVisibility(AUTHORIZED_LEADER_DISCORD_USER_IDS.includes(providerId));
+        setCurrentUserBadge(playerMatch);
         return;
       }
 
       applySignedOutTabState();
       setLeaderToolsVisibility(false);
+      setCurrentUserBadge(null);
     }
 
     async function logCurrentAuthSession() {
@@ -506,19 +560,6 @@
 
         return getPriority(a) - getPriority(b);
       });
-
-      const getRoleBadge = roleValue => {
-        const roleLabel = roleValue || 'MIEMBRO';
-        const badgeMap = {
-          'LÍDER': 'bg-yellow-100 text-yellow-800 border-yellow-200',
-          'ELDER': 'bg-blue-100 text-blue-800 border-blue-200',
-          '👑 | KING ELITE': 'bg-pink-100 text-pink-800 border-pink-200',
-          'MIEMBRO': 'bg-green-100 text-green-800 border-green-200'
-        };
-        const badgeClass = badgeMap[roleLabel] || 'bg-gray-100 text-gray-700 border-gray-200';
-
-        return `<span class="inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-semibold ${badgeClass}">${roleLabel}</span>`;
-      };
 
       if (statsContainer) {
         const totalPlayers = sortedPlayers.length;
