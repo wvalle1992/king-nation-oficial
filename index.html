@@ -448,6 +448,24 @@
       return `<span class="inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-semibold ${badgeClass}">${roleLabel}</span>`;
     }
 
+    function getSocialDisplay(platform, handle) {
+      if (!platform || !handle) {
+        return '';
+      }
+
+      const socialMap = {
+        tiktok: `🎵 @${handle}`,
+        instagram: `📸 @${handle}`,
+        youtube: `▶️ ${handle}`,
+        facebook: `f ${handle}`,
+        x: `𝕏 @${handle}`,
+        twitch: `🎮 ${handle}`,
+        other: `@${handle}`
+      };
+
+      return socialMap[platform] || `@${handle}`;
+    }
+
     function setCurrentUserBadge(player) {
       if (!currentUserBadge || !player) {
         if (currentUserWelcome) {
@@ -747,6 +765,8 @@
           const avatarUrl = player.avatar_url || './assets/king-nation-logo.png';
           const styledName = player.styled_name || 'Sin nombre estilizado';
           const ffName = player.ff_name || 'Sin nombre de Free Fire';
+          const freeFireId = player.free_fire_id || '';
+          const socialDisplay = getSocialDisplay(player.social_platform, player.social_handle);
           const roleBadge = getRoleBadge(player.role || 'MIEMBRO');
           const vipStatus = player.vip_status === true ? '👑 VIP' : '—';
           const rosterCardClass = player.role === 'LÍDER'
@@ -762,6 +782,7 @@
                 <div class="min-w-0">
                   <h3 class="text-base font-semibold text-gray-800 truncate">${styledName}</h3>
                   <p class="text-sm text-gray-500 truncate">${ffName}</p>
+                  ${socialDisplay ? `<p class="mt-1 text-xs font-medium text-gray-500 truncate">${socialDisplay}</p>` : ''}
                 </div>
               </div>
               <div class="mt-3 grid grid-cols-2 gap-2 text-sm">
@@ -774,6 +795,7 @@
                   <span class="text-gray-700">${vipStatus}</span>
                 </div>
               </div>
+              ${freeFireId ? `<div class="mt-3"><span class="inline-flex items-center rounded-full border border-indigo-200 bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-700">ID: ${freeFireId}</span></div>` : ''}
             </div>
           `;
         }).join('');
