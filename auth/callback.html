@@ -16,29 +16,52 @@
   <script>
     const SUPABASE_URL = 'https://vtyekyzpdnsnhpeiuite.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ0eWVreXpwZG5zbmhwZWl1aXRlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5NDM0NTMsImV4cCI6MjA5MTUxOTQ1M30.U1d2wPSj5co0RZre7GGM0jbko7BsMd-tTcMV-DjIS9g';
-    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      auth: {
+        detectSessionInUrl: true
+      }
+    });
     const authStatus = document.getElementById('auth-status');
 
-    async function handleAuthCallback() {
-      const code = new URLSearchParams(window.location.search).get('code');
+    async function logCurrentAuthSession() {
+      const { data: sessionData, error: sessionError } = await supabaseClient.auth.getSession();
 
-      if (!code) {
-        authStatus.textContent = 'No se encontro el codigo de autenticacion.';
+      if (sessionError) {
+        console.error('Supabase callback session error:', sessionError);
+        authStatus.textContent = 'No se pudo leer la sesion de Discord.';
         return;
       }
 
-      const { error } = await supabaseClient.auth.exchangeCodeForSession(code);
+      const session = sessionData?.session;
+      console.log('Callback session exists:', Boolean(session));
 
-      if (error) {
-        console.error('Supabase OAuth callback error:', error);
-        authStatus.textContent = 'No se pudo completar el inicio de sesion con Discord.';
+      if (!session) {
+        authStatus.textContent = 'Esperando la sesion de Discord...';
         return;
       }
 
+      const { data: userData, error: userError } = await supabaseClient.auth.getUser();
+
+      if (userError) {
+        console.error('Supabase callback user error:', userError);
+        authStatus.textContent = 'La sesion existe, pero no se pudo leer el usuario.';
+        return;
+      }
+
+      const user = userData?.user;
+      console.log('Callback authenticated user id:', user?.id || null);
+      console.log('Callback authenticated email:', user?.email || null);
+      console.log('Callback authenticated user metadata:', user?.user_metadata || null);
+      authStatus.textContent = 'Sesion iniciada correctamente. Redirigiendo...';
       window.location.href = '/';
     }
 
-    handleAuthCallback();
+    supabaseClient.auth.onAuthStateChange((event) => {
+      console.log('Callback auth state change:', event);
+      logCurrentAuthSession();
+    });
+
+    logCurrentAuthSession();
   </script>
 </body>
 </html>
