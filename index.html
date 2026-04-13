@@ -55,9 +55,12 @@
     </header>
 
     <section class="mb-6">
-      <div class="mb-4 flex justify-center">
+      <div class="mb-4 flex justify-center gap-3">
         <button id="discord-login-btn" class="rounded-xl border border-indigo-200 bg-indigo-50 px-4 py-2 text-sm font-semibold text-indigo-700 shadow-sm transition hover:bg-indigo-100">
           Entrar con Discord
+        </button>
+        <button id="signout-btn" class="hidden rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-gray-700 shadow-sm transition hover:bg-gray-50">
+          Cerrar sesión
         </button>
       </div>
       <div id="players-preview-card" class="max-w-md mx-auto rounded-2xl border border-gray-200 bg-white p-4 shadow-sm text-sm text-gray-600">
@@ -282,11 +285,89 @@
     const LEADER_DISCORD_USER_ID = '1219039567798079540';
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     const discordLoginButton = document.getElementById('discord-login-btn');
+    const signOutButton = document.getElementById('signout-btn');
     const playersRosterState = {
       players: [],
       filter: 'Todos',
       search: ''
     };
+
+    function applySignedOutTabState() {
+      const tabName = document.getElementById('tab-name');
+      const tabSensi = document.getElementById('tab-sensi');
+      const tabPlayers = document.getElementById('tab-players');
+      const panelName = document.getElementById('panel-name');
+      const panelSensi = document.getElementById('panel-sensi');
+      const panelPlayers = document.getElementById('panel-players');
+
+      if (tabName) {
+        tabName.classList.add('hidden');
+      }
+
+      if (tabSensi) {
+        tabSensi.classList.add('hidden');
+      }
+
+      if (tabPlayers) {
+        tabPlayers.classList.remove('hidden');
+        tabPlayers.setAttribute('aria-selected', 'true');
+      }
+
+      if (panelName) {
+        panelName.classList.remove('active');
+      }
+
+      if (panelSensi) {
+        panelSensi.classList.remove('active');
+      }
+
+      if (panelPlayers) {
+        panelPlayers.classList.add('active');
+      }
+
+      if (signOutButton) {
+        signOutButton.classList.add('hidden');
+      }
+    }
+
+    function applySignedInTabState() {
+      const tabName = document.getElementById('tab-name');
+      const tabSensi = document.getElementById('tab-sensi');
+      const tabPlayers = document.getElementById('tab-players');
+
+      if (tabName) {
+        tabName.classList.remove('hidden');
+      }
+
+      if (tabSensi) {
+        tabSensi.classList.remove('hidden');
+      }
+
+      if (tabPlayers) {
+        tabPlayers.classList.remove('hidden');
+      }
+
+      if (signOutButton) {
+        signOutButton.classList.remove('hidden');
+      }
+    }
+
+    async function syncAuthUi() {
+      const { data: sessionData, error: sessionError } = await supabaseClient.auth.getSession();
+
+      if (sessionError) {
+        console.error('Supabase session error:', sessionError);
+        applySignedOutTabState();
+        return;
+      }
+
+      if (sessionData?.session) {
+        applySignedInTabState();
+        return;
+      }
+
+      applySignedOutTabState();
+    }
 
     async function logCurrentAuthSession() {
       const { data: sessionData, error: sessionError } = await supabaseClient.auth.getSession();
@@ -318,6 +399,7 @@
 
     supabaseClient.auth.onAuthStateChange(() => {
       logCurrentAuthSession();
+      syncAuthUi();
     });
 
     async function loadPlayersPreview() {
@@ -578,7 +660,15 @@
       };
     }
 
+    if (signOutButton) {
+      signOutButton.onclick = async () => {
+        await supabaseClient.auth.signOut();
+        window.location.reload();
+      };
+    }
+
     logCurrentAuthSession();
+    syncAuthUi();
   </script>
 
   <!-- Error surface -->
