@@ -345,6 +345,14 @@
       vip_status: true
     };
     let leaderProfile = null;
+    let currentUserAccess = {
+      isAuthenticated: false,
+      role: null,
+      isMiembro: false,
+      isDecano: false,
+      isOwner: false,
+      isVip: false
+    };
     const playersRosterState = {
       players: [],
       filter: 'Todos',
@@ -588,6 +596,14 @@
 
       if (sessionError) {
         console.error('Supabase session error:', sessionError);
+        currentUserAccess = {
+          isAuthenticated: false,
+          role: null,
+          isMiembro: false,
+          isDecano: false,
+          isOwner: false,
+          isVip: false
+        };
         applySignedOutTabState();
         setLeaderToolsVisibility(false);
         setTopIdentityState(null);
@@ -595,6 +611,14 @@
       }
 
       if (!sessionData?.session) {
+        currentUserAccess = {
+          isAuthenticated: false,
+          role: null,
+          isMiembro: false,
+          isDecano: false,
+          isOwner: false,
+          isVip: false
+        };
         applySignedOutTabState();
         setLeaderToolsVisibility(false);
         setTopIdentityState(null);
@@ -605,6 +629,14 @@
 
       if (userError) {
         console.error('Supabase user error:', userError);
+        currentUserAccess = {
+          isAuthenticated: false,
+          role: null,
+          isMiembro: false,
+          isDecano: false,
+          isOwner: false,
+          isVip: false
+        };
         applySignedOutTabState();
         setLeaderToolsVisibility(false);
         setTopIdentityState(null);
@@ -614,6 +646,14 @@
       const providerId = userData?.user?.user_metadata?.provider_id;
 
       if (!providerId) {
+        currentUserAccess = {
+          isAuthenticated: false,
+          role: null,
+          isMiembro: false,
+          isDecano: false,
+          isOwner: false,
+          isVip: false
+        };
         applySignedOutTabState();
         setLeaderToolsVisibility(false);
         setTopIdentityState(null);
@@ -628,6 +668,14 @@
 
       if (playerMatchError) {
         console.error('Players access check error:', playerMatchError);
+        currentUserAccess = {
+          isAuthenticated: false,
+          role: null,
+          isMiembro: false,
+          isDecano: false,
+          isOwner: false,
+          isVip: false
+        };
         applySignedOutTabState();
         setLeaderToolsVisibility(false);
         setTopIdentityState(null);
@@ -635,12 +683,28 @@
       }
 
       if (playerMatch) {
+        currentUserAccess = {
+          isAuthenticated: true,
+          role: playerMatch.role || null,
+          isMiembro: true,
+          isDecano: playerMatch.role === 'ELDER',
+          isOwner: providerId === '1219039567798079540',
+          isVip: playerMatch.vip_status === true
+        };
         applySignedInTabState();
-        setLeaderToolsVisibility(AUTHORIZED_LEADER_DISCORD_USER_IDS.includes(providerId));
+        setLeaderToolsVisibility(currentUserAccess.isDecano || currentUserAccess.isOwner);
         setTopIdentityState(playerMatch);
         return;
       }
 
+      currentUserAccess = {
+        isAuthenticated: false,
+        role: null,
+        isMiembro: false,
+        isDecano: false,
+        isOwner: false,
+        isVip: false
+      };
       applySignedOutTabState();
       setLeaderToolsVisibility(false);
       setTopIdentityState(null);
