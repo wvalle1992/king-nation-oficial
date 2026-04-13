@@ -33,13 +33,16 @@
 
   <!-- Top Nav -->
   <div class="mx-auto max-w-5xl px-5 pt-3">
-    <nav class="w-full flex items-center justify-between gap-3 text-sm">
+    <nav class="w-full rounded-full border border-white/70 bg-white/75 px-3 py-2 shadow-sm backdrop-filter backdrop-blur-sm">
+      <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
       <div class="font-semibold text-gray-700">King Nation Oficial</div>
-      <div class="flex items-center gap-4">
-        <a href="#top" class="hover:underline">Inicio</a>
-        <a href="#nombres" class="hover:underline" onclick="document.getElementById('tab-name').click()">Generador de Nombres</a>
-        <a href="#sensi" class="hover:underline" onclick="document.getElementById('tab-sensi').click()">Sensi por modelo</a>
-        <a href="mailto:soldadoff@icloud.com" class="hover:underline">Contacto</a>
+      <div class="flex flex-wrap items-center gap-2 text-sm">
+        <a href="#top" class="inline-flex items-center rounded-full border border-transparent bg-white/70 px-4 py-2 font-medium text-gray-700 shadow-sm transition hover:border-pink-100 hover:bg-pink-50 hover:text-pink-700">Inicio</a>
+        <a id="nav-name" href="#nombres" data-nav-target="tab-name" class="inline-flex items-center rounded-full border border-transparent bg-white/70 px-4 py-2 font-medium text-gray-700 shadow-sm transition hover:border-pink-100 hover:bg-pink-50 hover:text-pink-700">Generador de Nombres</a>
+        <a id="nav-sensi" href="#sensi" data-nav-target="tab-sensi" class="inline-flex items-center rounded-full border border-transparent bg-white/70 px-4 py-2 font-medium text-gray-700 shadow-sm transition hover:border-pink-100 hover:bg-pink-50 hover:text-pink-700">Sensi por modelo</a>
+        <a id="nav-players" href="#jugadores" data-nav-target="tab-players" class="inline-flex items-center rounded-full border border-transparent bg-white/70 px-4 py-2 font-medium text-gray-700 shadow-sm transition hover:border-pink-100 hover:bg-pink-50 hover:text-pink-700">Jugadores</a>
+        <a href="https://wa.me/50582335213" target="_blank" rel="noopener noreferrer" class="inline-flex items-center rounded-full border border-transparent bg-white/70 px-4 py-2 font-medium text-gray-700 shadow-sm transition hover:border-emerald-100 hover:bg-emerald-50 hover:text-emerald-700">Contacto</a>
+      </div>
       </div>
     </nav>
   </div>
@@ -259,6 +262,26 @@
         { btn: document.getElementById('tab-sensi'), panel: document.getElementById('panel-sensi') },
         { btn: document.getElementById('tab-players'), panel: document.getElementById('panel-players') }
       ].filter(tab => tab.btn && tab.panel);
+      const navLinks = Array.from(document.querySelectorAll('[data-nav-target]'));
+
+      function updateNavState(selectedId) {
+        navLinks.forEach(link => {
+          const targetId = link.dataset.navTarget;
+          const targetTab = document.getElementById(targetId);
+          const isAvailable = targetTab && !targetTab.classList.contains('hidden');
+          const isActive = targetId === selectedId;
+
+          link.classList.toggle('opacity-50', !isAvailable);
+          link.classList.toggle('cursor-not-allowed', !isAvailable);
+          link.classList.toggle('pointer-events-none', !isAvailable);
+          link.classList.toggle('border-pink-200', isActive && isAvailable);
+          link.classList.toggle('bg-pink-50', isActive && isAvailable);
+          link.classList.toggle('text-pink-700', isActive && isAvailable);
+          link.classList.toggle('shadow-md', isActive && isAvailable);
+          link.setAttribute('aria-disabled', isAvailable ? 'false' : 'true');
+          link.setAttribute('aria-current', isActive && isAvailable ? 'page' : 'false');
+        });
+      }
 
       function selectTab(selectedId) {
         tabs.forEach(tab => {
@@ -266,11 +289,34 @@
           tab.btn.setAttribute('aria-selected', isSelected ? 'true' : 'false');
           tab.panel.classList.toggle('active', isSelected);
         });
+        updateNavState(selectedId);
       }
 
       tabs.forEach(tab => {
         tab.btn.addEventListener('click', () => selectTab(tab.btn.id));
       });
+
+      navLinks.forEach(link => {
+        link.addEventListener('click', event => {
+          const targetId = link.dataset.navTarget;
+          const targetTab = document.getElementById(targetId);
+
+          if (!targetTab || targetTab.classList.contains('hidden')) {
+            event.preventDefault();
+            return;
+          }
+
+          event.preventDefault();
+          targetTab.click();
+        });
+      });
+
+      window.syncTopNavState = selectedId => {
+        const activeTab = selectedId || tabs.find(tab => tab.btn.getAttribute('aria-selected') === 'true')?.btn.id;
+        updateNavState(activeTab);
+      };
+
+      window.syncTopNavState();
     })();
   </script>
 
@@ -341,6 +387,10 @@
       if (signOutButton) {
         signOutButton.classList.add('hidden');
       }
+
+      if (window.syncTopNavState) {
+        window.syncTopNavState('tab-players');
+      }
     }
 
     function applySignedInTabState() {
@@ -362,6 +412,10 @@
 
       if (signOutButton) {
         signOutButton.classList.remove('hidden');
+      }
+
+      if (window.syncTopNavState) {
+        window.syncTopNavState();
       }
     }
 
