@@ -966,8 +966,14 @@
     }
 
     if (leaderRefreshButton) {
-      leaderRefreshButton.onclick = () => {
-        loadPlayersPreview();
+      leaderRefreshButton.onclick = async () => {
+        if (!(currentUserAccess.isDecano || currentUserAccess.isOwner)) {
+          window.alert('No tienes permisos para realizar esta acción.');
+          return;
+        }
+
+        await loadPlayersPreview();
+        window.alert('Datos actualizados correctamente.');
       };
     }
 
