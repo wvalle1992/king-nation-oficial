@@ -792,6 +792,7 @@
           const avatarUrl = player.avatar_url || './assets/king-nation-logo.png';
           const styledName = player.styled_name || 'Sin nombre estilizado';
           const ffName = player.ff_name || 'Sin nombre de Free Fire';
+          const showSecondaryName = ffName && ffName !== styledName;
           const freeFireId = player.free_fire_id || '';
           const socialDisplay = getSocialDisplay(player.social_platform, player.social_handle);
           const roleBadge = getRoleBadge(player.role || 'MIEMBRO');
@@ -811,7 +812,7 @@
                     <h3 class="text-base font-semibold text-gray-800 truncate">${styledName}</h3>
                     ${freeFireId ? `<span class="inline-flex shrink-0 items-center rounded-full border border-indigo-200 bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-700">ID: ${freeFireId}</span>` : ''}
                   </div>
-                  <p class="text-sm text-gray-500 truncate">${ffName}</p>
+                  ${showSecondaryName ? `<p class="text-sm text-gray-500 truncate">${ffName}</p>` : ''}
                   ${socialDisplay ? `<div class="mt-1">${socialDisplay}</div>` : ''}
                 </div>
               </div>
