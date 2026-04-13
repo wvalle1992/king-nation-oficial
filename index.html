@@ -282,7 +282,7 @@
   <script>
     const SUPABASE_URL = 'https://vtyekyzpdnsnhpeiuite.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ0eWVreXpwZG5zbmhwZWl1aXRlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5NDM0NTMsImV4cCI6MjA5MTUxOTQ1M30.U1d2wPSj5co0RZre7GGM0jbko7BsMd-tTcMV-DjIS9g';
-    const LEADER_DISCORD_USER_ID = '1219039567798079540';
+    const AUTHORIZED_LEADER_DISCORD_USER_IDS = ['1219039567798079540'];
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     const discordLoginButton = document.getElementById('discord-login-btn');
     const signOutButton = document.getElementById('signout-btn');
@@ -352,17 +352,27 @@
       }
     }
 
+    function setLeaderToolsVisibility(isVisible) {
+      const leaderToolsPanel = document.getElementById('leader-tools-panel');
+
+      if (leaderToolsPanel) {
+        leaderToolsPanel.style.display = isVisible ? '' : 'none';
+      }
+    }
+
     async function syncAuthUi() {
       const { data: sessionData, error: sessionError } = await supabaseClient.auth.getSession();
 
       if (sessionError) {
         console.error('Supabase session error:', sessionError);
         applySignedOutTabState();
+        setLeaderToolsVisibility(false);
         return;
       }
 
       if (!sessionData?.session) {
         applySignedOutTabState();
+        setLeaderToolsVisibility(false);
         return;
       }
 
@@ -371,6 +381,7 @@
       if (userError) {
         console.error('Supabase user error:', userError);
         applySignedOutTabState();
+        setLeaderToolsVisibility(false);
         return;
       }
 
@@ -378,6 +389,7 @@
 
       if (!providerId) {
         applySignedOutTabState();
+        setLeaderToolsVisibility(false);
         return;
       }
 
@@ -390,15 +402,18 @@
       if (playerMatchError) {
         console.error('Players access check error:', playerMatchError);
         applySignedOutTabState();
+        setLeaderToolsVisibility(false);
         return;
       }
 
       if (playerMatch) {
         applySignedInTabState();
+        setLeaderToolsVisibility(AUTHORIZED_LEADER_DISCORD_USER_IDS.includes(providerId));
         return;
       }
 
       applySignedOutTabState();
+      setLeaderToolsVisibility(false);
     }
 
     async function logCurrentAuthSession() {
@@ -436,7 +451,6 @@
 
     async function loadPlayersPreview() {
       const previewCard = document.getElementById('players-preview-card');
-      const leaderToolsPanel = document.getElementById('leader-tools-panel');
       const rosterContainer = document.getElementById('players-roster');
       const statsContainer = document.getElementById('players-stats');
       const searchInput = document.getElementById('players-search');
@@ -618,10 +632,6 @@
       }
 
       const player = sortedPlayers[0];
-
-      if (leaderToolsPanel) {
-        leaderToolsPanel.style.display = player.discord_user_id === LEADER_DISCORD_USER_ID ? '' : 'none';
-      }
 
       const avatarUrl = player.avatar_url || './assets/king-nation-logo.png';
       const styledName = player.styled_name || 'Sin nombre estilizado';
