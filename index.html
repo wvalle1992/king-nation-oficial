@@ -186,26 +186,47 @@
     <section id="panel-players" class="panel" role="tabpanel" aria-labelledby="tab-players">
       <div class="max-w-3xl mx-auto space-y-4">
         <div id="leader-tools-panel" class="rounded-2xl border border-amber-200 bg-gradient-to-br from-amber-50 via-white to-yellow-50 p-4 shadow-sm">
-          <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div class="space-y-4">
             <div>
-              <p class="text-sm font-semibold text-amber-800">👑 Herramientas de líder</p>
-              <p class="text-sm text-amber-700">Funciones administrativas (próximamente protegidas con inicio de sesión)</p>
+              <p class="text-sm font-semibold text-amber-800">👑 Herramientas administrativas</p>
+              <p class="text-sm text-amber-700">Funciones visibles según tu acceso actual.</p>
             </div>
-            <div class="flex flex-wrap gap-2">
-              <button
-                type="button"
-                id="leader-sync-btn"
-                class="rounded-xl border border-amber-200 bg-white px-4 py-2 text-sm font-semibold text-amber-700 shadow-sm transition hover:bg-amber-50"
-              >
-                🔄 Sincronizar jugadores
-              </button>
-              <button
-                type="button"
-                id="leader-refresh-btn"
-                class="rounded-xl border border-emerald-200 bg-white px-4 py-2 text-sm font-semibold text-emerald-700 shadow-sm transition hover:bg-emerald-50"
-              >
-                ♻️ Refrescar datos
-              </button>
+
+            <div id="decano-tools-section" class="rounded-2xl border border-amber-200 bg-white/80 p-4 shadow-sm">
+              <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                <div>
+                  <p class="text-sm font-semibold text-amber-800">Herramientas de DECANO</p>
+                  <p class="text-sm text-amber-700">Acciones de apoyo y revisión del panel de jugadores.</p>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    id="leader-sync-btn"
+                    class="rounded-xl border border-amber-200 bg-white px-4 py-2 text-sm font-semibold text-amber-700 shadow-sm transition hover:bg-amber-50"
+                  >
+                    🔄 Sincronizar jugadores
+                  </button>
+                  <button
+                    type="button"
+                    id="leader-refresh-btn"
+                    class="rounded-xl border border-emerald-200 bg-white px-4 py-2 text-sm font-semibold text-emerald-700 shadow-sm transition hover:bg-emerald-50"
+                  >
+                    ♻️ Refrescar datos
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div id="owner-tools-section" class="rounded-2xl border border-rose-200 bg-white/80 p-4 shadow-sm">
+              <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                <div>
+                  <p class="text-sm font-semibold text-rose-800">Herramientas del OWNER</p>
+                  <p class="text-sm text-rose-700">Funciones exclusivas del owner disponibles próximamente.</p>
+                </div>
+                <div class="rounded-xl border border-rose-200 bg-rose-50 px-4 py-2 text-sm font-semibold text-rose-700">
+                  Próximamente
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -437,9 +458,19 @@
 
     function setLeaderToolsVisibility(isVisible) {
       const leaderToolsPanel = document.getElementById('leader-tools-panel');
+      const decanoToolsSection = document.getElementById('decano-tools-section');
+      const ownerToolsSection = document.getElementById('owner-tools-section');
 
       if (leaderToolsPanel) {
         leaderToolsPanel.style.display = isVisible ? '' : 'none';
+      }
+
+      if (decanoToolsSection) {
+        decanoToolsSection.style.display = (currentUserAccess.isDecano || currentUserAccess.isOwner) ? '' : 'none';
+      }
+
+      if (ownerToolsSection) {
+        ownerToolsSection.style.display = currentUserAccess.isOwner ? '' : 'none';
       }
     }
 
