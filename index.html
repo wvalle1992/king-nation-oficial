@@ -510,6 +510,7 @@
       const avatarUrl = player.avatar_url || './assets/king-nation-logo.png';
       const styledName = player.styled_name || 'Sin nombre estilizado';
       const ffName = player.ff_name || 'Sin nombre de Free Fire';
+      const showSecondaryName = ffName && ffName !== styledName;
       const roleBadge = getRoleBadge(player.role || 'MIEMBRO');
       const vipStatus = player.vip_status === true ? '👑 VIP' : '';
       const isLeader = AUTHORIZED_LEADER_DISCORD_USER_IDS.includes(player.discord_user_id);
@@ -525,7 +526,7 @@
           <div class="min-w-0 flex-1">
             <p class="text-xs uppercase tracking-wide text-gray-400">Sesión activa</p>
             <p class="text-sm font-semibold text-gray-800 truncate">${styledName}</p>
-            <p class="text-xs text-gray-500 truncate">${ffName}</p>
+            ${showSecondaryName ? `<p class="text-xs text-gray-500 truncate">${ffName}</p>` : ''}
           </div>
           <div class="flex flex-col items-end gap-2 text-right">
             ${roleBadge}
