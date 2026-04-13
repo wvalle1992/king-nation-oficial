@@ -215,6 +215,7 @@
                   </button>
                 </div>
               </div>
+              <p id="leader-refresh-message" class="hidden mt-3 text-sm font-medium"></p>
             </div>
 
             <div id="owner-tools-section" class="rounded-2xl border border-rose-200 bg-white/80 p-4 shadow-sm">
@@ -957,6 +958,7 @@
 
     const leaderSyncButton = document.getElementById('leader-sync-btn');
     const leaderRefreshButton = document.getElementById('leader-refresh-btn');
+    const leaderRefreshMessage = document.getElementById('leader-refresh-message');
 
     if (leaderSyncButton) {
       leaderSyncButton.onclick = () => {
@@ -967,13 +969,44 @@
 
     if (leaderRefreshButton) {
       leaderRefreshButton.onclick = async () => {
+        const defaultRefreshButtonText = '♻️ Refrescar datos';
+
+        if (leaderRefreshMessage) {
+          leaderRefreshMessage.className = 'hidden mt-3 text-sm font-medium';
+          leaderRefreshMessage.textContent = '';
+        }
+
         if (!(currentUserAccess.isDecano || currentUserAccess.isOwner)) {
-          window.alert('No tienes permisos para realizar esta acción.');
+          if (leaderRefreshMessage) {
+            leaderRefreshMessage.className = 'mt-3 text-sm font-medium text-red-600';
+            leaderRefreshMessage.textContent = 'No tienes permisos para realizar esta acción.';
+          }
           return;
         }
 
-        await loadPlayersPreview();
-        window.alert('Datos actualizados correctamente.');
+        leaderRefreshButton.disabled = true;
+        leaderRefreshButton.textContent = 'Actualizando...';
+        leaderRefreshButton.classList.add('opacity-70', 'cursor-not-allowed');
+
+        try {
+          await loadPlayersPreview();
+
+          if (leaderRefreshMessage) {
+            leaderRefreshMessage.className = 'mt-3 text-sm font-medium text-emerald-600';
+            leaderRefreshMessage.textContent = 'Datos actualizados correctamente.';
+          }
+        } catch (error) {
+          console.error('Leader refresh error:', error);
+
+          if (leaderRefreshMessage) {
+            leaderRefreshMessage.className = 'mt-3 text-sm font-medium text-red-600';
+            leaderRefreshMessage.textContent = 'Ocurrió un error al actualizar los datos.';
+          }
+        } finally {
+          leaderRefreshButton.disabled = false;
+          leaderRefreshButton.textContent = defaultRefreshButtonText;
+          leaderRefreshButton.classList.remove('opacity-70', 'cursor-not-allowed');
+        }
       };
     }
 
