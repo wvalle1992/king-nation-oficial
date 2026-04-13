@@ -388,6 +388,10 @@
         signOutButton.classList.add('hidden');
       }
 
+      if (discordLoginButton) {
+        discordLoginButton.classList.remove('hidden');
+      }
+
       if (window.syncTopNavState) {
         window.syncTopNavState('tab-players');
       }
@@ -412,6 +416,10 @@
 
       if (signOutButton) {
         signOutButton.classList.remove('hidden');
+      }
+
+      if (discordLoginButton) {
+        discordLoginButton.classList.add('hidden');
       }
 
       if (window.syncTopNavState) {
