@@ -28,7 +28,7 @@
 
       if (sessionError) {
         console.error('Supabase callback session error:', sessionError);
-        authStatus.textContent = 'No se pudo leer la sesion de Discord.';
+        authStatus.textContent = 'No se pudo leer la sesión de Discord.';
         return;
       }
 
@@ -36,7 +36,7 @@
       console.log('Callback session exists:', Boolean(session));
 
       if (!session) {
-        authStatus.textContent = 'Esperando la sesion de Discord...';
+        authStatus.textContent = 'Esperando la sesión de Discord...';
         return;
       }
 
@@ -44,7 +44,7 @@
 
       if (userError) {
         console.error('Supabase callback user error:', userError);
-        authStatus.textContent = 'La sesion existe, pero no se pudo leer el usuario.';
+        authStatus.textContent = 'La sesión existe, pero no se pudo cargar tu usuario.';
         return;
       }
 
@@ -52,7 +52,7 @@
       console.log('Callback authenticated user id:', user?.id || null);
       console.log('Callback authenticated email:', user?.email || null);
       console.log('Callback authenticated user metadata:', user?.user_metadata || null);
-      authStatus.textContent = 'Sesion iniciada correctamente. Redirigiendo...';
+      authStatus.textContent = 'Sesión iniciada correctamente. Redirigiendo...';
       window.location.href = '/';
     }
 

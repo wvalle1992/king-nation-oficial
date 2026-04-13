@@ -50,7 +50,7 @@
   <!-- Page Shell -->
   <div class="mx-auto max-w-5xl px-5 pt-6 pb-20 relative z-10">
     <header class="mb-4 flex items-center gap-4 justify-center">
-      <img src="./assets/king-nation-logo.png" alt="King Nation Logo" class="w-16 h-16 md:w-20 md:h-20 object-contain kn-logo p-1" />
+      <img src="./assets/king-nation-logo.png" alt="Logo de King Nation" class="w-16 h-16 md:w-20 md:h-20 object-contain kn-logo p-1" />
       <div class="text-center">
         <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight text-gray-800"><span class="kng-title">King Nation Oficial</span></h1>
         <p class="text-sm text-gray-600">Nombre estilizado · Sensi por modelo</p>
@@ -154,26 +154,26 @@
                 <thead><tr><th>Ajuste</th><th>Valor</th></tr></thead>
                 <tbody></tbody>
               </table>
-              <p class="muted" style="margin-top:10px">Tip: la <strong>Alta</strong> puede ir hasta 200. Ajusta ±5 según tu FPS y estilo.</p>
+              <p class="muted" style="margin-top:10px">Consejo: la <strong>Alta</strong> puede llegar hasta 200. Ajusta ±5 según tus FPS y tu estilo.</p>
             </section>
 
             <section class="card" style="margin-top:14px">
               <h3 style="margin:0 0 8px 0; font-size:16px">Consejos rápidos</h3>
               <ul class="muted" style="margin:0; padding-left:18px; display:grid; gap:6px">
                 <li><strong>Escala hasta 200:</strong> si en Alta aún te falta velocidad, sube de 5 en 5 (General y Rojo) antes de tocar 2x/4x.</li>
-                <li><strong>FPS &amp; térmicas:</strong> si tu FPS cae, baja 3–5 puntos en General/Red; si sube, aumenta 2–3.</li>
-                <li><strong>Recoil vertical:</strong> arma se va arriba → baja General y Rojo; se queda corta → sube 2x/4x.</li>
-                <li><strong>Gyro:</strong> si tu equipo tiene giroscopio, pruébalo en Media; si mareas, apágalo y sube poco a poco.</li>
+                <li><strong>FPS y térmicas:</strong> si tu FPS cae, baja 3–5 puntos en General/Red; si sube, aumenta 2–3.</li>
+                <li><strong>Retroceso vertical:</strong> si el arma se va hacia arriba, baja General y Rojo; si se queda corta, sube 2x/4x.</li>
+                <li><strong>Giroscopio:</strong> si tu equipo tiene giroscopio, pruébalo en Media; si te mareas, apágalo y sube poco a poco.</li>
                 <li><strong>DPI externo:</strong> evita valores extremos fuera de stock; si usas, acompasa subiendo/bajando 10–20 puntos en la Sensi.</li>
                 <li><strong>Claw vs pulgares:</strong> jugadores claw suelen preferir Media/Alta; pulgares, Baja/Media para más control.</li>
-                <li><strong>Mirada Libre:</strong> útil para loot y rotaciones; no afecta el recoil de disparo.</li>
+                <li><strong>Mirada Libre:</strong> útil para saqueo y rotaciones; no afecta el retroceso al disparar.</li>
                 <li><strong>Prueba 10 partidas:</strong> mantén un perfil estable 8–10 partidas antes de decidir ajustes finos.</li>
               </ul>
             </section>
 
             <footer class="namegen-footer">
               <div class="namegen-footer-brand">
-                <img src="./assets/king-nation-logo.png" alt="King Nation Logo" />
+                <img src="./assets/king-nation-logo.png" alt="Logo de King Nation" />
                 <strong>King Nation</strong>
               </div>
               <span>Hecho para el Clan King Nation</span>
@@ -189,7 +189,7 @@
           <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div>
               <p class="text-sm font-semibold text-amber-800">👑 Herramientas de líder</p>
-              <p class="text-sm text-amber-700">Funciones administrativas (próximamente seguras con login)</p>
+              <p class="text-sm text-amber-700">Funciones administrativas (próximamente protegidas con inicio de sesión)</p>
             </div>
             <div class="flex flex-wrap gap-2">
               <button
@@ -219,7 +219,7 @@
             <p class="mt-2 text-2xl font-semibold text-gray-800">--</p>
           </div>
           <div class="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
-            <p class="text-xs uppercase tracking-wide text-gray-400">Líderes / Elders</p>
+            <p class="text-xs uppercase tracking-wide text-gray-400">LÍDERES / DECANOS</p>
             <p class="mt-2 text-2xl font-semibold text-gray-800">--</p>
           </div>
         </div>
@@ -234,7 +234,7 @@
             <div id="players-filters" class="flex flex-wrap gap-2">
               <button type="button" data-filter="Todos" class="rounded-full border border-pink-200 bg-pink-50 px-3 py-1.5 text-xs font-semibold text-pink-700">Todos</button>
               <button type="button" data-filter="LÍDER" class="rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-600">LÍDER</button>
-              <button type="button" data-filter="ELDER" class="rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-600">ELDER</button>
+              <button type="button" data-filter="ELDER" class="rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-600">DECANO</button>
               <button type="button" data-filter="VIP" class="rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-600">VIP</button>
               <button type="button" data-filter="MIEMBRO" class="rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-600">MIEMBRO</button>
             </div>
@@ -445,7 +445,7 @@
       };
       const badgeClass = badgeMap[roleLabel] || 'bg-gray-100 text-gray-700 border-gray-200';
 
-      return `<span class="inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-semibold ${badgeClass}">${roleLabel}</span>`;
+      return `<span class="inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-semibold ${badgeClass}">${roleLabel === 'ELDER' ? 'DECANO' : roleLabel}</span>`;
     }
 
     function getSocialDisplay(platform, handle) {
@@ -553,7 +553,7 @@
           <img src="${avatarUrl}" alt="${styledName}" class="w-16 h-16 rounded-xl object-cover border border-gray-200 bg-gray-100" />
           <div class="min-w-0">
             <h2 class="text-lg font-semibold text-gray-800 truncate">${styledName}</h2>
-            <p class="text-sm text-gray-500 truncate">Lider del clan King Nation</p>
+            <p class="text-sm text-gray-500 truncate">Líder del clan King Nation</p>
           </div>
         </div>
         <div class="mt-4 grid grid-cols-2 gap-2 text-sm">
@@ -699,7 +699,7 @@
         if (statsContainer) {
           statsContainer.innerHTML = `
             <div class="sm:col-span-2 lg:col-span-3 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-600">
-              No se pudieron cargar las estadisticas por ahora.
+              No se pudieron cargar las estadísticas por ahora.
             </div>
           `;
         }
@@ -718,7 +718,7 @@
         if (statsContainer) {
           statsContainer.innerHTML = `
             <div class="sm:col-span-2 lg:col-span-3 rounded-2xl border border-gray-200 bg-white p-4 text-sm text-gray-500 shadow-sm">
-              No hay estadisticas disponibles todavia.
+              No hay estadísticas disponibles todavía.
             </div>
           `;
         }
@@ -753,7 +753,7 @@
             <p class="mt-2 text-2xl font-semibold text-pink-700">${totalVip}</p>
           </div>
           <div class="rounded-2xl border border-amber-200 bg-amber-50 p-4 shadow-sm">
-            <p class="text-xs uppercase tracking-wide text-amber-500">Lideres / Elders</p>
+            <p class="text-xs uppercase tracking-wide text-amber-500">LÍDERES / DECANOS</p>
             <p class="mt-2 text-2xl font-semibold text-amber-700">${totalLeadersAndElders}</p>
           </div>
         `;
@@ -866,7 +866,7 @@
     if (leaderSyncButton) {
       leaderSyncButton.onclick = () => {
         console.log('Leader sync action coming soon.');
-        window.alert('Sincronizacion de jugadores disponible proximamente.');
+        window.alert('Sincronización de jugadores disponible próximamente.');
       };
     }
 
