@@ -288,6 +288,38 @@
       search: ''
     };
 
+    async function logCurrentAuthSession() {
+      const { data: sessionData, error: sessionError } = await supabaseClient.auth.getSession();
+
+      if (sessionError) {
+        console.error('Supabase session error:', sessionError);
+        return;
+      }
+
+      const session = sessionData?.session;
+      console.log('Supabase session exists:', Boolean(session));
+
+      if (!session) {
+        return;
+      }
+
+      const { data: userData, error: userError } = await supabaseClient.auth.getUser();
+
+      if (userError) {
+        console.error('Supabase user error:', userError);
+        return;
+      }
+
+      const user = userData?.user;
+      console.log('Authenticated user id:', user?.id || null);
+      console.log('Authenticated email:', user?.email || null);
+      console.log('Authenticated user metadata:', user?.user_metadata || null);
+    }
+
+    supabaseClient.auth.onAuthStateChange(() => {
+      logCurrentAuthSession();
+    });
+
     async function loadPlayersPreview() {
       const previewCard = document.getElementById('players-preview-card');
       const leaderToolsPanel = document.getElementById('leader-tools-panel');
@@ -545,6 +577,8 @@
         }
       };
     }
+
+    logCurrentAuthSession();
   </script>
 
   <!-- Error surface -->
