@@ -214,6 +214,7 @@
                     ♻️ Refrescar datos
                   </button>
                 </div>
+                <p id="leader-sync-message" class="hidden text-sm font-medium"></p>
               </div>
               <p id="leader-refresh-message" class="hidden mt-3 text-sm font-medium"></p>
             </div>
@@ -958,12 +959,67 @@
 
     const leaderSyncButton = document.getElementById('leader-sync-btn');
     const leaderRefreshButton = document.getElementById('leader-refresh-btn');
+    const leaderSyncMessage = document.getElementById('leader-sync-message');
     const leaderRefreshMessage = document.getElementById('leader-refresh-message');
 
     if (leaderSyncButton) {
-      leaderSyncButton.onclick = () => {
-        console.log('Leader sync action coming soon.');
-        window.alert('Sincronización de jugadores disponible próximamente.');
+      leaderSyncButton.onclick = async () => {
+        const defaultSyncButtonText = '🔄 Sincronizar jugadores';
+
+        if (leaderSyncMessage) {
+          leaderSyncMessage.className = 'hidden text-sm font-medium';
+          leaderSyncMessage.textContent = '';
+        }
+
+        if (!(currentUserAccess.isDecano || currentUserAccess.isOwner)) {
+          if (leaderSyncMessage) {
+            leaderSyncMessage.className = 'text-sm font-medium text-red-600';
+            leaderSyncMessage.textContent = 'No tienes permisos para realizar esta acción.';
+          }
+          return;
+        }
+
+        leaderSyncButton.disabled = true;
+        leaderSyncButton.textContent = 'Sincronizando...';
+        leaderSyncButton.classList.add('opacity-70', 'cursor-not-allowed');
+
+        try {
+          const { data: sessionData, error: sessionError } = await supabaseClient.auth.getSession();
+
+          if (sessionError || !sessionData?.session?.access_token) {
+            throw sessionError || new Error('Missing access token');
+          }
+
+          const response = await fetch('/.netlify/functions/request-player-sync', {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${sessionData.session.access_token}`,
+              'Content-Type': 'application/json'
+            }
+          });
+
+          const result = await response.json().catch(() => null);
+
+          if (!response.ok || !result?.success) {
+            throw new Error(result?.error || 'Sync request failed');
+          }
+
+          if (leaderSyncMessage) {
+            leaderSyncMessage.className = 'text-sm font-medium text-emerald-600';
+            leaderSyncMessage.textContent = 'Sincronización iniciada correctamente.';
+          }
+        } catch (error) {
+          console.error('Leader sync request error:', error);
+
+          if (leaderSyncMessage) {
+            leaderSyncMessage.className = 'text-sm font-medium text-red-600';
+            leaderSyncMessage.textContent = 'No se pudo iniciar la sincronización.';
+          }
+        } finally {
+          leaderSyncButton.disabled = false;
+          leaderSyncButton.textContent = defaultSyncButtonText;
+          leaderSyncButton.classList.remove('opacity-70', 'cursor-not-allowed');
+        }
       };
     }
 
