@@ -288,6 +288,15 @@
     const discordLoginButton = document.getElementById('discord-login-btn');
     const signOutButton = document.getElementById('signout-btn');
     const currentUserBadge = document.getElementById('current-user-badge');
+    const playersPreviewCard = document.getElementById('players-preview-card');
+    const leaderProfileFallback = {
+      avatar_url: './assets/king-nation-logo.png',
+      styled_name: 'King Nation',
+      ff_name: 'Lider del clan King Nation',
+      role: 'LÍDER',
+      vip_status: true
+    };
+    let leaderProfile = null;
     const playersRosterState = {
       players: [],
       filter: 'Todos',
@@ -407,6 +416,52 @@
       currentUserBadge.classList.remove('hidden');
     }
 
+    function setLeaderPreviewCard(player) {
+      if (!playersPreviewCard) {
+        return;
+      }
+
+      const leaderPlayer = player || leaderProfile || leaderProfileFallback;
+      const avatarUrl = leaderPlayer.avatar_url || './assets/king-nation-logo.png';
+      const styledName = leaderPlayer.styled_name || 'King Nation';
+      const roleBadge = getRoleBadge(leaderPlayer.role || 'LÍDER');
+      const vipStatus = leaderPlayer.vip_status === true ? '👑 VIP' : '';
+
+      playersPreviewCard.innerHTML = `
+        <div class="flex items-center gap-4">
+          <img src="${avatarUrl}" alt="${styledName}" class="w-16 h-16 rounded-xl object-cover border border-gray-200 bg-gray-100" />
+          <div class="min-w-0">
+            <h2 class="text-lg font-semibold text-gray-800 truncate">${styledName}</h2>
+            <p class="text-sm text-gray-500 truncate">Lider del clan King Nation</p>
+          </div>
+        </div>
+        <div class="mt-4 grid grid-cols-2 gap-2 text-sm">
+          <div class="rounded-xl bg-gray-50 px-3 py-2">
+            <span class="block text-xs uppercase tracking-wide text-gray-400">Rol</span>
+            <div class="mt-1">${roleBadge}</div>
+          </div>
+          <div class="rounded-xl bg-gray-50 px-3 py-2">
+            <span class="block text-xs uppercase tracking-wide text-gray-400">VIP</span>
+            <span class="text-gray-700">${vipStatus || '—'}</span>
+          </div>
+        </div>
+      `;
+      playersPreviewCard.classList.remove('hidden');
+    }
+
+    function setTopIdentityState(player) {
+      if (player) {
+        setCurrentUserBadge(player);
+        if (playersPreviewCard) {
+          playersPreviewCard.classList.add('hidden');
+        }
+        return;
+      }
+
+      setCurrentUserBadge(null);
+      setLeaderPreviewCard();
+    }
+
     async function syncAuthUi() {
       const { data: sessionData, error: sessionError } = await supabaseClient.auth.getSession();
 
@@ -414,14 +469,14 @@
         console.error('Supabase session error:', sessionError);
         applySignedOutTabState();
         setLeaderToolsVisibility(false);
-        setCurrentUserBadge(null);
+        setTopIdentityState(null);
         return;
       }
 
       if (!sessionData?.session) {
         applySignedOutTabState();
         setLeaderToolsVisibility(false);
-        setCurrentUserBadge(null);
+        setTopIdentityState(null);
         return;
       }
 
@@ -431,7 +486,7 @@
         console.error('Supabase user error:', userError);
         applySignedOutTabState();
         setLeaderToolsVisibility(false);
-        setCurrentUserBadge(null);
+        setTopIdentityState(null);
         return;
       }
 
@@ -440,7 +495,7 @@
       if (!providerId) {
         applySignedOutTabState();
         setLeaderToolsVisibility(false);
-        setCurrentUserBadge(null);
+        setTopIdentityState(null);
         return;
       }
 
@@ -454,20 +509,20 @@
         console.error('Players access check error:', playerMatchError);
         applySignedOutTabState();
         setLeaderToolsVisibility(false);
-        setCurrentUserBadge(null);
+        setTopIdentityState(null);
         return;
       }
 
       if (playerMatch) {
         applySignedInTabState();
         setLeaderToolsVisibility(AUTHORIZED_LEADER_DISCORD_USER_IDS.includes(providerId));
-        setCurrentUserBadge(playerMatch);
+        setTopIdentityState(playerMatch);
         return;
       }
 
       applySignedOutTabState();
       setLeaderToolsVisibility(false);
-      setCurrentUserBadge(null);
+      setTopIdentityState(null);
     }
 
     async function logCurrentAuthSession() {
@@ -504,7 +559,6 @@
     });
 
     async function loadPlayersPreview() {
-      const previewCard = document.getElementById('players-preview-card');
       const rosterContainer = document.getElementById('players-roster');
       const statsContainer = document.getElementById('players-stats');
       const searchInput = document.getElementById('players-search');
@@ -515,8 +569,8 @@
 
       if (error) {
         console.error('Players preview error:', error);
-        if (previewCard) {
-          previewCard.innerHTML = '<p class="text-sm text-red-500">No se pudo cargar la vista previa.</p>';
+        if (playersPreviewCard) {
+          playersPreviewCard.innerHTML = '<p class="text-sm text-red-500">No se pudo cargar la vista previa.</p>';
         }
         if (rosterContainer) {
           rosterContainer.innerHTML = '<p class="text-sm text-red-500">No se pudieron cargar los jugadores por ahora.</p>';
@@ -534,8 +588,8 @@
       console.log('Players preview:', data);
 
       if (!data || data.length === 0) {
-        if (previewCard) {
-          previewCard.innerHTML = '<p class="text-sm text-gray-500">No hay jugadores disponibles por ahora.</p>';
+        if (playersPreviewCard) {
+          playersPreviewCard.innerHTML = '<p class="text-sm text-gray-500">No hay jugadores disponibles por ahora.</p>';
         }
         if (rosterContainer) {
           rosterContainer.innerHTML = '<p class="text-sm text-gray-500">Todavía no hay jugadores para mostrar.</p>';
@@ -672,41 +726,8 @@
         renderRoster();
       }
 
-      const player = sortedPlayers[0];
-
-      const avatarUrl = player.avatar_url || './assets/king-nation-logo.png';
-      const styledName = player.styled_name || 'Sin nombre estilizado';
-      const ffName = player.ff_name || 'Sin nombre de Free Fire';
-      const role = player.role || 'Sin rol';
-      const roleBadge = getRoleBadge(player.role || 'MIEMBRO');
-      const vipStatus = player.vip_status === true
-        ? '👑 VIP'
-        : player.vip_status === false
-          ? '—'
-          : '—';
-
-      if (previewCard) {
-        previewCard.innerHTML = `
-          <div class="flex items-center gap-4">
-            <img src="${avatarUrl}" alt="${ffName}" class="w-16 h-16 rounded-xl object-cover border border-gray-200 bg-gray-100" />
-            <div class="min-w-0">
-              <p class="text-xs uppercase tracking-wide text-gray-400">Jugador destacado</p>
-              <h2 class="text-lg font-semibold text-gray-800 truncate">${styledName}</h2>
-              <p class="text-sm text-gray-500 truncate">${ffName}</p>
-            </div>
-          </div>
-          <div class="mt-4 grid grid-cols-2 gap-2 text-sm">
-            <div class="rounded-xl bg-gray-50 px-3 py-2">
-              <span class="block text-xs uppercase tracking-wide text-gray-400">Rol</span>
-              <div class="mt-1">${roleBadge}</div>
-            </div>
-            <div class="rounded-xl bg-gray-50 px-3 py-2">
-              <span class="block text-xs uppercase tracking-wide text-gray-400">VIP</span>
-              <span class="text-gray-700">${vipStatus}</span>
-            </div>
-          </div>
-        `;
-      }
+      leaderProfile = sortedPlayers.find(player => player.discord_user_id === AUTHORIZED_LEADER_DISCORD_USER_IDS[0]) || null;
+      setLeaderPreviewCard(leaderProfile);
     }
 
     loadPlayersPreview();
