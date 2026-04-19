@@ -1,3 +1,54 @@
-body{font-family:Noto Sans, 'Segoe UI', system-ui, -apple-system, sans-serif}
-textarea{font-family:Noto Sans, 'Segoe UI Symbol', 'Apple SD Gothic Neo', system-ui, sans-serif}
-#err{position:fixed;left:0;right:0;bottom:0;background:#fee2e2;color:#991b1b;padding:8px 12px;font-size:12px;display:none;z-index:9999}
+body{
+  font-family:"Manrope","Segoe UI",system-ui,-apple-system,sans-serif;
+  line-height:1.45;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+.kng-title,
+.kn-wordmark,
+.tabbtn{
+  font-family:"Sora","Manrope","Segoe UI",sans-serif;
+  letter-spacing:0;
+}
+
+textarea{
+  font-family:"Manrope","Segoe UI Symbol","Apple SD Gothic Neo",system-ui,sans-serif;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible{
+  outline:3px solid rgba(14,165,233,.24);
+  outline-offset:2px;
+}
+
+#err{
+  position:fixed;
+  left:16px;
+  right:16px;
+  bottom:16px;
+  border:1px solid #fecaca;
+  border-radius:12px;
+  background:#fee2e2;
+  color:#991b1b;
+  padding:10px 12px;
+  font-size:12px;
+  display:none;
+  z-index:9999;
+  box-shadow:0 10px 24px rgba(239,68,68,.18);
+}
+
+@media (prefers-reduced-motion: reduce){
+  *{
+    animation-duration:.01ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.01ms !important;
+    scroll-behavior:auto !important;
+  }
+}
