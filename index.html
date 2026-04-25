@@ -341,10 +341,24 @@
         <button type="button" class="kn-player-modal__close" data-player-profile-close aria-label="Cerrar perfil">&times;</button>
       </div>
       <div class="kn-player-modal__media">
-        <img id="player-profile-modal-image" src="" alt="" loading="lazy" decoding="async" />
-        <p id="player-profile-modal-fallback" class="hidden m-6 rounded-xl border border-gray-200 bg-gray-50 px-4 py-6 text-center text-sm font-semibold text-gray-600">
-          Profile image not available yet.
-        </p>
+        <figure class="kn-player-modal__media-card" data-player-profile-media-item="image-1">
+          <p class="kn-player-modal__media-label">Imagen 1</p>
+          <img id="player-profile-modal-image" src="" alt="" loading="lazy" decoding="async" />
+          <p id="player-profile-modal-fallback" class="hidden rounded-xl border border-gray-200 bg-gray-50 px-4 py-6 text-center text-sm font-semibold text-gray-600">
+            Profile image not available yet.
+          </p>
+        </figure>
+        <figure class="kn-player-modal__media-card hidden" data-player-profile-media-item="image-2">
+          <p class="kn-player-modal__media-label">Imagen 2</p>
+          <img id="player-profile-modal-image-2" src="" alt="" loading="lazy" decoding="async" />
+          <p class="kn-player-modal__media-fallback hidden rounded-xl border border-gray-200 bg-gray-50 px-4 py-6 text-center text-sm font-semibold text-gray-600">
+            Image 2 is not available.
+          </p>
+        </figure>
+        <figure class="kn-player-modal__media-card hidden" data-player-profile-media-item="video">
+          <p class="kn-player-modal__media-label">Video</p>
+          <video id="player-profile-modal-video" controls muted playsinline preload="metadata"></video>
+        </figure>
       </div>
     </div>
   </div>
@@ -367,6 +381,8 @@
       '1219039567798079540': {
         freeFireIds: ['259512089'],
         src: './assets/player-profiles/soldado-king-profile.jpeg',
+        src2: '',
+        videoSrc: '',
         alt: 'Perfil de Free Fire de Soldado King'
       }
     };
@@ -387,6 +403,12 @@
     const playerProfileModalImage = document.getElementById('player-profile-modal-image');
     const playerProfileModalFallback = document.getElementById('player-profile-modal-fallback');
     const playerProfileModalClose = playerProfileModal?.querySelector('[data-player-profile-close]');
+    const playerProfileModalImage1Item = playerProfileModal?.querySelector('[data-player-profile-media-item="image-1"]');
+    const playerProfileModalImage2Item = playerProfileModal?.querySelector('[data-player-profile-media-item="image-2"]');
+    const playerProfileModalImage2 = document.getElementById('player-profile-modal-image-2');
+    const playerProfileModalImage2Fallback = playerProfileModalImage2Item?.querySelector('.kn-player-modal__media-fallback');
+    const playerProfileModalVideoItem = playerProfileModal?.querySelector('[data-player-profile-media-item="video"]');
+    const playerProfileModalVideo = document.getElementById('player-profile-modal-video');
     let lastPlayerProfileTrigger = null;
     const leaderProfileFallback = {
       avatar_url: './assets/king-nation-logo.png',
@@ -574,32 +596,103 @@
         .replace(/>/g, '&gt;');
     }
 
-    function openPlayerProfileModal(trigger) {
-      const imageSrc = trigger.dataset.playerProfileSrc;
-      const imageAlt = trigger.dataset.playerProfileAlt || 'Perfil de Free Fire';
-      const imageTitle = trigger.dataset.playerProfileTitle || 'Perfil de jugador King Nation';
+    function getCleanMediaUrl(value) {
+      return value == null ? '' : String(value).trim();
+    }
 
-      if (!imageSrc) {
+    function resetPlayerProfileModalMedia() {
+      if (playerProfileModalImage1Item) {
+        playerProfileModalImage1Item.classList.remove('hidden');
+      }
+
+      if (playerProfileModalImage) {
+        playerProfileModalImage.removeAttribute('src');
+        playerProfileModalImage.alt = '';
+        playerProfileModalImage.classList.remove('hidden');
+      }
+
+      if (playerProfileModalFallback) {
+        playerProfileModalFallback.classList.add('hidden');
+      }
+
+      if (playerProfileModalImage2Item) {
+        playerProfileModalImage2Item.classList.add('hidden');
+      }
+
+      if (playerProfileModalImage2) {
+        playerProfileModalImage2.removeAttribute('src');
+        playerProfileModalImage2.alt = '';
+        playerProfileModalImage2.classList.remove('hidden');
+      }
+
+      if (playerProfileModalImage2Fallback) {
+        playerProfileModalImage2Fallback.classList.add('hidden');
+      }
+
+      if (playerProfileModalVideo) {
+        playerProfileModalVideo.pause();
+        playerProfileModalVideo.removeAttribute('src');
+        playerProfileModalVideo.load();
+      }
+
+      if (playerProfileModalVideoItem) {
+        playerProfileModalVideoItem.classList.add('hidden');
+      }
+    }
+
+    function getPlayerProfileMediaFromTrigger(trigger) {
+      return {
+        src: getCleanMediaUrl(trigger.dataset.playerProfileSrc),
+        src2: getCleanMediaUrl(trigger.getAttribute('data-player-profile-src-2')),
+        videoSrc: getCleanMediaUrl(trigger.dataset.playerProfileVideoSrc),
+        alt: trigger.dataset.playerProfileAlt || 'Perfil de Free Fire',
+        alt2: trigger.getAttribute('data-player-profile-alt-2') || 'Perfil adicional de Free Fire',
+        title: trigger.dataset.playerProfileTitle || 'Perfil de jugador King Nation'
+      };
+    }
+
+    function openPlayerProfileModal(trigger) {
+      const media = getPlayerProfileMediaFromTrigger(trigger);
+      const firstAvailableMedia = media.src || media.src2 || media.videoSrc;
+
+      if (!firstAvailableMedia) {
         return;
       }
 
       lastPlayerProfileTrigger = trigger;
 
       if (!playerProfileModal || !playerProfileModalImage) {
-        window.open(imageSrc, '_blank', 'noopener');
+        window.open(firstAvailableMedia, '_blank', 'noopener');
         return;
       }
 
-      playerProfileModalImage.classList.remove('hidden');
-      if (playerProfileModalFallback) {
-        playerProfileModalFallback.classList.add('hidden');
-      }
+      resetPlayerProfileModalMedia();
 
       if (playerProfileModalTitle) {
-        playerProfileModalTitle.textContent = imageTitle;
+        playerProfileModalTitle.textContent = media.title;
       }
-      playerProfileModalImage.src = imageSrc;
-      playerProfileModalImage.alt = imageAlt;
+
+      if (media.src) {
+        playerProfileModalImage.src = media.src;
+        playerProfileModalImage.alt = media.alt;
+      } else {
+        playerProfileModalImage.classList.add('hidden');
+        if (playerProfileModalFallback) {
+          playerProfileModalFallback.classList.remove('hidden');
+        }
+      }
+
+      if (media.src2 && playerProfileModalImage2 && playerProfileModalImage2Item) {
+        playerProfileModalImage2Item.classList.remove('hidden');
+        playerProfileModalImage2.src = media.src2;
+        playerProfileModalImage2.alt = media.alt2;
+      }
+
+      if (media.videoSrc && playerProfileModalVideo && playerProfileModalVideoItem) {
+        playerProfileModalVideoItem.classList.remove('hidden');
+        playerProfileModalVideo.src = media.videoSrc;
+      }
+
       playerProfileModal.classList.remove('hidden');
       playerProfileModal.setAttribute('aria-hidden', 'false');
       document.body.classList.add('kn-modal-open');
@@ -609,20 +702,28 @@
       }
     }
 
-    function getPlayerProfileImage(player) {
+    function getPlayerProfileMedia(player) {
       const discordUserId = player.discord_user_id == null ? '' : String(player.discord_user_id).trim();
       const freeFireId = player.free_fire_id == null ? '' : String(player.free_fire_id).trim();
-      const profileImageUrl = player.profile_image_url == null ? '' : String(player.profile_image_url).trim();
+      const profileImageUrl = getCleanMediaUrl(player.profile_image_url);
+      const profileImageUrl2 = getCleanMediaUrl(player.profile_image_url_2);
+      const profileVideoUrl = getCleanMediaUrl(player.profile_video_url);
 
-      if (profileImageUrl) {
+      if (profileImageUrl || profileImageUrl2 || profileVideoUrl) {
         return {
           src: profileImageUrl,
+          src2: profileImageUrl2,
+          videoSrc: profileVideoUrl,
           alt: `Perfil de Free Fire de ${getPlayerDisplayName(player)}`
         };
       }
 
       return PLAYER_PROFILE_IMAGES_BY_DISCORD_USER_ID[discordUserId] ||
         PLAYER_PROFILE_IMAGES_BY_FREE_FIRE_ID[freeFireId];
+    }
+
+    function getPlayerProfileImage(player) {
+      return getPlayerProfileMedia(player);
     }
 
     function closePlayerProfileModal() {
@@ -635,22 +736,16 @@
       document.body.classList.remove('kn-modal-open');
 
       if (playerProfileModalImage) {
-        playerProfileModalImage.src = '';
-        playerProfileModalImage.alt = '';
-        playerProfileModalImage.classList.remove('hidden');
-      }
-
-      if (playerProfileModalTitle) {
-        playerProfileModalTitle.textContent = 'Perfil de jugador King Nation';
-      }
-
-      if (playerProfileModalFallback) {
-        playerProfileModalFallback.classList.add('hidden');
+        resetPlayerProfileModalMedia();
       }
 
       if (lastPlayerProfileTrigger) {
         lastPlayerProfileTrigger.focus();
         lastPlayerProfileTrigger = null;
+      }
+
+      if (playerProfileModalTitle) {
+        playerProfileModalTitle.textContent = 'Perfil de jugador King Nation';
       }
     }
 
@@ -670,8 +765,32 @@
       });
     }
 
+    if (playerProfileModalImage2) {
+      playerProfileModalImage2.addEventListener('load', () => {
+        playerProfileModalImage2.classList.remove('hidden');
+        if (playerProfileModalImage2Fallback) {
+          playerProfileModalImage2Fallback.classList.add('hidden');
+        }
+      });
+
+      playerProfileModalImage2.addEventListener('error', () => {
+        playerProfileModalImage2.classList.add('hidden');
+        if (playerProfileModalImage2Fallback) {
+          playerProfileModalImage2Fallback.classList.remove('hidden');
+        }
+      });
+    }
+
+    if (playerProfileModalVideo) {
+      playerProfileModalVideo.addEventListener('error', () => {
+        if (playerProfileModalVideoItem) {
+          playerProfileModalVideoItem.classList.add('hidden');
+        }
+      });
+    }
+
     document.addEventListener('click', event => {
-      const profileTrigger = event.target.closest('[data-player-profile-src]');
+      const profileTrigger = event.target.closest('[data-player-profile-src], [data-player-profile-src-2], [data-player-profile-video-src]');
 
       if (profileTrigger) {
         openPlayerProfileModal(profileTrigger);
@@ -1054,9 +1173,10 @@
           const profileName = getPlayerDisplayName(player);
           const profileTitle = `Perfil de ${profileName}`;
           const profileAlt = `Perfil de Free Fire de ${profileName}`;
+          const profileAlt2 = `Imagen adicional de Free Fire de ${profileName}`;
           const freeFireIdBadge = freeFireId
             ? profileImage
-              ? `<button type="button" class="kn-player-id-button inline-flex shrink-0 items-center rounded-full border border-indigo-200 bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-700" data-player-profile-src="${escapeAttribute(profileImage.src)}" data-player-profile-alt="${escapeAttribute(profileAlt)}" data-player-profile-title="${escapeAttribute(profileTitle)}" aria-label="${escapeAttribute(`Abrir perfil de Free Fire de ${profileName}`)}">ID: ${freeFireId}</button>`
+              ? `<button type="button" class="kn-player-id-button inline-flex shrink-0 items-center rounded-full border border-indigo-200 bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-700" data-player-profile-src="${escapeAttribute(profileImage.src || '')}" data-player-profile-src-2="${escapeAttribute(profileImage.src2 || '')}" data-player-profile-video-src="${escapeAttribute(profileImage.videoSrc || '')}" data-player-profile-alt="${escapeAttribute(profileAlt)}" data-player-profile-alt-2="${escapeAttribute(profileAlt2)}" data-player-profile-title="${escapeAttribute(profileTitle)}" aria-label="${escapeAttribute(`Abrir perfil de Free Fire de ${profileName}`)}">ID: ${freeFireId}</button>`
               : `<span class="inline-flex shrink-0 items-center rounded-full border border-indigo-200 bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-700">ID: ${freeFireId}</span>`
             : '';
           const socialDisplay = getSocialDisplay(player.social_platform, player.social_handle);
