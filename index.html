@@ -29,169 +29,202 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
 </head>
-<body class="kn-intake text-gray-900">
+<body class="kn-intake kn-manus-layout text-gray-900">
   <a class="kn-skip-link" href="#main-content">Saltar al contenido principal</a>
   <div id="top"></div>
   <div id="err"></div>
 
-  <!-- Top Nav -->
-  <div class="mx-auto max-w-5xl px-4 pt-4 md:px-5">
-    <nav class="kn-top-nav w-full px-3 py-2" aria-label="Navegación principal">
-      <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-      <div class="kn-wordmark font-semibold text-gray-700">King Nation Oficial</div>
-      <div class="kn-top-links flex flex-wrap items-center gap-2 text-sm">
-        <a href="#top" class="kn-pill-link inline-flex items-center rounded-full border border-transparent bg-white/70 px-4 py-2 font-medium text-gray-700 shadow-sm transition hover:border-cyan-100 hover:bg-cyan-50 hover:text-cyan-700">Inicio</a>
-        <a id="nav-name" href="#panel-name" data-nav-target="tab-name" class="kn-pill-link inline-flex items-center rounded-full border border-transparent bg-white/70 px-4 py-2 font-medium text-gray-700 shadow-sm transition hover:border-cyan-100 hover:bg-cyan-50 hover:text-cyan-700">Generador de Nombres</a>
-        <a id="nav-sensi" href="#panel-sensi" data-nav-target="tab-sensi" class="kn-pill-link inline-flex items-center rounded-full border border-transparent bg-white/70 px-4 py-2 font-medium text-gray-700 shadow-sm transition hover:border-cyan-100 hover:bg-cyan-50 hover:text-cyan-700">Sensi por modelo</a>
-        <a id="nav-players" href="#panel-players" data-nav-target="tab-players" class="kn-pill-link inline-flex items-center rounded-full border border-transparent bg-white/70 px-4 py-2 font-medium text-gray-700 shadow-sm transition hover:border-cyan-100 hover:bg-cyan-50 hover:text-cyan-700">Jugadores</a>
-        <a href="https://wa.me/50582335213" target="_blank" rel="noopener noreferrer" class="kn-pill-link inline-flex items-center rounded-full border border-transparent bg-white/70 px-4 py-2 font-medium text-gray-700 shadow-sm transition hover:border-emerald-100 hover:bg-emerald-50 hover:text-emerald-700">Contacto</a>
+  <!-- Desktop Nav -->
+  <nav class="kn-top-nav-wrap hidden md:block sticky top-0 z-40 px-5 py-3" aria-label="Navegación principal">
+    <div class="kn-top-nav mx-auto flex max-w-6xl items-center justify-between gap-5 px-4 py-3">
+      <a href="#top" class="kn-brand-lockup inline-flex items-center gap-3" aria-label="King Nation Oficial">
+        <img src="./assets/king-nation-logo.png" alt="" class="kn-logo h-11 w-11 object-contain p-1" width="44" height="44" decoding="async" />
+        <span class="kn-wordmark font-semibold text-gray-700">King Nation Oficial</span>
+      </a>
+      <div class="kn-top-links flex items-center gap-2 text-sm">
+        <a href="#top" class="kn-pill-link inline-flex items-center rounded-xl border border-transparent bg-white/70 px-4 py-2 font-medium text-gray-700 shadow-sm transition hover:border-cyan-100 hover:bg-cyan-50 hover:text-cyan-700">Inicio</a>
+        <a id="nav-name" href="#panel-name" data-nav-target="tab-name" class="kn-pill-link inline-flex items-center rounded-xl border border-transparent bg-white/70 px-4 py-2 font-medium text-gray-700 shadow-sm transition hover:border-cyan-100 hover:bg-cyan-50 hover:text-cyan-700">Nombres</a>
+        <a id="nav-sensi" href="#panel-sensi" data-nav-target="tab-sensi" class="kn-pill-link inline-flex items-center rounded-xl border border-transparent bg-white/70 px-4 py-2 font-medium text-gray-700 shadow-sm transition hover:border-cyan-100 hover:bg-cyan-50 hover:text-cyan-700">Sensi</a>
+        <a id="nav-players" href="#panel-players" data-nav-target="tab-players" class="kn-pill-link inline-flex items-center rounded-xl border border-transparent bg-white/70 px-4 py-2 font-medium text-gray-700 shadow-sm transition hover:border-cyan-100 hover:bg-cyan-50 hover:text-cyan-700">Legión</a>
+        <a href="https://wa.me/50582335213" target="_blank" rel="noopener noreferrer" class="kn-pill-link inline-flex items-center rounded-xl border border-transparent bg-white/70 px-4 py-2 font-medium text-gray-700 shadow-sm transition hover:border-emerald-100 hover:bg-emerald-50 hover:text-emerald-700">Contacto</a>
       </div>
-      </div>
-    </nav>
-  </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Header -->
+  <header class="kn-mobile-header relative z-10 flex items-center justify-between px-5 py-5 md:hidden">
+    <a href="#top" class="inline-flex min-w-0 items-center gap-3" aria-label="King Nation Oficial">
+      <img src="./assets/king-nation-logo.png" alt="" class="kn-logo h-12 w-12 object-contain p-1" width="48" height="48" decoding="async" />
+      <span class="min-w-0">
+        <span class="kng-title block text-xl font-extrabold leading-tight">King Nation</span>
+        <span class="block text-xs font-semibold text-gray-500">Oficial</span>
+      </span>
+    </a>
+    <a href="https://wa.me/50582335213" target="_blank" rel="noopener noreferrer" class="kn-mobile-contact inline-flex h-11 w-11 items-center justify-center rounded-xl border border-cyan-100 bg-white/80 text-sm font-extrabold text-cyan-700 shadow-sm" aria-label="Contacto">WA</a>
+  </header>
 
   <!-- Page Shell -->
-  <main id="main-content" role="main" class="mx-auto max-w-5xl px-4 pt-6 pb-20 relative z-10 md:px-5 kn-main-shell">
-    <header class="kn-hero mb-4 flex items-center gap-4 justify-center">
+  <main id="main-content" role="main" class="mx-auto max-w-6xl px-4 pt-2 pb-28 relative z-10 md:px-5 md:pt-8 kn-main-shell">
+    <header class="kn-hero mb-6 flex items-center gap-4 justify-center md:mb-8">
       <img src="./assets/king-nation-logo.png" alt="Logo de King Nation" class="w-16 h-16 md:w-20 md:h-20 object-contain kn-logo p-1" width="80" height="80" decoding="async" fetchpriority="high" />
       <div class="text-center">
         <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight text-gray-800"><span class="kng-title">King Nation Oficial</span></h1>
-        <p class="text-sm text-gray-600">Nombre estilizado · Sensi por modelo</p>
+        <p class="text-sm text-gray-600">Nombre estilizado · Sensi por modelo · Legión King</p>
       </div>
     </header>
 
-    <section class="mb-6 kn-auth-strip">
-      <div class="mb-4 flex justify-center gap-3">
-        <button id="discord-login-btn" class="kn-action-btn kn-btn-discord rounded-xl border border-indigo-200 bg-indigo-50 px-4 py-2 text-sm font-semibold text-indigo-700 shadow-sm transition hover:bg-indigo-100">
-          Entrar con Discord
-        </button>
-        <button id="signout-btn" class="kn-action-btn kn-btn-neutral hidden rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-gray-700 shadow-sm transition hover:bg-gray-50">
-          Cerrar sesión
-        </button>
-      </div>
-      <p id="current-user-welcome" aria-live="polite" class="hidden mb-2 text-center text-sm font-semibold text-gray-700"></p>
-      <div id="current-user-badge" class="kn-surface hidden max-w-md mx-auto mb-4 rounded-2xl border border-gray-200 bg-white px-4 py-3 shadow-sm"></div>
-      <div id="players-preview-card" class="kn-surface max-w-md mx-auto rounded-2xl border border-gray-200 bg-white p-4 shadow-sm text-sm text-gray-600">
-        Cargando vista previa del jugador…
+    <section class="mb-7 kn-auth-strip">
+      <div class="kn-auth-card kn-surface rounded-2xl border border-cyan-100 p-4 shadow-sm md:p-5">
+        <div class="grid gap-4 md:grid-cols-[1.05fr_.95fr] md:items-center">
+          <div class="min-w-0">
+            <p class="text-xs font-bold uppercase tracking-wide text-cyan-700">Acceso King Nation</p>
+            <h2 class="mt-1 text-xl font-extrabold text-gray-800">Conecta tu cuenta para abrir tus herramientas.</h2>
+            <p class="mt-2 text-sm leading-6 text-gray-600">El login mantiene visibles tus opciones de nombre, Sensi y perfil dentro de la comunidad.</p>
+            <div class="mt-4 flex flex-wrap gap-3">
+              <button id="discord-login-btn" class="kn-action-btn kn-btn-discord rounded-xl border border-indigo-200 bg-indigo-50 px-4 py-2 text-sm font-semibold text-indigo-700 shadow-sm transition hover:bg-indigo-100">
+                Entrar con Discord
+              </button>
+              <button id="signout-btn" class="kn-action-btn kn-btn-neutral hidden rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-gray-700 shadow-sm transition hover:bg-gray-50">
+                Cerrar sesión
+              </button>
+            </div>
+          </div>
+          <div class="min-w-0 space-y-3">
+            <p id="current-user-welcome" aria-live="polite" class="hidden text-sm font-semibold text-gray-700"></p>
+            <div id="current-user-badge" class="kn-surface hidden rounded-2xl border border-gray-200 bg-white px-4 py-3 shadow-sm"></div>
+            <div id="players-preview-card" class="kn-surface rounded-2xl border border-gray-200 bg-white p-4 shadow-sm text-sm text-gray-600">
+              Cargando vista previa del jugador…
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
-    <nav class="tabs kn-tabs-shell" role="tablist" aria-label="Herramientas">
+    <nav class="tabs kn-tabs-shell kn-primary-tabs" role="tablist" aria-label="Herramientas">
       <button class="tabbtn" id="tab-name" role="tab" aria-controls="panel-name" aria-selected="true">Generador de Nombres</button>
       <button class="tabbtn" id="tab-sensi" role="tab" aria-controls="panel-sensi" aria-selected="false">Sensi por Modelo</button>
-      <button class="tabbtn" id="tab-players" role="tab" aria-controls="panel-players" aria-selected="false">Jugadores</button>
+      <button class="tabbtn" id="tab-players" role="tab" aria-controls="panel-players" aria-selected="false">Legión</button>
     </nav>
 
     <!-- Panel: Name Generator -->
-    <section id="panel-name" class="panel active" role="tabpanel" aria-labelledby="tab-name">
+    <section id="panel-name" class="panel active kn-tool-panel" role="tabpanel" aria-labelledby="tab-name">
+      <div class="kn-panel-heading">
+        <p class="kn-section-kicker">Generador</p>
+        <h2 class="kn-section-title">Generador de Nombres</h2>
+        <p class="kn-section-subtitle">Crea nombres con estilo manteniendo la identidad de King Nation.</p>
+      </div>
       <div id="root"></div>
     </section>
 
     <!-- Panel: Sensi Finder -->
-    <section id="panel-sensi" class="panel" role="tabpanel" aria-labelledby="tab-sensi">
+    <section id="panel-sensi" class="panel kn-tool-panel" role="tabpanel" aria-labelledby="tab-sensi">
       <div class="sensi-scope">
         <div class="wrap">
-          <section class="kn-card kn-app-frame p-5">
-            <header>
-              <div class="title">
+          <div class="kn-panel-heading">
+            <p class="kn-section-kicker">Sensibilidad</p>
+            <h2 class="kn-section-title">Sensi por Modelo</h2>
+            <p class="kn-section-subtitle">Sensibilidad hasta 200. Elige marca, modelo, perfil y copia los valores reales del generador.</p>
+          </div>
+
+          <section class="kn-sensi-layout" aria-label="Generador de sensibilidad por modelo">
+            <div class="kn-card kn-sensi-controls-card p-5">
+              <div class="kn-card-head">
                 <img src="./assets/king-nation-logo.png" alt="" class="kn-logo kn-section-badge" aria-hidden="true" width="40" height="40" loading="lazy" decoding="async" />
                 <div>
-                  <h1>Sensi por Modelo</h1>
-                  <p class="subtitle">Sensibilidad hasta 200 · Elige Marca / Modelo / Perfil y copia los valores</p>
+                  <h3>Configura tu dispositivo</h3>
+                  <p>Busca rápido o selecciona cada opción.</p>
                 </div>
               </div>
-            </header>
 
-            <section class="card controls" aria-label="Panel de controles">
-              <div>
-                <label for="q">Buscar (marca o modelo)</label>
-                <input id="q" type="text" placeholder="Ej: Galaxy A54, iPhone 16 Pro Max, Redmi Note 13" autocomplete="off" list="suggestions" />
-                <datalist id="suggestions"></datalist>
-              </div>
-              <div>
-                <label for="brand">Marca</label>
-                <select id="brand">
-                  <option value="" disabled selected hidden>Selecciona marca</option>
-                </select>
-              </div>
-              <div>
-                <label for="model">Modelo</label>
-                <select id="model">
-                  <option value="" disabled selected hidden>Selecciona modelo</option>
-                </select>
-              </div>
-              <div>
-                <label for="profile">Perfil</label>
-                <select id="profile">
-                  <option value="" disabled selected hidden>Selecciona perfil</option>
-                  <option value="low">Baja (control)</option>
-                  <option value="mid">Media (equilibrada)</option>
-                  <option value="high">Alta (rápida)</option>
-                </select>
-              </div>
-              <div>
-                <label for="dpi">Preferencia DPI</label>
-                <select id="dpi">
-                  <option value="" disabled selected hidden>¿Con DPI?</option>
-                  <option value="with">Con DPI sugerido</option>
-                  <option value="without">Sin DPI</option>
-                </select>
-              </div>
-              <div style="align-self:end; display:flex; gap:8px">
-                <button id="btnShow" class="btn btn-primary" disabled>Mostrar</button>
-                <button id="btnCopy" class="btn" disabled>Copiar</button>
-                <button id="btnClear" class="btn btn-ghost">Limpiar</button>
-              </div>
-            </section>
-
-            <section class="card stack" style="margin-top:14px">
-              <div class="result-head">
+              <section class="card controls" aria-label="Panel de controles">
+                <div class="kn-field-full">
+                  <label for="q">Buscar marca o modelo</label>
+                  <input id="q" type="text" placeholder="Ej: Galaxy A54, iPhone 16 Pro Max, Redmi Note 13" autocomplete="off" list="suggestions" />
+                  <datalist id="suggestions"></datalist>
+                </div>
                 <div>
-                  <div id="resultTitle" style="font-weight:700; font-size:18px">Selecciona opciones para ver la Sensi…</div>
-                  <div id="resultMeta" class="muted">—</div>
+                  <label for="brand">Marca</label>
+                  <select id="brand">
+                    <option value="" disabled selected hidden>Selecciona marca</option>
+                  </select>
                 </div>
-                <div class="tags" id="badges"></div>
-              </div>
+                <div>
+                  <label for="model">Modelo</label>
+                  <select id="model">
+                    <option value="" disabled selected hidden>Selecciona modelo</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="profile">Perfil</label>
+                  <select id="profile">
+                    <option value="" disabled selected hidden>Selecciona perfil</option>
+                    <option value="low">Baja (control)</option>
+                    <option value="mid">Media (equilibrada)</option>
+                    <option value="high">Alta (rápida)</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="dpi">Preferencia DPI</label>
+                  <select id="dpi">
+                    <option value="" disabled selected hidden>¿Con DPI?</option>
+                    <option value="with">Con DPI sugerido</option>
+                    <option value="without">Sin DPI</option>
+                  </select>
+                </div>
+                <div class="kn-sensi-actions">
+                  <button id="btnShow" class="btn btn-primary" disabled>Mostrar</button>
+                  <button id="btnCopy" class="btn" disabled>Copiar</button>
+                  <button id="btnClear" class="btn btn-ghost">Limpiar</button>
+                </div>
+              </section>
+            </div>
 
-              <table id="tbl" hidden>
-                <thead><tr><th>Ajuste</th><th>Valor</th></tr></thead>
-                <tbody></tbody>
-              </table>
-              <p class="muted" style="margin-top:10px">Consejo: la <strong>Alta</strong> puede llegar hasta 200. Ajusta ±5 según tus FPS y tu estilo.</p>
-            </section>
+            <div class="kn-sensi-side">
+              <section class="card stack kn-sensi-result-card">
+                <div class="result-head">
+                  <div>
+                    <div id="resultTitle" class="kn-sensi-result-title">Selecciona opciones para ver la Sensi…</div>
+                    <div id="resultMeta" class="muted">—</div>
+                  </div>
+                  <div class="tags" id="badges"></div>
+                </div>
 
-            <section class="card" style="margin-top:14px">
-              <h3 style="margin:0 0 8px 0; font-size:16px">Consejos rápidos</h3>
-              <ul class="muted" style="margin:0; padding-left:18px; display:grid; gap:6px">
-                <li><strong>Escala hasta 200:</strong> si en Alta aún te falta velocidad, sube de 5 en 5 (General y Rojo) antes de tocar 2x/4x.</li>
-                <li><strong>FPS y térmicas:</strong> si tu FPS cae, baja 3–5 puntos en General/Red; si sube, aumenta 2–3.</li>
-                <li><strong>Retroceso vertical:</strong> si el arma se va hacia arriba, baja General y Rojo; si se queda corta, sube 2x/4x.</li>
-                <li><strong>Giroscopio:</strong> si tu equipo tiene giroscopio, pruébalo en Media; si te mareas, apágalo y sube poco a poco.</li>
-                <li><strong>DPI externo:</strong> evita valores extremos fuera de stock; si usas, acompasa subiendo/bajando 10–20 puntos en la Sensi.</li>
-                <li><strong>Claw vs pulgares:</strong> jugadores claw suelen preferir Media/Alta; pulgares, Baja/Media para más control.</li>
-                <li><strong>Mirada Libre:</strong> útil para saqueo y rotaciones; no afecta el retroceso al disparar.</li>
-                <li><strong>Prueba 10 partidas:</strong> mantén un perfil estable 8–10 partidas antes de decidir ajustes finos.</li>
-              </ul>
-            </section>
+                <table id="tbl" hidden>
+                  <thead><tr><th>Ajuste</th><th>Valor</th></tr></thead>
+                  <tbody></tbody>
+                </table>
+                <p class="muted">Consejo: la <strong>Alta</strong> puede llegar hasta 200. Ajusta ±5 según tus FPS y tu estilo.</p>
+              </section>
 
-            <footer class="namegen-footer">
-              <div class="namegen-footer-brand">
-                <img src="./assets/king-nation-logo.png" alt="Logo de King Nation" width="72" height="72" loading="lazy" decoding="async" />
-                <strong>King Nation</strong>
-              </div>
-              <span>Hecho para el Clan King Nation</span>
-            </footer>
+              <section class="card kn-sensi-tips">
+                <h3>Consejos rápidos</h3>
+                <ul class="muted">
+                  <li><strong>Escala hasta 200:</strong> si en Alta aún te falta velocidad, sube de 5 en 5 General y Rojo antes de tocar 2x/4x.</li>
+                  <li><strong>FPS y térmicas:</strong> si tu FPS cae, baja 3-5 puntos en General/Red; si sube, aumenta 2-3.</li>
+                  <li><strong>Retroceso vertical:</strong> si el arma se va hacia arriba, baja General y Rojo; si se queda corta, sube 2x/4x.</li>
+                  <li><strong>Prueba 10 partidas:</strong> mantén un perfil estable 8-10 partidas antes de decidir ajustes finos.</li>
+                </ul>
+              </section>
+            </div>
           </section>
         </div>
       </div>
     </section>
 
-    <section id="panel-players" class="panel" role="tabpanel" aria-labelledby="tab-players">
-      <div class="max-w-3xl mx-auto space-y-4">
-        <div id="leader-tools-panel" class="rounded-2xl border border-amber-200 bg-gradient-to-br from-amber-50 via-white to-yellow-50 p-4 shadow-sm">
+    <section id="panel-players" class="panel kn-tool-panel" role="tabpanel" aria-labelledby="tab-players">
+      <div class="space-y-5">
+        <div class="kn-panel-heading kn-players-heading">
+          <div>
+            <p class="kn-section-kicker">Comunidad</p>
+            <h2 class="kn-section-title">Legión King Nation</h2>
+            <p class="kn-section-subtitle">Roster, rangos, VIP y herramientas conectadas a Supabase.</p>
+          </div>
+        </div>
+
+        <div id="leader-tools-panel" class="rounded-2xl border border-amber-200 bg-gradient-to-br from-amber-50 via-white to-yellow-50 p-4 shadow-sm md:p-5">
           <div class="space-y-4">
             <div>
-              <p class="text-sm font-semibold text-amber-800">👑 Herramientas administrativas</p>
+              <p class="text-sm font-semibold text-amber-800">Herramientas administrativas</p>
               <p class="text-sm text-amber-700">Funciones visibles según tu acceso actual.</p>
             </div>
 
@@ -207,14 +240,14 @@
                     id="leader-sync-btn"
                     class="rounded-xl border border-amber-200 bg-white px-4 py-2 text-sm font-semibold text-amber-700 shadow-sm transition hover:bg-amber-50"
                   >
-                    🔄 Sincronizar jugadores
+                    Sincronizar jugadores
                   </button>
                   <button
                     type="button"
                     id="leader-refresh-btn"
                     class="rounded-xl border border-emerald-200 bg-white px-4 py-2 text-sm font-semibold text-emerald-700 shadow-sm transition hover:bg-emerald-50"
                   >
-                    ♻️ Refrescar datos
+                    Refrescar datos
                   </button>
                 </div>
                 <p id="leader-sync-message" aria-live="polite" class="hidden text-sm font-medium"></p>
@@ -249,8 +282,8 @@
             <p class="mt-2 text-2xl font-semibold text-gray-800">--</p>
           </div>
         </div>
-        <div class="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
-          <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+        <div class="kn-players-controls rounded-2xl border border-gray-200 bg-white/90 p-4 shadow-sm">
+          <div class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
             <label for="players-search" class="sr-only">Buscar jugador</label>
             <input
               id="players-search"
@@ -259,7 +292,7 @@
               autocomplete="off"
               aria-label="Buscar jugador"
               placeholder="Buscar jugador…"
-              class="w-full md:max-w-xs rounded-xl border border-gray-200 bg-gray-50 px-4 py-2 text-sm text-gray-700 focus:border-cyan-300 focus:bg-white focus:ring-2 focus:ring-cyan-100"
+              class="w-full lg:max-w-sm rounded-xl border border-gray-200 bg-gray-50 px-4 py-2 text-sm text-gray-700 focus:border-cyan-300 focus:bg-white focus:ring-2 focus:ring-cyan-100"
             />
             <div id="players-filters" class="flex flex-wrap gap-2">
               <button type="button" data-filter="Todos" class="rounded-full border border-pink-200 bg-pink-50 px-3 py-1.5 text-xs font-semibold text-pink-700">Todos</button>
@@ -283,6 +316,39 @@
     </footer>
   </main>
 
+  <nav class="kn-mobile-bottom-nav md:hidden" aria-label="Herramientas móviles">
+    <a href="#panel-name" data-nav-target="tab-name" class="kn-mobile-nav-item">
+      <span class="kn-mobile-nav-icon" aria-hidden="true">N</span>
+      <span>Nombres</span>
+    </a>
+    <a href="#panel-sensi" data-nav-target="tab-sensi" class="kn-mobile-nav-item">
+      <span class="kn-mobile-nav-icon" aria-hidden="true">S</span>
+      <span>Sensi</span>
+    </a>
+    <a href="#panel-players" data-nav-target="tab-players" class="kn-mobile-nav-item">
+      <span class="kn-mobile-nav-icon" aria-hidden="true">K</span>
+      <span>Legión</span>
+    </a>
+  </nav>
+
+  <div id="player-profile-modal" class="kn-player-modal hidden" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="player-profile-modal-title">
+    <div class="kn-player-modal__panel">
+      <div class="kn-player-modal__bar">
+        <div>
+          <p class="kn-player-modal__eyebrow">Free Fire</p>
+          <h2 id="player-profile-modal-title">Perfil de jugador King Nation</h2>
+        </div>
+        <button type="button" class="kn-player-modal__close" data-player-profile-close aria-label="Cerrar perfil">&times;</button>
+      </div>
+      <div class="kn-player-modal__media">
+        <img id="player-profile-modal-image" src="" alt="" loading="lazy" decoding="async" />
+        <p id="player-profile-modal-fallback" class="hidden m-6 rounded-xl border border-gray-200 bg-gray-50 px-4 py-6 text-center text-sm font-semibold text-gray-600">
+          Profile image not available yet.
+        </p>
+      </div>
+    </div>
+  </div>
+
   <!-- Tabs script -->
   <script src="./js/tabs.js"></script>
 
@@ -297,12 +363,31 @@
     const SUPABASE_URL = 'https://vtyekyzpdnsnhpeiuite.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ0eWVreXpwZG5zbmhwZWl1aXRlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5NDM0NTMsImV4cCI6MjA5MTUxOTQ1M30.U1d2wPSj5co0RZre7GGM0jbko7BsMd-tTcMV-DjIS9g';
     const AUTHORIZED_LEADER_DISCORD_USER_IDS = ['1219039567798079540'];
+    const PLAYER_PROFILE_IMAGES_BY_DISCORD_USER_ID = {
+      '1219039567798079540': {
+        freeFireIds: ['259512089'],
+        src: './assets/player-profiles/soldado-king-profile.jpeg',
+        alt: 'Perfil de Free Fire de Soldado King'
+      }
+    };
+    const PLAYER_PROFILE_IMAGES_BY_FREE_FIRE_ID = Object.values(PLAYER_PROFILE_IMAGES_BY_DISCORD_USER_ID).reduce((imagesByFreeFireId, profileImage) => {
+      (profileImage.freeFireIds || []).forEach(freeFireId => {
+        imagesByFreeFireId[String(freeFireId).trim()] = profileImage;
+      });
+      return imagesByFreeFireId;
+    }, {});
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     const discordLoginButton = document.getElementById('discord-login-btn');
     const signOutButton = document.getElementById('signout-btn');
     const currentUserWelcome = document.getElementById('current-user-welcome');
     const currentUserBadge = document.getElementById('current-user-badge');
     const playersPreviewCard = document.getElementById('players-preview-card');
+    const playerProfileModal = document.getElementById('player-profile-modal');
+    const playerProfileModalTitle = document.getElementById('player-profile-modal-title');
+    const playerProfileModalImage = document.getElementById('player-profile-modal-image');
+    const playerProfileModalFallback = document.getElementById('player-profile-modal-fallback');
+    const playerProfileModalClose = playerProfileModal?.querySelector('[data-player-profile-close]');
+    let lastPlayerProfileTrigger = null;
     const leaderProfileFallback = {
       avatar_url: './assets/king-nation-logo.png',
       styled_name: 'King Nation',
@@ -476,6 +561,136 @@
         </span>
       `;
     }
+
+    function getPlayerDisplayName(player) {
+      return player.styled_name || player.ff_name || 'jugador King Nation';
+    }
+
+    function escapeAttribute(value) {
+      return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    }
+
+    function openPlayerProfileModal(trigger) {
+      const imageSrc = trigger.dataset.playerProfileSrc;
+      const imageAlt = trigger.dataset.playerProfileAlt || 'Perfil de Free Fire';
+      const imageTitle = trigger.dataset.playerProfileTitle || 'Perfil de jugador King Nation';
+
+      if (!imageSrc) {
+        return;
+      }
+
+      lastPlayerProfileTrigger = trigger;
+
+      if (!playerProfileModal || !playerProfileModalImage) {
+        window.open(imageSrc, '_blank', 'noopener');
+        return;
+      }
+
+      playerProfileModalImage.classList.remove('hidden');
+      if (playerProfileModalFallback) {
+        playerProfileModalFallback.classList.add('hidden');
+      }
+
+      if (playerProfileModalTitle) {
+        playerProfileModalTitle.textContent = imageTitle;
+      }
+      playerProfileModalImage.src = imageSrc;
+      playerProfileModalImage.alt = imageAlt;
+      playerProfileModal.classList.remove('hidden');
+      playerProfileModal.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('kn-modal-open');
+
+      if (playerProfileModalClose) {
+        playerProfileModalClose.focus();
+      }
+    }
+
+    function getPlayerProfileImage(player) {
+      const discordUserId = player.discord_user_id == null ? '' : String(player.discord_user_id).trim();
+      const freeFireId = player.free_fire_id == null ? '' : String(player.free_fire_id).trim();
+      const profileImageUrl = player.profile_image_url == null ? '' : String(player.profile_image_url).trim();
+
+      if (profileImageUrl) {
+        return {
+          src: profileImageUrl,
+          alt: `Perfil de Free Fire de ${getPlayerDisplayName(player)}`
+        };
+      }
+
+      return PLAYER_PROFILE_IMAGES_BY_DISCORD_USER_ID[discordUserId] ||
+        PLAYER_PROFILE_IMAGES_BY_FREE_FIRE_ID[freeFireId];
+    }
+
+    function closePlayerProfileModal() {
+      if (!playerProfileModal || playerProfileModal.classList.contains('hidden')) {
+        return;
+      }
+
+      playerProfileModal.classList.add('hidden');
+      playerProfileModal.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('kn-modal-open');
+
+      if (playerProfileModalImage) {
+        playerProfileModalImage.src = '';
+        playerProfileModalImage.alt = '';
+        playerProfileModalImage.classList.remove('hidden');
+      }
+
+      if (playerProfileModalTitle) {
+        playerProfileModalTitle.textContent = 'Perfil de jugador King Nation';
+      }
+
+      if (playerProfileModalFallback) {
+        playerProfileModalFallback.classList.add('hidden');
+      }
+
+      if (lastPlayerProfileTrigger) {
+        lastPlayerProfileTrigger.focus();
+        lastPlayerProfileTrigger = null;
+      }
+    }
+
+    if (playerProfileModalImage) {
+      playerProfileModalImage.addEventListener('load', () => {
+        playerProfileModalImage.classList.remove('hidden');
+        if (playerProfileModalFallback) {
+          playerProfileModalFallback.classList.add('hidden');
+        }
+      });
+
+      playerProfileModalImage.addEventListener('error', () => {
+        playerProfileModalImage.classList.add('hidden');
+        if (playerProfileModalFallback) {
+          playerProfileModalFallback.classList.remove('hidden');
+        }
+      });
+    }
+
+    document.addEventListener('click', event => {
+      const profileTrigger = event.target.closest('[data-player-profile-src]');
+
+      if (profileTrigger) {
+        openPlayerProfileModal(profileTrigger);
+        return;
+      }
+
+      if (
+        event.target.matches('[data-player-profile-close]') ||
+        event.target === playerProfileModal
+      ) {
+        closePlayerProfileModal();
+      }
+    });
+
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape') {
+        closePlayerProfileModal();
+      }
+    });
 
     function setCurrentUserBadge(player) {
       if (!currentUserBadge || !player) {
@@ -834,7 +1049,16 @@
           const styledName = player.styled_name || 'Sin nombre estilizado';
           const ffName = player.ff_name || 'Sin nombre de Free Fire';
           const showSecondaryName = ffName && ffName !== styledName;
-          const freeFireId = player.free_fire_id || '';
+          const freeFireId = player.free_fire_id == null ? '' : String(player.free_fire_id).trim();
+          const profileImage = getPlayerProfileImage(player);
+          const profileName = getPlayerDisplayName(player);
+          const profileTitle = `Perfil de ${profileName}`;
+          const profileAlt = `Perfil de Free Fire de ${profileName}`;
+          const freeFireIdBadge = freeFireId
+            ? profileImage
+              ? `<button type="button" class="kn-player-id-button inline-flex shrink-0 items-center rounded-full border border-indigo-200 bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-700" data-player-profile-src="${escapeAttribute(profileImage.src)}" data-player-profile-alt="${escapeAttribute(profileAlt)}" data-player-profile-title="${escapeAttribute(profileTitle)}" aria-label="${escapeAttribute(`Abrir perfil de Free Fire de ${profileName}`)}">ID: ${freeFireId}</button>`
+              : `<span class="inline-flex shrink-0 items-center rounded-full border border-indigo-200 bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-700">ID: ${freeFireId}</span>`
+            : '';
           const socialDisplay = getSocialDisplay(player.social_platform, player.social_handle);
           const roleBadge = getRoleBadge(player.role || 'MIEMBRO');
           const vipStatus = player.vip_status === true ? '👑 VIP' : '—';
@@ -851,7 +1075,7 @@
                 <div class="min-w-0 flex-1">
                   <div class="flex items-start justify-between gap-3">
                     <h3 class="text-base font-semibold text-gray-800 truncate">${styledName}</h3>
-                    ${freeFireId ? `<span class="inline-flex shrink-0 items-center rounded-full border border-indigo-200 bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-700">ID: ${freeFireId}</span>` : ''}
+                    ${freeFireIdBadge}
                   </div>
                   ${showSecondaryName ? `<p class="text-sm text-gray-500 truncate">${ffName}</p>` : ''}
                   ${socialDisplay ? `<div class="mt-1">${socialDisplay}</div>` : ''}
@@ -870,7 +1094,7 @@
             </div>
           `;
         }).join('');
-        rosterContainer.className = 'max-w-3xl mx-auto grid gap-4 md:grid-cols-2';
+        rosterContainer.className = 'grid gap-5 sm:grid-cols-2 lg:grid-cols-3';
       };
 
       playersRosterState.players = sortedPlayers;
