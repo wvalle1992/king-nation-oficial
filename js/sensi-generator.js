@@ -45,6 +45,17 @@ function setDatalistOptions(datalistEl, values){
   }
 }
 function placeholder(text){ return text; }
+function deviceSearchTerms(item){
+  const aliases = Array.isArray(item.aliases) ? item.aliases : [];
+  const terms = [item.brand, item.model, `${item.brand} ${item.model}`, ...aliases];
+  if(item.brand === 'Redmi' || item.brand === 'POCO'){
+    terms.push(`Xiaomi ${item.brand} ${item.model}`);
+  }
+  return terms;
+}
+function deviceSearchText(item){
+  return deviceSearchTerms(item).join(' ').toLowerCase();
+}
 function getProfile(profileId){
   return SENSI_PROFILES.find((profile) => profile.id === profileId)
     || SENSI_PROFILES.find((profile) => profile.id === DEFAULT_SENSI_PROFILE_ID)
@@ -88,7 +99,10 @@ function updateProfileHelp(){
 
 function buildSuggestions(filterBrand=''){
   const list = filterBrand ? (byBrand.get(filterBrand) || []) : CATALOG;
-  const vals = list.map(x=>`${x.brand} ${x.model}`);
+  const vals = [...new Set(list.flatMap((x) => [
+    `${x.brand} ${x.model}`,
+    ...(Array.isArray(x.aliases) ? x.aliases : [])
+  ]))];
   setDatalistOptions($suggestions, vals);
 }
 function fillBrands(){
@@ -111,7 +125,7 @@ function validate(){
 function searchSmart(q){
   q = (q||'').trim().toLowerCase();
   if(!q) return null;
-  return CATALOG.find(x => `${x.brand} ${x.model}`.toLowerCase().includes(q));
+  return CATALOG.find(x => deviceSearchText(x).includes(q));
 }
 
 // Brand-based DPI helper
