@@ -268,9 +268,17 @@
             </div>
           </div>
         </div>
-        <div id="players-stats" class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <div id="players-stats" class="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
           <div class="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
             <p class="text-xs uppercase tracking-wide text-gray-400">Total jugadores</p>
+            <p class="mt-2 text-2xl font-semibold text-gray-800">--</p>
+          </div>
+          <div class="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
+            <p class="text-xs uppercase tracking-wide text-gray-400">Con media</p>
+            <p class="mt-2 text-2xl font-semibold text-gray-800">--</p>
+          </div>
+          <div class="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
+            <p class="text-xs uppercase tracking-wide text-gray-400">Con clip</p>
             <p class="mt-2 text-2xl font-semibold text-gray-800">--</p>
           </div>
           <div class="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
@@ -291,15 +299,28 @@
               name="players-search"
               autocomplete="off"
               aria-label="Buscar jugador"
-              placeholder="Buscar jugador…"
+              placeholder="Buscar jugador o ID…"
               class="w-full lg:max-w-sm rounded-xl border border-gray-200 bg-gray-50 px-4 py-2 text-sm text-gray-700 focus:border-cyan-300 focus:bg-white focus:ring-2 focus:ring-cyan-100"
             />
-            <div id="players-filters" class="flex flex-wrap gap-2">
-              <button type="button" data-filter="Todos" class="rounded-full border border-pink-200 bg-pink-50 px-3 py-1.5 text-xs font-semibold text-pink-700">Todos</button>
-              <button type="button" data-filter="LÍDER" class="rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-600">LÍDER</button>
-              <button type="button" data-filter="ELDER" class="rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-600">DECANO</button>
-              <button type="button" data-filter="VIP" class="rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-600">VIP</button>
-              <button type="button" data-filter="MIEMBRO" class="rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-600">MIEMBRO</button>
+            <div class="kn-players-filter-groups">
+              <div id="players-filters" class="kn-filter-row" aria-label="Filtrar por rol">
+                <span class="kn-filter-label">Rol</span>
+                <button type="button" data-filter="Todos" class="rounded-full border border-pink-200 bg-pink-50 px-3 py-1.5 text-xs font-semibold text-pink-700">Todos</button>
+                <button type="button" data-filter="LÍDER" class="rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-600">LÍDER</button>
+                <button type="button" data-filter="ELDER" class="rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-600">DECANO</button>
+                <button type="button" data-filter="VIP" class="rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-600">VIP</button>
+                <button type="button" data-filter="MIEMBRO" class="rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-600">MIEMBRO</button>
+              </div>
+              <div id="players-media-filters" class="kn-filter-row" aria-label="Filtrar por media de perfil">
+                <span class="kn-filter-label">Media</span>
+                <button type="button" data-media-filter="Todos" class="rounded-full border border-pink-200 bg-pink-50 px-3 py-1.5 text-xs font-semibold text-pink-700">Todos</button>
+                <button type="button" data-media-filter="Con media" class="rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-600">Con media</button>
+                <button type="button" data-media-filter="Con foto" class="rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-600">Con foto</button>
+                <button type="button" data-media-filter="Con segunda foto" class="rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-600">Con segunda foto</button>
+                <button type="button" data-media-filter="Con clip" class="rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-600">Con clip</button>
+                <button type="button" data-media-filter="Sin media" class="rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-600">Sin media</button>
+                <button type="button" id="players-media-sort" class="kn-media-sort-button rounded-full border border-gray-200 bg-white px-3 py-1.5 text-xs font-semibold text-gray-600" aria-pressed="false">Media primero</button>
+              </div>
             </div>
           </div>
         </div>
@@ -342,21 +363,21 @@
       </div>
       <div class="kn-player-modal__media">
         <figure class="kn-player-modal__media-card" data-player-profile-media-item="image-1">
-          <p class="kn-player-modal__media-label">Imagen 1</p>
+          <p class="kn-player-modal__media-label">Foto principal</p>
           <img id="player-profile-modal-image" src="" alt="" loading="lazy" decoding="async" />
           <p id="player-profile-modal-fallback" class="hidden rounded-xl border border-gray-200 bg-gray-50 px-4 py-6 text-center text-sm font-semibold text-gray-600">
-            Profile image not available yet.
+            Foto principal no disponible todavía.
           </p>
         </figure>
         <figure class="kn-player-modal__media-card hidden" data-player-profile-media-item="image-2">
-          <p class="kn-player-modal__media-label">Imagen 2</p>
+          <p class="kn-player-modal__media-label">Segunda foto</p>
           <img id="player-profile-modal-image-2" src="" alt="" loading="lazy" decoding="async" />
           <p class="kn-player-modal__media-fallback hidden rounded-xl border border-gray-200 bg-gray-50 px-4 py-6 text-center text-sm font-semibold text-gray-600">
-            Image 2 is not available.
+            Segunda foto no disponible.
           </p>
         </figure>
         <figure class="kn-player-modal__media-card hidden" data-player-profile-media-item="video">
-          <p class="kn-player-modal__media-label">Video</p>
+          <p class="kn-player-modal__media-label">Clip</p>
           <video id="player-profile-modal-video" controls muted playsinline preload="metadata"></video>
         </figure>
       </div>
@@ -428,7 +449,9 @@
     };
     const playersRosterState = {
       players: [],
-      filter: 'Todos',
+      roleFilter: 'Todos',
+      mediaFilter: 'Todos',
+      mediaFirst: false,
       search: ''
     };
 
@@ -724,6 +747,79 @@
 
     function getPlayerProfileImage(player) {
       return getPlayerProfileMedia(player);
+    }
+
+    function getPlayerMediaSummary(player) {
+      const media = getPlayerProfileMedia(player) || {};
+      const hasImage1 = Boolean(getCleanMediaUrl(media.src));
+      const hasImage2 = Boolean(getCleanMediaUrl(media.src2));
+      const hasClip = Boolean(getCleanMediaUrl(media.videoSrc));
+      const mediaCount = [hasImage1, hasImage2, hasClip].filter(Boolean).length;
+
+      return {
+        media,
+        hasImage1,
+        hasImage2,
+        hasClip,
+        hasMedia: mediaCount > 0,
+        hasCompleteProfile: hasImage1 && hasImage2 && hasClip,
+        hasMultipleMedia: mediaCount > 1,
+        mediaCount
+      };
+    }
+
+    function getPlayerRolePriority(player) {
+      if (player.role === 'LÍDER') return 0;
+      if (player.role === 'ELDER') return 1;
+      if (player.vip_status === true) return 2;
+      return 3;
+    }
+
+    function getPlayerMediaPriority(player) {
+      const mediaSummary = getPlayerMediaSummary(player);
+
+      if (mediaSummary.hasCompleteProfile) return 0;
+      if (mediaSummary.hasClip) return 1;
+      if (mediaSummary.hasMultipleMedia) return 2;
+      if (mediaSummary.hasMedia) return 3;
+      return 4;
+    }
+
+    function matchesPlayerMediaFilter(player, mediaFilter) {
+      const mediaSummary = getPlayerMediaSummary(player);
+
+      if (mediaFilter === 'Con media') return mediaSummary.hasMedia;
+      if (mediaFilter === 'Con foto') return mediaSummary.hasImage1;
+      if (mediaFilter === 'Con segunda foto') return mediaSummary.hasImage2;
+      if (mediaFilter === 'Con clip') return mediaSummary.hasClip;
+      if (mediaFilter === 'Sin media') return !mediaSummary.hasMedia;
+      return true;
+    }
+
+    function getPlayerMediaBadges(mediaSummary) {
+      if (!mediaSummary.hasMedia) {
+        return '<span class="kn-media-badge kn-media-badge--empty">Sin media</span>';
+      }
+
+      const badges = ['<span class="kn-media-badge kn-media-badge--available">Con media</span>'];
+
+      if (mediaSummary.hasImage1) {
+        badges.push('<span class="kn-media-badge kn-media-badge--photo">Foto</span>');
+      }
+
+      if (mediaSummary.hasImage2) {
+        badges.push('<span class="kn-media-badge kn-media-badge--photo">Foto 2</span>');
+      }
+
+      if (mediaSummary.hasClip) {
+        badges.push('<span class="kn-media-badge kn-media-badge--clip"><span class="kn-play-mark" aria-hidden="true"></span>Clip</span>');
+      }
+
+      if (mediaSummary.hasCompleteProfile) {
+        badges.push('<span class="kn-media-badge kn-media-badge--complete">Perfil completo</span>');
+      }
+
+      return badges.join('');
     }
 
     function closePlayerProfileModal() {
@@ -1058,6 +1154,8 @@
       const statsContainer = document.getElementById('players-stats');
       const searchInput = document.getElementById('players-search');
       const filterButtons = Array.from(document.querySelectorAll('#players-filters [data-filter]'));
+      const mediaFilterButtons = Array.from(document.querySelectorAll('#players-media-filters [data-media-filter]'));
+      const mediaSortButton = document.getElementById('players-media-sort');
       const { data, error } = await supabaseClient
         .from('players')
         .select('*');
@@ -1072,7 +1170,7 @@
         }
         if (statsContainer) {
           statsContainer.innerHTML = `
-            <div class="sm:col-span-2 lg:col-span-3 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-600">
+            <div class="sm:col-span-2 lg:col-span-5 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-600">
               No se pudieron cargar las estadísticas por ahora.
             </div>
           `;
@@ -1091,7 +1189,7 @@
         }
         if (statsContainer) {
           statsContainer.innerHTML = `
-            <div class="sm:col-span-2 lg:col-span-3 rounded-2xl border border-gray-200 bg-white p-4 text-sm text-gray-500 shadow-sm">
+            <div class="sm:col-span-2 lg:col-span-5 rounded-2xl border border-gray-200 bg-white p-4 text-sm text-gray-500 shadow-sm">
               No hay estadísticas disponibles todavía.
             </div>
           `;
@@ -1100,18 +1198,13 @@
       }
 
       const sortedPlayers = [...data].sort((a, b) => {
-        const getPriority = player => {
-          if (player.role === 'LÍDER') return 0;
-          if (player.role === 'ELDER') return 1;
-          if (player.vip_status === true) return 2;
-          return 3;
-        };
-
-        return getPriority(a) - getPriority(b);
+        return getPlayerRolePriority(a) - getPlayerRolePriority(b);
       });
 
       if (statsContainer) {
         const totalPlayers = sortedPlayers.length;
+        const totalWithMedia = sortedPlayers.filter(player => getPlayerMediaSummary(player).hasMedia).length;
+        const totalWithClip = sortedPlayers.filter(player => getPlayerMediaSummary(player).hasClip).length;
         const totalVip = sortedPlayers.filter(player => player.vip_status === true).length;
         const totalLeadersAndElders = sortedPlayers.filter(
           player => player.role === 'LÍDER' || player.role === 'ELDER'
@@ -1121,6 +1214,14 @@
           <div class="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
             <p class="text-xs uppercase tracking-wide text-gray-400">Total jugadores</p>
             <p class="mt-2 text-2xl font-semibold text-gray-800">${totalPlayers}</p>
+          </div>
+          <div class="rounded-2xl border border-cyan-200 bg-cyan-50 p-4 shadow-sm">
+            <p class="text-xs uppercase tracking-wide text-cyan-600">Con media</p>
+            <p class="mt-2 text-2xl font-semibold text-cyan-700">${totalWithMedia}</p>
+          </div>
+          <div class="rounded-2xl border border-orange-200 bg-orange-50 p-4 shadow-sm">
+            <p class="text-xs uppercase tracking-wide text-orange-600">Con clip</p>
+            <p class="mt-2 text-2xl font-semibold text-orange-700">${totalWithClip}</p>
           </div>
           <div class="rounded-2xl border border-pink-200 bg-pink-50 p-4 shadow-sm">
             <p class="text-xs uppercase tracking-wide text-pink-500">Total VIP</p>
@@ -1138,24 +1239,55 @@
 
         const searchTerm = playersRosterState.search.trim().toLowerCase();
         const filteredPlayers = playersRosterState.players.filter(player => {
-          const matchesFilter = playersRosterState.filter === 'Todos'
+          const matchesRoleFilter = playersRosterState.roleFilter === 'Todos'
             ? true
-            : playersRosterState.filter === 'VIP'
+            : playersRosterState.roleFilter === 'VIP'
               ? player.vip_status === true
-              : (player.role || 'MIEMBRO') === playersRosterState.filter;
+              : (player.role || 'MIEMBRO') === playersRosterState.roleFilter;
+          const matchesMediaFilter = matchesPlayerMediaFilter(player, playersRosterState.mediaFilter);
           const styledName = (player.styled_name || '').toLowerCase();
           const ffName = (player.ff_name || '').toLowerCase();
-          const matchesSearch = !searchTerm || styledName.includes(searchTerm) || ffName.includes(searchTerm);
+          const freeFireId = player.free_fire_id == null ? '' : String(player.free_fire_id).toLowerCase();
+          const matchesSearch = !searchTerm ||
+            styledName.includes(searchTerm) ||
+            ffName.includes(searchTerm) ||
+            freeFireId.includes(searchTerm);
 
-          return matchesFilter && matchesSearch;
+          return matchesRoleFilter && matchesMediaFilter && matchesSearch;
+        }).sort((a, b) => {
+          if (!playersRosterState.mediaFirst) {
+            return 0;
+          }
+
+          const mediaPriority = getPlayerMediaPriority(a) - getPlayerMediaPriority(b);
+
+          if (mediaPriority !== 0) {
+            return mediaPriority;
+          }
+
+          return getPlayerRolePriority(a) - getPlayerRolePriority(b);
         });
 
         filterButtons.forEach(button => {
-          const isActive = button.dataset.filter === playersRosterState.filter;
+          const isActive = button.dataset.filter === playersRosterState.roleFilter;
           button.className = isActive
             ? 'rounded-full border border-pink-200 bg-pink-50 px-3 py-1.5 text-xs font-semibold text-pink-700'
             : 'rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-600';
         });
+
+        mediaFilterButtons.forEach(button => {
+          const isActive = button.dataset.mediaFilter === playersRosterState.mediaFilter;
+          button.className = isActive
+            ? 'rounded-full border border-pink-200 bg-pink-50 px-3 py-1.5 text-xs font-semibold text-pink-700'
+            : 'rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-600';
+        });
+
+        if (mediaSortButton) {
+          mediaSortButton.setAttribute('aria-pressed', String(playersRosterState.mediaFirst));
+          mediaSortButton.className = playersRosterState.mediaFirst
+            ? 'kn-media-sort-button rounded-full border border-cyan-200 bg-cyan-50 px-3 py-1.5 text-xs font-semibold text-cyan-700'
+            : 'kn-media-sort-button rounded-full border border-gray-200 bg-white px-3 py-1.5 text-xs font-semibold text-gray-600';
+        }
 
         if (filteredPlayers.length === 0) {
           rosterContainer.className = 'rounded-2xl border border-gray-200 bg-white p-5 shadow-sm text-sm text-gray-600';
@@ -1169,27 +1301,44 @@
           const ffName = player.ff_name || 'Sin nombre de Free Fire';
           const showSecondaryName = ffName && ffName !== styledName;
           const freeFireId = player.free_fire_id == null ? '' : String(player.free_fire_id).trim();
-          const profileImage = getPlayerProfileImage(player);
+          const mediaSummary = getPlayerMediaSummary(player);
+          const profileImage = mediaSummary.media;
           const profileName = getPlayerDisplayName(player);
           const profileTitle = `Perfil de ${profileName}`;
           const profileAlt = `Perfil de Free Fire de ${profileName}`;
           const profileAlt2 = `Imagen adicional de Free Fire de ${profileName}`;
           const freeFireIdBadge = freeFireId
-            ? profileImage
-              ? `<button type="button" class="kn-player-id-button inline-flex shrink-0 items-center rounded-full border border-indigo-200 bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-700" data-player-profile-src="${escapeAttribute(profileImage.src || '')}" data-player-profile-src-2="${escapeAttribute(profileImage.src2 || '')}" data-player-profile-video-src="${escapeAttribute(profileImage.videoSrc || '')}" data-player-profile-alt="${escapeAttribute(profileAlt)}" data-player-profile-alt-2="${escapeAttribute(profileAlt2)}" data-player-profile-title="${escapeAttribute(profileTitle)}" aria-label="${escapeAttribute(`Abrir perfil de Free Fire de ${profileName}`)}">ID: ${freeFireId}</button>`
-              : `<span class="inline-flex shrink-0 items-center rounded-full border border-indigo-200 bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-700">ID: ${freeFireId}</span>`
+            ? `<span class="inline-flex shrink-0 items-center rounded-full border border-indigo-200 bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-700">ID: ${freeFireId}</span>`
+            : '';
+          const profileActionText = mediaSummary.hasCompleteProfile
+            ? 'Abrir perfil completo'
+            : mediaSummary.hasClip
+              ? 'Ver clip y perfil'
+              : mediaSummary.hasMedia
+                ? 'Ver media de perfil'
+                : '';
+          const profileAction = mediaSummary.hasMedia
+            ? `<button type="button" class="kn-player-profile-button" data-player-profile-src="${escapeAttribute(profileImage.src || '')}" data-player-profile-src-2="${escapeAttribute(profileImage.src2 || '')}" data-player-profile-video-src="${escapeAttribute(profileImage.videoSrc || '')}" data-player-profile-alt="${escapeAttribute(profileAlt)}" data-player-profile-alt-2="${escapeAttribute(profileAlt2)}" data-player-profile-title="${escapeAttribute(profileTitle)}" aria-label="${escapeAttribute(`Abrir media de perfil de ${profileName}`)}"><span class="kn-player-profile-button__icon" aria-hidden="true"></span>${profileActionText}</button>`
             : '';
           const socialDisplay = getSocialDisplay(player.social_platform, player.social_handle);
           const roleBadge = getRoleBadge(player.role || 'MIEMBRO');
           const vipStatus = player.vip_status === true ? '👑 VIP' : '—';
-          const rosterCardClass = player.role === 'LÍDER'
+          const baseRosterCardClass = player.role === 'LÍDER'
             ? 'rounded-2xl border-2 border-amber-300 bg-gradient-to-br from-yellow-100 via-amber-50 to-orange-100 p-4 shadow-[0_10px_30px_rgba(245,158,11,0.18)] transition-all duration-300 ease-out hover:-translate-y-1 hover:scale-[1.04] hover:shadow-[0_18px_40px_rgba(245,158,11,0.26)]'
             : player.vip_status === true
               ? 'rounded-2xl border border-pink-200 bg-gradient-to-br from-pink-100 via-white to-rose-100 p-4 shadow-[0_10px_28px_rgba(236,72,153,0.14)] transition-all duration-300 ease-out hover:-translate-y-1 hover:scale-[1.03] hover:shadow-[0_18px_38px_rgba(236,72,153,0.22)]'
               : 'rounded-2xl border border-gray-200 bg-white p-4 shadow-sm transition-all duration-300 ease-out hover:-translate-y-1 hover:scale-[1.03] hover:shadow-2xl';
+          const mediaCardClass = [
+            'kn-player-card',
+            mediaSummary.hasMedia ? 'kn-player-card--media' : '',
+            mediaSummary.hasClip ? 'kn-player-card--clip' : '',
+            mediaSummary.hasCompleteProfile ? 'kn-player-card--complete' : '',
+            mediaSummary.hasMultipleMedia && !mediaSummary.hasCompleteProfile ? 'kn-player-card--featured' : ''
+          ].filter(Boolean).join(' ');
 
           return `
-            <div class="${rosterCardClass}">
+            <div class="${baseRosterCardClass} ${mediaCardClass}">
+              ${mediaSummary.hasMedia ? `<div class="kn-media-ribbon">${mediaSummary.hasCompleteProfile ? 'Perfil completo' : mediaSummary.hasClip ? 'Con clip' : 'Con media'}</div>` : ''}
               <div class="flex items-start gap-4">
                 <img src="${avatarUrl}" alt="${ffName}" class="w-14 h-14 rounded-xl object-cover border border-gray-200 bg-gray-100" width="56" height="56" loading="lazy" decoding="async" />
                 <div class="min-w-0 flex-1">
@@ -1201,6 +1350,9 @@
                   ${socialDisplay ? `<div class="mt-1">${socialDisplay}</div>` : ''}
                 </div>
               </div>
+              <div class="kn-player-media-strip" aria-label="Media disponible">
+                ${getPlayerMediaBadges(mediaSummary)}
+              </div>
               <div class="mt-3 grid grid-cols-2 gap-2 text-sm">
                 <div class="rounded-xl bg-gray-50 px-3 py-2">
                   <span class="block text-xs uppercase tracking-wide text-gray-400">Rol</span>
@@ -1211,6 +1363,7 @@
                   <span class="text-gray-700">${vipStatus}</span>
                 </div>
               </div>
+              ${profileAction ? `<div class="mt-3">${profileAction}</div>` : ''}
             </div>
           `;
         }).join('');
@@ -1229,10 +1382,24 @@
 
       filterButtons.forEach(button => {
         button.onclick = () => {
-          playersRosterState.filter = button.dataset.filter || 'Todos';
+          playersRosterState.roleFilter = button.dataset.filter || 'Todos';
           renderRoster();
         };
       });
+
+      mediaFilterButtons.forEach(button => {
+        button.onclick = () => {
+          playersRosterState.mediaFilter = button.dataset.mediaFilter || 'Todos';
+          renderRoster();
+        };
+      });
+
+      if (mediaSortButton) {
+        mediaSortButton.onclick = () => {
+          playersRosterState.mediaFirst = !playersRosterState.mediaFirst;
+          renderRoster();
+        };
+      }
 
       if (rosterContainer) {
         renderRoster();
