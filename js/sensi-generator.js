@@ -229,12 +229,12 @@ function formatSensiExport(result){
     : 'estándar';
   const s = result.sensi;
   return [
-    '👑 King Nation Oficial — Sensi por Modelo',
+    'King Nation Oficial — Sensi por Modelo',
     '',
-    `📱 Dispositivo: ${result.brand} ${result.model}`,
-    `🎮 Perfil: ${profileLabel(result.profile)}`,
-    `⚙️ DPI: ${dpiLine}`,
-    `📊 Hz / Touch: ${specLine}`,
+    `Dispositivo: ${result.brand} ${result.model}`,
+    `Perfil: ${profileLabel(result.profile)}`,
+    `DPI: ${dpiLine}`,
+    `Hz / Touch: ${specLine}`,
     '',
     `General: ${s.general}`,
     `Punto Rojo: ${s.red}`,
@@ -243,7 +243,7 @@ function formatSensiExport(result){
     `Franco (AWM): ${s.sniper}`,
     `Mirada Libre: ${s.freelook}`,
     '',
-    `🔥 Estilo: ${profileStyleNote(result.profile)}`,
+    `Estilo: ${profileStyleNote(result.profile)}`,
     'Generado en King Nation Oficial.'
   ].join('\n');
 }
