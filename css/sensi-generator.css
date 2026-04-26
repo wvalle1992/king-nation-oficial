@@ -128,9 +128,21 @@
   flex-wrap:wrap;
 }
 
+.sensi-scope .kn-sensi-export-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  align-items:center;
+}
+
+.sensi-scope .kn-sensi-export-actions .btn{
+  flex:1 1 140px;
+}
+
 @media (max-width:759px){
   .sensi-scope .controls > div:last-child .btn,
-  .sensi-scope .kn-sensi-actions .btn{
+  .sensi-scope .kn-sensi-actions .btn,
+  .sensi-scope .kn-sensi-export-actions .btn{
     flex:1 1 calc(50% - 4px);
   }
 }

@@ -18,6 +18,10 @@ const $suggestions = document.getElementById('suggestions');
 const $btnShow = document.getElementById('btnShow');
 const $btnCopy = document.getElementById('btnCopy');
 const $btnClear = document.getElementById('btnClear');
+const $btnCopySensi = document.getElementById('btnCopySensi');
+const $btnWhatsAppSensi = document.getElementById('btnWhatsAppSensi');
+const $btnShareSensi = document.getElementById('btnShareSensi');
+const $sensiShareStatus = document.getElementById('sensiShareStatus');
 const $tbl = document.getElementById('tbl');
 const $tbody = $tbl.querySelector('tbody');
 const $title = document.getElementById('resultTitle');
@@ -73,6 +77,17 @@ function profileDpiTier(profileId){
   const profile = getProfile(profileId);
   return profile ? profile.dpiTier : 'mid';
 }
+function profileStyleNote(profileId){
+  const notes = {
+    'suave-control':'suave y estable para mejor control.',
+    'balanceado':'balanceado para la mayoría de jugadores.',
+    'king-headshot':'agresivo para levantar mira y buscar headshot.',
+    'pvp-escopeta':'rápido para PvP, Desert Eagle y escopetas.',
+    'br-ranked':'estable para partidas largas y ranked.',
+    'control-4x':'controlado para AR y mira 4x.'
+  };
+  return notes[profileId] || 'balanceado para la mayoría de jugadores.';
+}
 function fillProfiles(){
   while($profile.firstChild) $profile.removeChild($profile.firstChild);
   const ph = document.createElement('option');
@@ -121,6 +136,10 @@ function fillModels(){
 function validate(){
   const ok = Boolean($brand.value && $model.value && $profile.value && $dpi.value);
   $btnShow.disabled = !ok; $btnCopy.disabled = !ok;
+}
+function showSensiStatus(message){
+  if(!$sensiShareStatus) return;
+  $sensiShareStatus.textContent = message;
 }
 function searchSmart(q){
   q = (q||'').trim().toLowerCase();
@@ -191,6 +210,83 @@ function getSensiFor(brand, model, profile){
   const spec = getDeviceSpec(brand, model);
   return scaleByDevice(base, spec);
 }
+function getCurrentSensiResult(){
+  const b = $brand.value, m = $model.value, prof = $profile.value, dpip = $dpi.value;
+  if(!b || !m || !prof || !dpip) return null;
+  const item = (byBrand.get(b) || []).find(x=>x.model===m);
+  if(!item) return null;
+  const sensi = getSensiFor(b, m, prof);
+  if(!sensi) return null;
+  const spec = getDeviceSpec(b, m);
+  return {brand:b, model:m, profile:prof, dpiPreference:dpip, item, sensi, spec};
+}
+function formatSensiExport(result){
+  const dpiLine = result.brand === 'Apple'
+    ? 'N/A (iOS)'
+    : (result.dpiPreference === 'with' ? suggestedDpi(result.brand, result.profile) : 'Sin ajustar');
+  const specLine = result.spec
+    ? `${result.spec.refresh || '-'} / ${result.spec.touch}${result.spec.instant ? ` (inst ${result.spec.instant})` : ''}`
+    : 'estándar';
+  const s = result.sensi;
+  return [
+    '👑 King Nation Oficial — Sensi por Modelo',
+    '',
+    `📱 Dispositivo: ${result.brand} ${result.model}`,
+    `🎮 Perfil: ${profileLabel(result.profile)}`,
+    `⚙️ DPI: ${dpiLine}`,
+    `📊 Hz / Touch: ${specLine}`,
+    '',
+    `General: ${s.general}`,
+    `Punto Rojo: ${s.red}`,
+    `2x Scope: ${s.x2}`,
+    `4x Scope: ${s.x4}`,
+    `Franco (AWM): ${s.sniper}`,
+    `Mirada Libre: ${s.freelook}`,
+    '',
+    `🔥 Estilo: ${profileStyleNote(result.profile)}`,
+    'Generado en King Nation Oficial.'
+  ].join('\n');
+}
+function ensureExportText(){
+  const result = getCurrentSensiResult();
+  if(!result){
+    showSensiStatus('Selecciona marca, modelo, perfil y DPI para exportar la Sensi.');
+    return '';
+  }
+  return formatSensiExport(result);
+}
+function fallbackCopyText(text){
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.setAttribute('readonly', '');
+  ta.style.position = 'fixed';
+  ta.style.left = '-9999px';
+  ta.style.top = '0';
+  document.body.appendChild(ta);
+  ta.focus();
+  ta.select();
+  let ok = false;
+  try{
+    ok = document.execCommand('copy');
+  }catch(_err){
+    ok = false;
+  }
+  document.body.removeChild(ta);
+  return ok ? Promise.resolve() : Promise.reject(new Error('copy-failed'));
+}
+function copyTextSafe(text){
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    return navigator.clipboard.writeText(text).catch(() => fallbackCopyText(text));
+  }
+  return fallbackCopyText(text);
+}
+function copySensiExport(message='Sensi copiada ✅'){
+  const text = ensureExportText();
+  if(!text) return Promise.resolve(false);
+  return copyTextSafe(text)
+    .then(()=>{ showSensiStatus(message); return true; })
+    .catch(()=>{ showSensiStatus('No se pudo copiar. Inténtalo otra vez.'); return false; });
+}
 
 function render(){
   const b = $brand.value, m = $model.value, prof = $profile.value, dpip = $dpi.value;
@@ -198,6 +294,7 @@ function render(){
     $tbl.hidden = true; $tbody.innerHTML='';
     $title.textContent='Selecciona opciones para ver la Sensi…';
     $meta.textContent='—'; $badges.innerHTML='';
+    showSensiStatus('');
     return;
   }
   const item = (byBrand.get(b) || []).find(x=>x.model===m);
@@ -217,14 +314,7 @@ function render(){
   $tbl.hidden = false;
 }
 function copySettings(){
-  const b = $brand.value, m = $model.value, prof = $profile.value, dpip = $dpi.value; if(!b||!m||!prof||!dpip) return;
-  const item = (byBrand.get(b) || []).find(x=>x.model===m); if(!item) return; const s = getSensiFor(b, m, prof);
-  const header = `Sensi de ${b} ${m} (${profileLabel(prof)})`;
-  const dpiLine = (b==='Apple') ? 'DPI: N/A (iOS)' : (dpip==='with' ? `DPI sugerido: ${suggestedDpi(b, prof)}` : 'DPI: Sin ajustar');
-  const spec = getDeviceSpec(b,m);
-  const specLine = spec ? `Panel: ${spec.refresh||'-'}Hz · Touch: ${spec.touch}Hz${spec.instant?` (inst ${spec.instant}Hz)`:''}` : 'Panel: estándar';
-  const lines = [ header, dpiLine, specLine, `Gyro: ${item.gyro? 'ON':'OFF'}`, `General: ${s.general}`, `Punto Rojo: ${s.red}`, `2x: ${s.x2}`, `4x: ${s.x4}`, `Franco: ${s.sniper}`, `Mirada Libre: ${s.freelook}` ].join('\n');
-  if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(lines); }
+  copySensiExport();
 }
 $brand.addEventListener('change', ()=>{ fillModels(); validate(); });
 $model.addEventListener('change', validate);
@@ -232,6 +322,26 @@ $profile.addEventListener('change', ()=>{ updateProfileHelp(); validate(); });
 $dpi.addEventListener('change', validate);
 document.getElementById('btnShow').addEventListener('click', render);
 document.getElementById('btnCopy').addEventListener('click', copySettings);
+if($btnCopySensi){ $btnCopySensi.addEventListener('click', ()=>copySensiExport()); }
+if($btnWhatsAppSensi){
+  $btnWhatsAppSensi.addEventListener('click', ()=>{
+    const text = ensureExportText();
+    if(!text) return;
+    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank', 'noopener,noreferrer');
+    showSensiStatus('Abriendo WhatsApp…');
+  });
+}
+if($btnShareSensi){
+  $btnShareSensi.addEventListener('click', ()=>{
+    const text = ensureExportText();
+    if(!text) return;
+    if(navigator.share){
+      navigator.share({text}).then(()=>showSensiStatus('Sensi compartida ✅')).catch(()=>{});
+      return;
+    }
+    copySensiExport('Compartir no disponible; Sensi copiada ✅');
+  });
+}
 document.getElementById('btnClear').addEventListener('click', ()=>{ fillBrands(); fillModels(); buildSuggestions(''); $q.value=''; $profile.selectedIndex = 0; $dpi.selectedIndex = 0; updateProfileHelp(); validate(); render(); });
 $q.addEventListener('input', ()=>{
   const hit = searchSmart($q.value);
