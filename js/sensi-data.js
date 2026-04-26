@@ -1,10 +1,77 @@
 const CATALOG = [];
-function addBatch(brand, models, opts={}){
-  const base = opts.base || {
-    low:{general:120, red:110, x2:105, x4:95,  sniper:90,  freelook:100},
-    mid:{general:160, red:150, x2:140, x4:130, sniper:120, freelook:130},
-    high:{general:200, red:190, x2:180, x4:170, sniper:160, freelook:170}
+const KING_NATION_HEADSHOT_BASELINE = {
+  general:185,
+  red:171,
+  x2:153,
+  x4:174,
+  sniper:65,
+  freelook:170
+};
+const DEFAULT_SENSI_PROFILE_ID = 'king-headshot';
+const SENSI_PROFILES = [
+  {
+    id:'suave-control',
+    label:'Suave / Control',
+    description:'Más estable para jugadores que sienten temblor, sobredrag o prefieren controlar mejor cada mira.',
+    dpiTier:'low',
+    baseline:{general:178, red:162, x2:146, x4:165, sniper:60, freelook:160}
+  },
+  {
+    id:'balanceado',
+    label:'Balanceado',
+    description:'Opción segura para la mayoría: levanta bien a la cabeza sin sentirse demasiado agresiva.',
+    dpiTier:'mid',
+    baseline:{general:182, red:167, x2:150, x4:170, sniper:62, freelook:165}
+  },
+  {
+    id:'king-headshot',
+    label:'King Headshot',
+    description:'Estilo principal King Nation para drag agresivo y levantada fuerte de headshot.',
+    dpiTier:'high',
+    baseline:{...KING_NATION_HEADSHOT_BASELINE}
+  },
+  {
+    id:'pvp-escopeta',
+    label:'PvP Escopeta',
+    description:'Corta distancia para Desert Eagle, M1887 y M1014 con drag rápido y Rojo fuerte.',
+    dpiTier:'high',
+    baseline:{general:191, red:175, x2:158, x4:169, sniper:57, freelook:182}
+  },
+  {
+    id:'br-ranked',
+    label:'BR Ranked',
+    description:'Agresiva pero más estable para BR, peleas largas, AR y distancias mezcladas.',
+    dpiTier:'high',
+    baseline:{general:185, red:170, x2:153, x4:176, sniper:64, freelook:172}
+  },
+  {
+    id:'control-4x',
+    label:'4x Control',
+    description:'Para levantar a la cabeza sin sobredrag en 4x o AR a larga distancia.',
+    dpiTier:'mid',
+    baseline:{general:183, red:169, x2:152, x4:168, sniper:64, freelook:168}
+  }
+];
+const KING_NATION_SENSI_PRESETS = buildSensiPreset();
+
+function tuneSensi(values, delta={}){
+  return {
+    general: values.general + (delta.general || 0),
+    red: values.red + (delta.red || 0),
+    x2: values.x2 + (delta.x2 || 0),
+    x4: values.x4 + (delta.x4 || 0),
+    sniper: values.sniper + (delta.sniper || 0),
+    freelook: values.freelook + (delta.freelook || 0)
   };
+}
+function buildSensiPreset(profileDeltas={}){
+  return Object.fromEntries(SENSI_PROFILES.map((profile) => {
+    const delta = profileDeltas[profile.id] || profileDeltas.default || {};
+    return [profile.id, tuneSensi(profile.baseline, delta)];
+  }));
+}
+function addBatch(brand, models, opts={}){
+  const base = opts.base || KING_NATION_SENSI_PRESETS;
   const gyroDefault = Boolean(opts.gyro);
   for(const m of models){
     const modelName = (typeof m === 'object' && m.name) ? m.name : m;
@@ -26,17 +93,13 @@ addBatch('Apple', [
   'iPad 9th Gen','iPad 10th Gen','iPad Air 5','iPad Mini 6','iPad Pro 11"','iPad Pro 12.9"'
 ], {gyro:true});
 
-// ✅ Added Samsung Galaxy A56 with a tuned sensi profile (keeps everything else unchanged)
+// Samsung Galaxy A56 keeps a tuned profile, refreshed from the King Nation headshot baseline.
 addBatch('Samsung', [
   'Galaxy A03','Galaxy A05s','Galaxy A14','Galaxy A24','Galaxy A34','Galaxy A54','Galaxy A55',
   {
     name:'Galaxy A56',
     gyro:true,
-    sensi:{
-      low:{general:135, red:125, x2:115, x4:105, sniper:95,  freelook:120},
-      mid:{general:165, red:170, x2:145, x4:140, sniper:125, freelook:150},
-      high:{general:180, red:195, x2:150, x4:160, sniper:135, freelook:200}
-    }
+    sensi:buildSensiPreset({default:{general:2, red:2, x2:1}})
   },
   'Galaxy M14','Galaxy M34','Galaxy S20 FE','Galaxy S21 FE',
   'Galaxy S22','Galaxy S22+','Galaxy S22 Ultra','Galaxy S23','Galaxy S23+','Galaxy S23 Ultra',
@@ -98,22 +161,22 @@ const DEVICE_SPECS = new Map([
 ]);
 
 const SUGGESTED_DPI_BY_BRAND = {
-  'Samsung': {low:600, mid:720, high:820},
-  'Xiaomi': {low:550, mid:700, high:820},
-  'Motorola': {low:520, mid:680, high:780},
-  'Infinix': {low:500, mid:650, high:750},
-  'TECNO': {low:500, mid:650, high:750},
-  'realme': {low:540, mid:680, high:780},
-  'OPPO': {low:540, mid:700, high:800},
-  'vivo': {low:520, mid:680, high:780},
-  'Huawei': {low:560, mid:700, high:800},
-  'OnePlus': {low:560, mid:720, high:820},
-  'Google': {low:560, mid:720, high:820},
-  'Nokia': {low:500, mid:650, high:740},
-  'ZTE': {low:500, mid:640, high:720},
-  'Alcatel': {low:480, mid:620, high:700},
-  'BLU': {low:480, mid:620, high:700},
-  'Sony': {low:560, mid:700, high:800},
-  'Honor': {low:560, mid:700, high:800},
+  'Samsung': {low:620, mid:740, high:840},
+  'Xiaomi': {low:570, mid:720, high:840},
+  'Motorola': {low:540, mid:700, high:800},
+  'Infinix': {low:520, mid:670, high:780},
+  'TECNO': {low:520, mid:670, high:780},
+  'realme': {low:560, mid:700, high:800},
+  'OPPO': {low:560, mid:720, high:820},
+  'vivo': {low:540, mid:700, high:800},
+  'Huawei': {low:580, mid:720, high:820},
+  'OnePlus': {low:580, mid:740, high:840},
+  'Google': {low:580, mid:740, high:840},
+  'Nokia': {low:520, mid:670, high:760},
+  'ZTE': {low:520, mid:660, high:740},
+  'Alcatel': {low:500, mid:640, high:720},
+  'BLU': {low:500, mid:640, high:720},
+  'Sony': {low:580, mid:720, high:820},
+  'Honor': {low:580, mid:720, high:820},
   'Apple': {low:0, mid:0, high:0}
 };

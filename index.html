@@ -155,13 +155,17 @@
                   </select>
                 </div>
                 <div>
-                  <label for="profile">Perfil</label>
-                  <select id="profile">
+                  <label for="profile">Perfil de sensi</label>
+                  <select id="profile" aria-describedby="profileHelp">
                     <option value="" disabled selected hidden>Selecciona perfil</option>
-                    <option value="low">Baja (control)</option>
-                    <option value="mid">Media (equilibrada)</option>
-                    <option value="high">Alta (rápida)</option>
+                    <option value="suave-control">Suave / Control</option>
+                    <option value="balanceado">Balanceado</option>
+                    <option value="king-headshot">King Headshot</option>
+                    <option value="pvp-escopeta">PvP Escopeta</option>
+                    <option value="br-ranked">BR Ranked</option>
+                    <option value="control-4x">4x Control</option>
                   </select>
+                  <p id="profileHelp" class="muted">Elige un estilo: control suave, balanceado, headshot agresivo, escopeta, BR o 4x.</p>
                 </div>
                 <div>
                   <label for="dpi">Preferencia DPI</label>
@@ -193,15 +197,15 @@
                   <thead><tr><th>Ajuste</th><th>Valor</th></tr></thead>
                   <tbody></tbody>
                 </table>
-                <p class="muted">Consejo: la <strong>Alta</strong> puede llegar hasta 200. Ajusta ±5 según tus FPS y tu estilo.</p>
+                <p class="muted">Consejo: prueba un perfil completo y ajusta ±3 a ±5 según tus FPS, agarre y estilo.</p>
               </section>
 
               <section class="card kn-sensi-tips">
                 <h3>Consejos rápidos</h3>
                 <ul class="muted">
-                  <li><strong>Escala hasta 200:</strong> si en Alta aún te falta velocidad, sube de 5 en 5 General y Rojo antes de tocar 2x/4x.</li>
+                  <li><strong>Escoge tu estilo:</strong> usa Suave si sobredrageas, Balanceado para iniciar y King Headshot si ya controlas el drag.</li>
                   <li><strong>FPS y térmicas:</strong> si tu FPS cae, baja 3-5 puntos en General/Red; si sube, aumenta 2-3.</li>
-                  <li><strong>Retroceso vertical:</strong> si el arma se va hacia arriba, baja General y Rojo; si se queda corta, sube 2x/4x.</li>
+                  <li><strong>Franco estable:</strong> evita subir demasiado Franco; el control vale más que la velocidad en tiros largos.</li>
                   <li><strong>Prueba 10 partidas:</strong> mantén un perfil estable 8-10 partidas antes de decidir ajustes finos.</li>
                 </ul>
               </section>

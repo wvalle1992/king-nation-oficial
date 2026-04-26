@@ -11,6 +11,7 @@ const byBrand = (() => {
 const $brand = document.getElementById('brand');
 const $model = document.getElementById('model');
 const $profile = document.getElementById('profile');
+const $profileHelp = document.getElementById('profileHelp');
 const $dpi = document.getElementById('dpi');
 const $q = document.getElementById('q');
 const $suggestions = document.getElementById('suggestions');
@@ -44,6 +45,46 @@ function setDatalistOptions(datalistEl, values){
   }
 }
 function placeholder(text){ return text; }
+function getProfile(profileId){
+  return SENSI_PROFILES.find((profile) => profile.id === profileId)
+    || SENSI_PROFILES.find((profile) => profile.id === DEFAULT_SENSI_PROFILE_ID)
+    || SENSI_PROFILES[0];
+}
+function profileLabel(profileId){
+  const profile = getProfile(profileId);
+  return profile ? profile.label : 'King Headshot';
+}
+function profileDescription(profileId){
+  const profile = getProfile(profileId);
+  return profile ? profile.description : '';
+}
+function profileDpiTier(profileId){
+  const profile = getProfile(profileId);
+  return profile ? profile.dpiTier : 'mid';
+}
+function fillProfiles(){
+  while($profile.firstChild) $profile.removeChild($profile.firstChild);
+  const ph = document.createElement('option');
+  ph.value = "";
+  ph.textContent = 'Selecciona perfil';
+  ph.disabled = true;
+  ph.selected = true;
+  ph.hidden = true;
+  $profile.appendChild(ph);
+  for(const profile of SENSI_PROFILES){
+    const opt = document.createElement('option');
+    opt.value = profile.id;
+    opt.textContent = profile.label;
+    opt.title = profile.description;
+    $profile.appendChild(opt);
+  }
+}
+function updateProfileHelp(){
+  if(!$profileHelp) return;
+  $profileHelp.textContent = $profile.value
+    ? profileDescription($profile.value)
+    : 'Elige un estilo: control suave, balanceado, headshot agresivo, escopeta, BR o 4x.';
+}
 
 function buildSuggestions(filterBrand=''){
   const list = filterBrand ? (byBrand.get(filterBrand) || []) : CATALOG;
@@ -75,16 +116,27 @@ function searchSmart(q){
 
 // Brand-based DPI helper
 function suggestedDpi(brand, prof){
-  const p = prof||'mid';
+  const p = profileDpiTier(prof);
   const row = SUGGESTED_DPI_BY_BRAND[brand] || {low:520, mid:680, high:780};
   return row[p] || row.mid;
 }
 
 // Hardware-aware scaling
-const BASELINE = {refresh:120, touch:240}; // reference
-function clamp100_200(v){ return Math.max(1, Math.min(200, Math.round(v))); }
+const BASELINE = {refresh:120, touch:240}; // iPad Pro 11 reference used for the King Nation baseline
+const AIM_DEVICE_SCALING = {
+  general:{touch:6, refresh:4},
+  red:{touch:7, refresh:4},
+  x2:{touch:5, refresh:3},
+  x4:{touch:4, refresh:2},
+  sniper:{touch:1, refresh:1}
+};
+const FREELOOK_DEVICE_SCALING = {touch:3, refresh:2};
+function clampFreeFire(v){ return Math.max(1, Math.min(200, Math.round(v))); }
 function getDeviceSpec(brand, model){
   return DEVICE_SPECS.get([brand, model].toString()) || null;
+}
+function deviceDelta(dTouch, dRef, weights){
+  return Math.round((-dTouch * weights.touch) + (-dRef * weights.refresh));
 }
 function scaleByDevice(base, spec){
   if(!spec) return {...base};
@@ -96,32 +148,32 @@ function scaleByDevice(base, spec){
   const dRef   = (refresh - BASELINE.refresh) / BASELINE.refresh;
 
   const out = {...base};
-  const generalDelta = Math.round((-dTouch*10) + (-dRef*6));
-  const redDelta     = Math.round((-dTouch*10) + (-dRef*5));
-  const x2Delta      = Math.round((-dTouch*8)  + (-dRef*4));
-  const x4Delta      = Math.round((-dTouch*7)  + (-dRef*3));
-  const sniperDelta  = Math.round((-dTouch*6)  + (-dRef*2));
-  const freeDelta    = Math.round((-dTouch*6)  + (-dRef*2));
+  const generalDelta = deviceDelta(dTouch, dRef, AIM_DEVICE_SCALING.general);
+  const redDelta     = deviceDelta(dTouch, dRef, AIM_DEVICE_SCALING.red);
+  const x2Delta      = deviceDelta(dTouch, dRef, AIM_DEVICE_SCALING.x2);
+  const x4Delta      = deviceDelta(dTouch, dRef, AIM_DEVICE_SCALING.x4);
+  const sniperDelta  = deviceDelta(dTouch, dRef, AIM_DEVICE_SCALING.sniper);
+  const freeDelta    = deviceDelta(dTouch, dRef, FREELOOK_DEVICE_SCALING);
 
-  out.general   = clamp100_200(out.general + generalDelta);
-  out.red       = clamp100_200(out.red + redDelta);
-  out.x2        = clamp100_200(out.x2 + x2Delta);
-  out.x4        = clamp100_200(out.x4 + x4Delta);
-  out.sniper    = clamp100_200(out.sniper + sniperDelta);
-  out.freelook  = clamp100_200(out.freelook + freeDelta);
+  out.general   = clampFreeFire(out.general + generalDelta);
+  out.red       = clampFreeFire(out.red + redDelta);
+  out.x2        = clampFreeFire(out.x2 + x2Delta);
+  out.x4        = clampFreeFire(out.x4 + x4Delta);
+  out.sniper    = clampFreeFire(out.sniper + sniperDelta);
+  out.freelook  = clampFreeFire(out.freelook + freeDelta);
 
   if(instant && instant >= 1000){
-    out.red   = clamp100_200(out.red - 2);
-    out.x2    = clamp100_200(out.x2 - 2);
-    out.x4    = clamp100_200(out.x4 - 2);
-    out.sniper= clamp100_200(out.sniper - 2);
+    out.red   = clampFreeFire(out.red - 1);
+    out.x2    = clampFreeFire(out.x2 - 1);
+    out.x4    = clampFreeFire(out.x4 - 2);
+    out.sniper= clampFreeFire(out.sniper - 1);
   }
   return out;
 }
 function getSensiFor(brand, model, profile){
   const item = (byBrand.get(brand) || []).find(x=>x.model===model);
   if(!item) return null;
-  const base = item.sensi[profile];
+  const base = item.sensi[profile] || item.sensi[DEFAULT_SENSI_PROFILE_ID];
   const spec = getDeviceSpec(brand, model);
   return scaleByDevice(base, spec);
 }
@@ -138,11 +190,11 @@ function render(){
   if(!item){ $tbl.hidden = true; $tbody.innerHTML=''; return; }
 
   const s = getSensiFor(b, m, prof);
-  $title.textContent = `${b} ${m} — ${prof==='low'?'Baja':prof==='mid'?'Media':'Alta'}`;
+  $title.textContent = `${b} ${m} — ${profileLabel(prof)}`;
   const dpiBadge = (b==='Apple') ? 'DPI: N/A (iOS)' : (dpip==='with' ? `DPI sugerido: ${suggestedDpi(b, prof)}` : 'DPI: Sin ajustar');
   const spec = getDeviceSpec(b, m);
   const specBadge = spec ? `Hz: ${spec.refresh || '-'} / Touch: ${spec.touch}${spec.instant?` (inst ${spec.instant})`:''}` : 'Hz/Touch: estándar';
-  $meta.textContent = 'Presets orientativos adaptados a tu hardware; ajusta según FPS y estilo.';
+  $meta.textContent = profileDescription(prof);
   $badges.innerHTML = [ `Gyro: ${item.gyro? 'ON':'OFF'}`, dpiBadge, specBadge ].map(t=>`<span class="tag">${t}</span>`).join('');
 
   $tbody.innerHTML = '';
@@ -153,7 +205,7 @@ function render(){
 function copySettings(){
   const b = $brand.value, m = $model.value, prof = $profile.value, dpip = $dpi.value; if(!b||!m||!prof||!dpip) return;
   const item = (byBrand.get(b) || []).find(x=>x.model===m); if(!item) return; const s = getSensiFor(b, m, prof);
-  const header = `Sensi de ${b} ${m} (${prof==='low'?'Baja':prof==='mid'?'Media':'Alta'})`;
+  const header = `Sensi de ${b} ${m} (${profileLabel(prof)})`;
   const dpiLine = (b==='Apple') ? 'DPI: N/A (iOS)' : (dpip==='with' ? `DPI sugerido: ${suggestedDpi(b, prof)}` : 'DPI: Sin ajustar');
   const spec = getDeviceSpec(b,m);
   const specLine = spec ? `Panel: ${spec.refresh||'-'}Hz · Touch: ${spec.touch}Hz${spec.instant?` (inst ${spec.instant}Hz)`:''}` : 'Panel: estándar';
@@ -162,11 +214,11 @@ function copySettings(){
 }
 $brand.addEventListener('change', ()=>{ fillModels(); validate(); });
 $model.addEventListener('change', validate);
-$profile.addEventListener('change', validate);
+$profile.addEventListener('change', ()=>{ updateProfileHelp(); validate(); });
 $dpi.addEventListener('change', validate);
 document.getElementById('btnShow').addEventListener('click', render);
 document.getElementById('btnCopy').addEventListener('click', copySettings);
-document.getElementById('btnClear').addEventListener('click', ()=>{ fillBrands(); fillModels(); buildSuggestions(''); $q.value=''; $profile.selectedIndex = 0; $dpi.selectedIndex = 0; validate(); render(); });
+document.getElementById('btnClear').addEventListener('click', ()=>{ fillBrands(); fillModels(); buildSuggestions(''); $q.value=''; $profile.selectedIndex = 0; $dpi.selectedIndex = 0; updateProfileHelp(); validate(); render(); });
 $q.addEventListener('input', ()=>{
   const hit = searchSmart($q.value);
   if(hit){ $brand.value = hit.brand; fillModels(); $model.value = hit.model; validate(); }
@@ -179,9 +231,11 @@ $q.addEventListener('keydown', (e)=>{
   }
 });
 window.addEventListener('keydown', (e)=>{ if(e.key==='Enter' && !document.getElementById('btnShow').disabled){ e.preventDefault(); render(); } });
+fillProfiles();
 fillBrands();
 fillModels();
 buildSuggestions('');
+updateProfileHelp();
 validate();
 render();
 // ======================= END CLEAN SCRIPT =======================
