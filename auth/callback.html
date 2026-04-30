@@ -4,12 +4,93 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Autenticando...</title>
+  <link rel="icon" href="../assets/king-nation-logo.png" />
+  <link rel="shortcut icon" href="../assets/king-nation-logo.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/king-nation-logo.png" />
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    :root {
+      --kn-cyan: #0ea5e9;
+      --kn-orange: #f97316;
+      --kn-ink: #172033;
+    }
+
+    body {
+      min-height: 100svh;
+      background:
+        radial-gradient(circle at top left, rgba(249, 115, 22, .12), transparent 34rem),
+        radial-gradient(circle at bottom right, rgba(14, 165, 233, .14), transparent 32rem),
+        linear-gradient(165deg, #fff9ef 0%, #ffffff 42%, #f5f8ff 100%);
+      color: var(--kn-ink);
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: url("../assets/king-nation-logo.png") center / min(72vw, 540px) no-repeat;
+      opacity: .08;
+      pointer-events: none;
+    }
+
+    .kn-auth-card {
+      border: 1px solid rgba(14, 165, 233, .22);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, .94), rgba(247, 250, 255, .9)),
+        linear-gradient(135deg, rgba(249, 115, 22, .08), rgba(14, 165, 233, .08));
+      box-shadow: 0 24px 70px rgba(15, 23, 42, .13), 0 8px 24px rgba(14, 165, 233, .08);
+      position: relative;
+      z-index: 1;
+    }
+
+    .kn-auth-spinner {
+      width: 2.75rem;
+      height: 2.75rem;
+      border-radius: 999px;
+      border: 4px solid rgba(14, 165, 233, .18);
+      border-top-color: var(--kn-cyan);
+      animation: kn-spin .9s linear infinite;
+      margin: 0 auto 1rem;
+    }
+
+    .kn-auth-action {
+      min-height: 44px;
+      border-radius: 14px;
+      font-weight: 800;
+      transition: transform .18s ease, box-shadow .18s ease, background-color .18s ease;
+    }
+
+    .kn-auth-action:hover {
+      transform: translateY(-1px);
+    }
+
+    .kn-auth-primary {
+      background: linear-gradient(135deg, #0ea5e9, #2563eb);
+      color: #fff;
+      box-shadow: 0 12px 28px rgba(37, 99, 235, .24);
+    }
+
+    .kn-auth-secondary {
+      background: rgba(255, 255, 255, .86);
+      border: 1px solid rgba(14, 165, 233, .22);
+      color: #075985;
+    }
+
+    @keyframes kn-spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
 </head>
-<body class="min-h-screen bg-gray-50 flex items-center justify-center p-6">
-  <div class="max-w-md w-full rounded-2xl border border-gray-200 bg-white p-6 shadow-sm text-center">
-    <h1 class="text-lg font-semibold text-gray-800">Conectando con Discord...</h1>
+<body class="flex items-center justify-center p-5">
+  <div id="auth-card" class="kn-auth-card max-w-md w-full rounded-2xl p-6 text-center sm:p-7">
+    <div id="auth-spinner" class="kn-auth-spinner" aria-hidden="true"></div>
+    <img src="../assets/king-nation-logo.png" alt="King Nation" class="mx-auto mb-4 h-16 w-16 rounded-2xl object-contain" width="64" height="64" decoding="async" />
+    <h1 id="auth-title" class="text-xl font-extrabold text-gray-800">Conectando con Discord...</h1>
     <p id="auth-status" class="mt-2 text-sm text-gray-500">Estamos completando tu inicio de sesión.</p>
   </div>
 
@@ -22,6 +103,100 @@
       }
     });
     const authStatus = document.getElementById('auth-status');
+    const authCard = document.getElementById('auth-card');
+    const DISCORD_AUTH_TIMEOUT_MS = 18000;
+    let authFallbackTimer = null;
+    let authCompleted = false;
+
+    function clearAuthFallbackTimer() {
+      if (authFallbackTimer) {
+        window.clearTimeout(authFallbackTimer);
+        authFallbackTimer = null;
+      }
+    }
+
+    function showUrlFallback(currentUrl) {
+      const existingUrlField = document.getElementById('auth-current-url');
+
+      if (existingUrlField) {
+        existingUrlField.focus();
+        existingUrlField.select();
+        return;
+      }
+
+      const urlField = document.createElement('input');
+      urlField.id = 'auth-current-url';
+      urlField.type = 'text';
+      urlField.readOnly = true;
+      urlField.value = currentUrl;
+      urlField.className = 'mt-4 w-full rounded-xl border border-cyan-100 bg-white px-3 py-3 text-sm font-semibold text-gray-700 shadow-sm';
+      urlField.setAttribute('aria-label', 'Enlace actual');
+      authCard.appendChild(urlField);
+      urlField.focus();
+      urlField.select();
+    }
+
+    async function copyCurrentUrl(copyButton) {
+      const currentUrl = window.location.href;
+
+      try {
+        if (!navigator.clipboard || !window.isSecureContext) {
+          throw new Error('Clipboard API is unavailable');
+        }
+
+        await navigator.clipboard.writeText(currentUrl);
+        copyButton.textContent = 'Enlace copiado';
+      } catch (error) {
+        console.warn('Clipboard copy failed:', error);
+        copyButton.textContent = 'Copia manual';
+        showUrlFallback(currentUrl);
+      }
+    }
+
+    async function restartDiscordConnection(retryButton) {
+      retryButton.disabled = true;
+      retryButton.textContent = 'Abriendo Discord...';
+
+      const { error } = await supabaseClient.auth.signInWithOAuth({
+        provider: 'discord',
+        options: {
+          redirectTo: window.location.origin + '/auth/callback.html'
+        }
+      });
+
+      if (error) {
+        console.error('Discord retry login error:', error);
+        retryButton.disabled = false;
+        retryButton.textContent = 'Intentar otra vez';
+        window.location.reload();
+      }
+    }
+
+    function showAuthFallback() {
+      if (authCompleted || !authCard) {
+        return;
+      }
+
+      authCard.innerHTML = `
+        <img src="../assets/king-nation-logo.png" alt="King Nation" class="mx-auto mb-4 h-16 w-16 rounded-2xl object-contain" width="64" height="64" decoding="async" />
+        <p class="text-xs font-extrabold uppercase tracking-wide text-cyan-700">King Nation</p>
+        <h1 class="mt-2 text-xl font-extrabold text-gray-800">No pudimos completar la conexión con Discord.</h1>
+        <p class="mt-3 text-sm leading-6 text-gray-600">Esto suele pasar cuando abres el link desde WhatsApp, Instagram, Facebook o un navegador privado.</p>
+        <p class="mt-3 text-sm leading-6 text-gray-600">Abre el link directamente en Safari o Chrome, inicia sesión en Discord e intenta otra vez.</p>
+        <div class="mt-6 grid gap-3 sm:grid-cols-2">
+          <button id="auth-retry-btn" type="button" class="kn-auth-action kn-auth-primary px-4 py-3 text-sm">Intentar otra vez</button>
+          <button id="auth-copy-btn" type="button" class="kn-auth-action kn-auth-secondary px-4 py-3 text-sm">Copiar enlace</button>
+        </div>
+      `;
+
+      const retryButton = document.getElementById('auth-retry-btn');
+      const copyButton = document.getElementById('auth-copy-btn');
+
+      retryButton?.addEventListener('click', () => restartDiscordConnection(retryButton));
+      copyButton?.addEventListener('click', () => copyCurrentUrl(copyButton));
+    }
+
+    authFallbackTimer = window.setTimeout(showAuthFallback, DISCORD_AUTH_TIMEOUT_MS);
 
     async function logCurrentAuthSession() {
       const { data: sessionData, error: sessionError } = await supabaseClient.auth.getSession();
@@ -39,6 +214,9 @@
         authStatus.textContent = 'Esperando la sesión de Discord...';
         return;
       }
+
+      authCompleted = true;
+      clearAuthFallbackTimer();
 
       const { data: userData, error: userError } = await supabaseClient.auth.getUser();
 
