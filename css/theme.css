@@ -168,7 +168,54 @@ body::after{
 }
 
 .kn-hero{
-  padding:26px 0 16px;
+  max-width:900px;
+  margin-inline:auto;
+  padding:30px 0 18px;
+}
+
+.kn-hero-logo{
+  width:86px;
+  height:86px;
+  flex:0 0 86px;
+  border-radius:22px;
+  box-shadow:0 16px 36px rgba(15,23,42,.14), 0 0 0 6px rgba(255,255,255,.72);
+}
+
+.kn-hero-copy{
+  max-width:680px;
+}
+
+.kn-hero h1{
+  margin:0;
+  font-family:"Sora","Manrope","Segoe UI",sans-serif;
+  font-size:clamp(32px,5vw,54px);
+  line-height:1.02;
+  letter-spacing:0;
+}
+
+.kn-hero-separator{
+  color:#94a3b8;
+}
+
+.kn-hero-subtitle{
+  max-width:650px;
+  margin:12px auto 0;
+  color:#475569;
+  font-size:16px;
+  line-height:1.65;
+}
+
+.kn-hero-note{
+  display:inline-flex;
+  align-items:center;
+  margin:14px auto 0;
+  padding:7px 12px;
+  border:1px solid rgba(14,165,233,.18);
+  border-radius:999px;
+  background:rgba(255,255,255,.68);
+  color:#64748b;
+  font-size:12px;
+  font-weight:800;
 }
 
 .kn-auth-strip{
@@ -1115,9 +1162,15 @@ body.kn-modal-open{
 
   .kn-hero{
     flex-direction:column;
-    gap:12px;
-    padding-top:14px;
+    gap:14px;
+    padding-top:16px;
     text-align:center;
+  }
+
+  .kn-hero-logo{
+    width:76px;
+    height:76px;
+    flex-basis:76px;
   }
 
   .kn-hero > div,
@@ -1128,10 +1181,15 @@ body.kn-modal-open{
   }
 
   .kn-hero h1{
-    font-size:28px;
-    line-height:1.08;
+    font-size:30px;
+    line-height:1.12;
     white-space:normal;
     overflow-wrap:break-word;
+  }
+
+  .kn-hero-subtitle{
+    font-size:14px;
+    line-height:1.6;
   }
 
   .kn-player-modal{
