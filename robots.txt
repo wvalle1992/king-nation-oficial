@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://kingnationoficial.netlify.app/sitemap.xml
