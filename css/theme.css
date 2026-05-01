@@ -33,6 +33,10 @@ body.kn-manus-layout .kn-main-shell{
   max-width:1180px;
 }
 
+.kn-main-shell{
+  padding-bottom:calc(7rem + env(safe-area-inset-bottom, 0px)) !important;
+}
+
 body.kn-manus-layout .kn-main-shell::before{
   content:"";
   position:absolute;
@@ -815,6 +819,8 @@ body.kn-modal-open{
 .kn-media-sort-button{
   min-height:38px;
   border-radius:999px !important;
+  white-space:normal;
+  overflow-wrap:anywhere;
   transition:transform .16s ease, box-shadow .16s ease, border-color .16s ease, background-color .16s ease;
 }
 
@@ -881,6 +887,7 @@ body.kn-modal-open{
   position:relative;
   overflow:hidden;
   isolation:isolate;
+  min-width:0;
 }
 
 .kn-player-card::before{
@@ -946,6 +953,7 @@ body.kn-modal-open{
   flex-wrap:wrap;
   gap:7px;
   margin-top:14px;
+  min-width:0;
 }
 
 .kn-media-badge{
@@ -1058,6 +1066,7 @@ body.kn-modal-open{
   top:0;
   z-index:45 !important;
   margin:0 12px 8px;
+  padding-top:max(14px, env(safe-area-inset-top, 0px)) !important;
   border:1px solid rgba(14,165,233,.18);
   border-top:0;
   border-radius:0 0 22px 22px;
@@ -1070,7 +1079,7 @@ body.kn-modal-open{
   position:fixed;
   left:14px;
   right:14px;
-  bottom:14px;
+  bottom:max(14px, env(safe-area-inset-bottom, 0px));
   z-index:50;
   display:grid;
   grid-template-columns:repeat(3, 1fr);
@@ -1083,7 +1092,7 @@ body.kn-modal-open{
     linear-gradient(135deg, rgba(249,115,22,.08), rgba(14,165,233,.09));
   box-shadow:0 24px 60px rgba(15,23,42,.22), inset 0 1px 0 rgba(255,255,255,.82);
   backdrop-filter:blur(18px) saturate(1.18);
-  padding-bottom:max(9px, env(safe-area-inset-bottom));
+  padding-bottom:9px;
 }
 
 .kn-mobile-nav-item{
@@ -1181,10 +1190,10 @@ body.kn-modal-open{
   }
 
   .kn-hero h1{
-    font-size:30px;
+    font-size:clamp(26px, 8vw, 30px);
     line-height:1.12;
     white-space:normal;
-    overflow-wrap:break-word;
+    overflow-wrap:anywhere;
   }
 
   .kn-hero-subtitle{
@@ -1231,8 +1240,13 @@ body.kn-modal-open{
     padding:14px !important;
   }
 
+  .kn-players-filter-groups{
+    gap:12px;
+  }
+
   .kn-filter-row{
     justify-content:flex-start;
+    gap:9px;
   }
 
   .kn-filter-label{
@@ -1240,13 +1254,38 @@ body.kn-modal-open{
     min-height:auto;
   }
 
+  #players-filters button,
+  #players-media-filters button,
+  .kn-media-sort-button{
+    min-height:42px;
+    padding:9px 13px !important;
+    line-height:1.15;
+  }
+
+  #players-roster.grid{
+    gap:16px;
+  }
+
+  #players-roster.grid > div,
+  #players-roster h3,
+  #players-roster p,
+  #players-roster span,
+  .kn-player-profile-button{
+    min-width:0;
+    overflow-wrap:anywhere;
+  }
+
   .kn-media-ribbon{
     font-size:10px;
   }
 
   .kn-mobile-header{
-    padding-top:14px;
     padding-bottom:12px;
+  }
+
+  .kn-mobile-header .kn-logo{
+    width:44px !important;
+    height:44px !important;
   }
 
   .kn-auth-card{
@@ -1266,5 +1305,66 @@ body.kn-modal-open{
 
   .kn-section-title{
     font-size:30px;
+  }
+}
+
+@media (max-width:380px){
+  .kn-mobile-header{
+    margin-inline:8px;
+    padding-left:14px !important;
+    padding-right:14px !important;
+  }
+
+  .kn-mobile-header .kn-logo{
+    width:40px !important;
+    height:40px !important;
+  }
+
+  .kn-mobile-header .kng-title{
+    font-size:18px;
+  }
+
+  .kn-mobile-contact{
+    width:40px !important;
+    height:40px !important;
+    border-radius:14px !important;
+  }
+
+  .kn-hero{
+    gap:12px;
+    padding-top:12px;
+  }
+
+  .kn-hero-logo{
+    width:68px;
+    height:68px;
+    flex-basis:68px;
+    border-radius:18px;
+  }
+
+  .kn-hero h1{
+    font-size:25px;
+    line-height:1.14;
+  }
+
+  .kn-hero-subtitle{
+    font-size:13px;
+  }
+
+  .kn-tool-panel{
+    padding:16px;
+  }
+
+  .kn-mobile-bottom-nav{
+    left:10px;
+    right:10px;
+    gap:6px;
+    padding:7px;
+  }
+
+  .kn-mobile-nav-item{
+    min-height:54px;
+    border-radius:16px;
+    font-size:9px;
   }
 }

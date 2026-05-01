@@ -1,11 +1,13 @@
 .namegen-scope{
   color:#1f2937;
+  min-width:0;
 }
 
 .namegen-wrap{
   max-width:1000px;
   margin:0 auto;
   padding:0;
+  min-width:0;
 }
 
 .namegen-shell{
@@ -27,6 +29,7 @@
 .namegen-results-grid{
   display:grid;
   gap:14px;
+  min-width:0;
 }
 
 @media (min-width:860px){
@@ -40,6 +43,7 @@
   font-weight:700;
   line-height:1.15;
   color:#0f172a;
+  overflow-wrap:anywhere;
   word-break:break-word;
 }
 
@@ -69,6 +73,7 @@
 
 .namegen-output-card{
   position:relative;
+  min-width:0;
 }
 
 .namegen-copy-btn{
@@ -81,6 +86,22 @@
   min-height:124px;
   margin-top:12px;
   resize:none;
+  overflow-wrap:anywhere;
+  word-break:break-word;
+}
+
+@media (max-width:380px){
+  .namegen-shell{
+    padding:16px;
+  }
+
+  .namegen-preview-value{
+    font-size:clamp(25px, 8vw, 30px);
+  }
+
+  .namegen-social{
+    gap:10px;
+  }
 }
 
 .namegen-helper-list{
