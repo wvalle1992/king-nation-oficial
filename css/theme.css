@@ -280,6 +280,62 @@ body::after{
   box-shadow:0 12px 24px rgba(15,23,42,.10);
 }
 
+.kn-discord-invite{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  max-width:650px;
+  border:1px solid rgba(99,102,241,.20);
+  border-radius:18px;
+  background:rgba(255,255,255,.78);
+  padding:14px;
+  box-shadow:0 12px 24px rgba(15,23,42,.07);
+}
+
+.kn-discord-invite h3{
+  color:#1f2937;
+  font-family:"Sora","Manrope","Segoe UI",sans-serif;
+  font-size:15px;
+  font-weight:800;
+  line-height:1.25;
+  margin:0;
+}
+
+.kn-discord-invite p{
+  color:#64748b;
+  font-size:12px;
+  font-weight:650;
+  line-height:1.55;
+  margin:5px 0 0;
+}
+
+.kn-discord-invite__button{
+  flex:0 0 auto;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:42px;
+  border:1px solid rgba(79,70,229,.28);
+  border-radius:14px;
+  background:#4f46e5;
+  color:#fff;
+  font-size:13px;
+  font-weight:800;
+  line-height:1;
+  padding:0 15px;
+  text-decoration:none;
+  box-shadow:0 12px 22px rgba(79,70,229,.20);
+  transition:transform .2s ease, background .2s ease, box-shadow .2s ease;
+}
+
+.kn-discord-invite__button:hover,
+.kn-discord-invite__button:focus-visible{
+  background:#4338ca;
+  box-shadow:0 14px 26px rgba(79,70,229,.26);
+  transform:translateY(-1px);
+}
+
 .kn-auth-card #players-preview-card,
 .kn-auth-card #current-user-badge{
   border-radius:20px !important;
@@ -1335,6 +1391,15 @@ body.kn-modal-open{
     right:10px;
     bottom:-12px;
     font-size:70px;
+  }
+
+  .kn-discord-invite{
+    align-items:stretch;
+    flex-direction:column;
+  }
+
+  .kn-discord-invite__button{
+    width:100%;
   }
 
   .kn-tool-panel{
