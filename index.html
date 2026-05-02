@@ -70,7 +70,7 @@
   <nav class="kn-top-nav-wrap hidden md:block sticky top-0 z-40 px-5 py-3" aria-label="Navegación principal">
     <div class="kn-top-nav mx-auto flex max-w-6xl items-center justify-between gap-5 px-4 py-3">
       <a href="#top" class="kn-brand-lockup inline-flex items-center gap-3" aria-label="King Nation Oficial">
-        <img src="./assets/king-nation-logo.png" alt="" class="kn-logo h-11 w-11 object-contain p-1" width="44" height="44" decoding="async" />
+        <img src="./assets/king-nation-logo-display.png" alt="" class="kn-logo h-11 w-11 object-contain p-1" width="44" height="44" decoding="async" />
         <span class="kn-wordmark font-semibold text-gray-700">King Nation Oficial</span>
       </a>
       <div class="kn-top-links flex items-center gap-2 text-sm">
@@ -86,7 +86,7 @@
   <!-- Mobile Header -->
   <header class="kn-mobile-header relative z-10 flex items-center justify-between px-5 py-5 md:hidden">
     <a href="#top" class="inline-flex min-w-0 items-center gap-3" aria-label="King Nation Oficial">
-      <img src="./assets/king-nation-logo.png" alt="" class="kn-logo h-12 w-12 object-contain p-1" width="48" height="48" decoding="async" />
+      <img src="./assets/king-nation-logo-display.png" alt="" class="kn-logo h-12 w-12 object-contain p-1" width="48" height="48" decoding="async" />
       <span class="min-w-0">
         <span class="kng-title block text-xl font-extrabold leading-tight">King Nation</span>
         <span class="block text-xs font-semibold text-gray-500">Oficial</span>
@@ -98,7 +98,7 @@
   <!-- Page Shell -->
   <main id="main-content" role="main" class="mx-auto max-w-6xl px-4 pt-2 pb-28 relative z-10 md:px-5 md:pt-8 kn-main-shell">
     <header class="kn-hero mb-6 flex items-center gap-5 justify-center md:mb-8">
-      <img src="./assets/king-nation-logo.png" alt="Logo de King Nation Oficial" class="kn-hero-logo kn-logo object-contain p-1" width="96" height="96" decoding="async" fetchpriority="high" />
+      <img src="./assets/king-nation-logo-display.png" alt="Logo de King Nation Oficial" class="kn-hero-logo kn-logo object-contain p-1" width="96" height="96" decoding="async" fetchpriority="high" />
       <div class="kn-hero-copy text-center">
         <h1 class="font-extrabold text-gray-800"><span class="kng-title">King Nation Oficial</span> <span class="kn-hero-separator">—</span> Comunidad de Free Fire</h1>
         <p class="kn-hero-subtitle">Un punto de encuentro para la legión King Nation: nombres con estilo, sensibilidad por modelo y roster de jugadores.</p>
@@ -165,7 +165,7 @@
           <section class="kn-sensi-layout" aria-label="Generador de sensibilidad por modelo">
             <div class="kn-card kn-sensi-controls-card p-5">
               <div class="kn-card-head">
-                <img src="./assets/king-nation-logo.png" alt="" class="kn-logo kn-section-badge" aria-hidden="true" width="40" height="40" loading="lazy" decoding="async" />
+                <img src="./assets/king-nation-logo-display.png" alt="" class="kn-logo kn-section-badge" aria-hidden="true" width="40" height="40" loading="lazy" decoding="async" />
                 <div>
                   <h3>Configura tu dispositivo</h3>
                   <p>Busca rápido o selecciona cada opción.</p>
@@ -479,7 +479,7 @@
     const playerProfileModalVideo = document.getElementById('player-profile-modal-video');
     let lastPlayerProfileTrigger = null;
     const leaderProfileFallback = {
-      avatar_url: './assets/king-nation-logo.png',
+      avatar_url: './assets/king-nation-logo-display.png',
       styled_name: 'King Nation',
       ff_name: 'Lider del clan King Nation',
       role: 'LÍDER',
@@ -968,7 +968,7 @@
         return;
       }
 
-      const avatarUrl = player.avatar_url || './assets/king-nation-logo.png';
+      const avatarUrl = player.avatar_url || './assets/king-nation-logo-display.png';
       const styledName = player.styled_name || 'Sin nombre estilizado';
       const ffName = player.ff_name || 'Sin nombre de Free Fire';
       const showSecondaryName = ffName && ffName !== styledName;
@@ -1004,7 +1004,7 @@
       }
 
       const leaderPlayer = player || leaderProfile || leaderProfileFallback;
-      const avatarUrl = leaderPlayer.avatar_url || './assets/king-nation-logo.png';
+      const avatarUrl = leaderPlayer.avatar_url || './assets/king-nation-logo-display.png';
       const styledName = leaderPlayer.styled_name || 'King Nation';
       const roleBadge = getRoleBadge(leaderPlayer.role || 'LÍDER');
       const vipStatus = leaderPlayer.vip_status === true ? '👑 VIP' : '';
@@ -1343,7 +1343,7 @@
         }
 
         rosterContainer.innerHTML = filteredPlayers.map(player => {
-          const avatarUrl = player.avatar_url || './assets/king-nation-logo.png';
+          const avatarUrl = player.avatar_url || './assets/king-nation-logo-display.png';
           const styledName = player.styled_name || 'Sin nombre estilizado';
           const ffName = player.ff_name || 'Sin nombre de Free Fire';
           const showSecondaryName = ffName && ffName !== styledName;
