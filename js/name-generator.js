@@ -46,9 +46,6 @@ const getPlainNameText = (name) => String(name || "").replace(/<[^>]+>/g, "");
 const buildNameShareText = (name) => [
   "King Nation Oficial — Nombre generado",
   "",
-  "Nombre estilo King:",
-  getPlainNameText(name),
-  "",
   "Copia este nombre para Free Fire:",
   getPlainNameText(name)
 ].join("\n");
