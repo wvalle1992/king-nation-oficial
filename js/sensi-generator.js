@@ -27,6 +27,7 @@ const $tbody = $tbl.querySelector('tbody');
 const $title = document.getElementById('resultTitle');
 const $meta = document.getElementById('resultMeta');
 const $badges = document.getElementById('badges');
+const KING_NATION_SENSI_SHARE_URL = 'https://kingnationoficial.netlify.app/#panel-sensi';
 
 // ---------- Helpers that AVOID innerHTML so models with quotes (iPad Pro 11") work ----------
 function setSelectOptions(selectEl, values, placeholderText){
@@ -244,7 +245,10 @@ function formatSensiExport(result){
     `Mirada Libre: ${s.freelook}`,
     '',
     `Estilo: ${profileStyleNote(result.profile)}`,
-    'Generado en King Nation Oficial.'
+    'Generado en King Nation Oficial.',
+    '',
+    'Generado en King Nation:',
+    KING_NATION_SENSI_SHARE_URL
   ].join('\n');
 }
 function ensureExportText(){
