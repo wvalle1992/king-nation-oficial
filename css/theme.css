@@ -404,6 +404,26 @@ body::after{
   padding-bottom:0;
 }
 
+.kn-players-heading .kn-section-subtitle{
+  max-width:680px;
+}
+
+.kn-players-intro{
+  margin:0;
+  max-width:840px;
+  border:1px solid rgba(14,165,233,.18);
+  border-radius:20px;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.94), rgba(240,249,255,.86)),
+    linear-gradient(90deg, rgba(249,115,22,.08), rgba(14,165,233,.08));
+  color:#475569;
+  font-size:14px;
+  font-weight:650;
+  line-height:1.65;
+  padding:14px 16px;
+  box-shadow:0 12px 28px rgba(15,23,42,.06);
+}
+
 .kn-card-head{
   display:flex;
   align-items:center;
@@ -776,7 +796,8 @@ body.kn-modal-open{
   border-radius:24px !important;
   border-color:rgba(14,165,233,.18) !important;
   background:
-    linear-gradient(180deg, rgba(255,255,255,.96), rgba(248,250,252,.88)) !important;
+    linear-gradient(180deg, rgba(255,255,255,.97), rgba(248,250,252,.90)),
+    linear-gradient(135deg, rgba(14,165,233,.06), rgba(20,184,166,.05)) !important;
   box-shadow:var(--kn-manus-soft-shadow) !important;
   padding:18px !important;
 }
@@ -794,6 +815,7 @@ body.kn-modal-open{
   flex-direction:column;
   gap:10px;
   min-width:0;
+  padding:2px;
 }
 
 .kn-filter-row{
@@ -802,6 +824,9 @@ body.kn-modal-open{
   align-items:center;
   justify-content:flex-end;
   gap:8px;
+  padding:4px;
+  border-radius:18px;
+  background:rgba(248,250,252,.72);
 }
 
 .kn-filter-label{
@@ -821,6 +846,7 @@ body.kn-modal-open{
   border-radius:999px !important;
   white-space:normal;
   overflow-wrap:anywhere;
+  box-shadow:0 6px 14px rgba(15,23,42,.04);
   transition:transform .16s ease, box-shadow .16s ease, border-color .16s ease, background-color .16s ease;
 }
 
@@ -866,7 +892,16 @@ body.kn-modal-open{
 }
 
 #players-roster{
-  transition:background-color .18s ease, box-shadow .18s ease;
+  transition:background-color .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+
+#players-roster:not(.grid){
+  border-color:rgba(14,165,233,.18) !important;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.97), rgba(248,250,252,.90)) !important;
+  color:#64748b;
+  font-weight:650;
+  line-height:1.6;
 }
 
 #players-roster.grid{
@@ -880,6 +915,10 @@ body.kn-modal-open{
 
 #players-roster.grid > div:hover{
   box-shadow:0 24px 52px rgba(15,23,42,.16) !important;
+}
+
+#players-roster.grid > .kn-player-card:hover{
+  transform:translateY(-2px) scale(1.01) !important;
 }
 
 .kn-player-card{
