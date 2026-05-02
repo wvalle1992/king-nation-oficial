@@ -42,6 +42,16 @@ function buildInitialsV1({ base, gender, insertInvisibleSpace }){
 }
 const makeAsciiV1 = (name) =>
   name ? name.split(INV_SPACE).map(p => p ? (p[0].toUpperCase() + p.slice(1).toLowerCase()) : p).join(INV_SPACE) : "";
+const getPlainNameText = (name) => String(name || "").replace(/<[^>]+>/g, "");
+const buildNameShareText = (name) => [
+  "King Nation Oficial — Nombre generado",
+  "",
+  "Nombre estilo King:",
+  getPlainNameText(name),
+  "",
+  "Copia este nombre para Free Fire:",
+  getPlainNameText(name)
+].join("\n");
 
 // =========================
 // Initials v2 (current): "SoʟᴅɑᴅoそӃɪɴɢ" style
@@ -117,7 +127,7 @@ function App(){
     return makeAsciiV1(v1);
   }, [baseName, gender, insertInv]);
   const share = (platform, text) => {
-    const plain = String(text||"").replace(/<[^>]+>/g,"");
+    const plain = buildNameShareText(text);
     const encoded = encodeURIComponent(plain);
     if(platform==="whatsapp"){
       const wa = /Android|iPhone|iPad/i.test(navigator.userAgent) ? "https://wa.me/?text=" : "https://api.whatsapp.com/send?text=";
