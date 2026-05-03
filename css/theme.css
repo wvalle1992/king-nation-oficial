@@ -913,6 +913,16 @@ body.kn-modal-open{
   box-shadow:0 10px 20px rgba(15,23,42,.08);
 }
 
+#players-filters button:focus-visible,
+#players-media-filters button:focus-visible,
+.kn-media-sort-button:focus-visible,
+.kn-mobile-nav-item:focus-visible,
+.kn-player-profile-button:focus-visible{
+  outline:3px solid rgba(14,165,233,.38);
+  outline-offset:3px;
+  box-shadow:0 0 0 5px rgba(255,255,255,.86), 0 12px 26px rgba(14,165,233,.18);
+}
+
 #players-stats{
   gap:16px !important;
 }
@@ -1587,7 +1597,7 @@ body.kn-modal-open{
   }
 
   .kn-mobile-nav-item{
-    min-height:54px;
+    min-height:56px;
     border-radius:16px;
     font-size:9px;
   }

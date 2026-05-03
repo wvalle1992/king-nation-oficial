@@ -194,7 +194,7 @@ function App(){
                 <select value={gender} onChange={(e)=>setGender(e.target.value)} className="kn-select">
                   <option value="king">King</option>
                   <option value="queen">Queen</option>
-                  <option value="none">Sin prefijo</option>
+                  <option value="none">Sin King/Queen</option>
                 </select>
               </div>
               <button className="kn-btn kn-btn-secondary" onClick={()=>{setBaseName("Soldado"); setGender("king"); setInsertInv(true); setSmallCaps(true); setAddKNSuffix(false);}}>

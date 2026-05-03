@@ -141,7 +141,7 @@
             <p class="mt-2 text-xs leading-5 text-gray-500">Para dudas, ayuda o solicitud para unirte: <a href="https://wa.me/50582335213" target="_blank" rel="noopener noreferrer" class="font-semibold text-emerald-700 underline">WhatsApp</a> · <a href="mailto:soldadoff@icloud.com" class="font-semibold text-cyan-700 underline">soldadoff@icloud.com</a></p>
           </div>
           <div class="min-w-0 space-y-3">
-            <p id="current-user-welcome" aria-live="polite" class="hidden text-sm font-semibold text-gray-700"></p>
+            <p id="current-user-welcome" aria-live="polite" role="status" class="hidden text-sm font-semibold text-gray-700"></p>
             <div id="current-user-badge" class="kn-surface hidden rounded-2xl border border-gray-200 bg-white px-4 py-3 shadow-sm"></div>
             <div id="players-preview-card" class="kn-surface rounded-2xl border border-gray-200 bg-white p-4 shadow-sm text-sm text-gray-600">
               Cargando vista previa del jugador…
@@ -253,7 +253,7 @@
                   <button id="btnWhatsAppSensi" class="btn" type="button">WhatsApp</button>
                   <button id="btnShareSensi" class="btn" type="button">Compartir</button>
                 </div>
-                <p id="sensiShareStatus" class="muted" aria-live="polite"></p>
+                <p id="sensiShareStatus" class="muted" aria-live="polite" role="status"></p>
                 <p class="muted">Consejo: prueba un perfil completo y ajusta ±3 a ±5 según tus FPS, agarre y estilo.</p>
               </section>
 
@@ -315,9 +315,9 @@
                     Refrescar datos
                   </button>
                 </div>
-                <p id="leader-sync-message" aria-live="polite" class="hidden text-sm font-medium"></p>
+                <p id="leader-sync-message" aria-live="polite" role="status" class="hidden text-sm font-medium"></p>
               </div>
-              <p id="leader-refresh-message" aria-live="polite" class="hidden mt-3 text-sm font-medium"></p>
+              <p id="leader-refresh-message" aria-live="polite" role="status" class="hidden mt-3 text-sm font-medium"></p>
             </div>
 
             <div id="owner-tools-section" class="rounded-2xl border border-rose-200 bg-white/80 p-4 shadow-sm">
@@ -364,7 +364,7 @@
               name="players-search"
               autocomplete="off"
               aria-label="Buscar jugador"
-              placeholder="Buscar jugador o ID…"
+              placeholder="Buscar por jugador, nombre o ID…"
               class="w-full lg:max-w-sm rounded-xl border border-gray-200 bg-gray-50 px-4 py-2 text-sm text-gray-700 focus:border-cyan-300 focus:bg-white focus:ring-2 focus:ring-cyan-100"
             />
             <div class="kn-players-filter-groups">
@@ -381,7 +381,7 @@
                 <button type="button" data-media-filter="Todos" class="rounded-full border border-pink-200 bg-pink-50 px-3 py-1.5 text-xs font-semibold text-pink-700">Todos</button>
                 <button type="button" data-media-filter="Con media" class="rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-600">Con media</button>
                 <button type="button" data-media-filter="Con foto" class="rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-600">Con foto</button>
-                <button type="button" data-media-filter="Con segunda foto" class="rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-600">Foto 2</button>
+                <button type="button" data-media-filter="Con segunda foto" class="rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-600">Segunda foto</button>
                 <button type="button" data-media-filter="Con clip" class="rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-600">Con clip</button>
                 <button type="button" data-media-filter="Sin media" class="rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-600">Sin media</button>
                 <button type="button" id="players-media-sort" class="kn-media-sort-button rounded-full border border-gray-200 bg-white px-3 py-1.5 text-xs font-semibold text-gray-600" aria-pressed="false">Media primero</button>
