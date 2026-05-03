@@ -59,6 +59,16 @@
   margin-top:14px;
 }
 
+.namegen-status{
+  min-height:20px;
+  margin:10px 0 0;
+  color:#0f766e;
+  font-size:13px;
+  font-weight:700;
+  line-height:1.45;
+  text-align:center;
+}
+
 .namegen-output-grid{
   display:grid;
   gap:14px;
