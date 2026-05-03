@@ -368,22 +368,22 @@
               class="w-full lg:max-w-sm rounded-xl border border-gray-200 bg-gray-50 px-4 py-2 text-sm text-gray-700 focus:border-cyan-300 focus:bg-white focus:ring-2 focus:ring-cyan-100"
             />
             <div class="kn-players-filter-groups">
-              <div id="players-filters" class="kn-filter-row" aria-label="Filtrar por rol">
+              <div id="players-filters" class="kn-filter-row" role="group" aria-label="Filtrar por rol">
                 <span class="kn-filter-label">Rol</span>
-                <button type="button" data-filter="Todos" class="rounded-full border border-pink-200 bg-pink-50 px-3 py-1.5 text-xs font-semibold text-pink-700">Todos</button>
-                <button type="button" data-filter="LÍDER" class="rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-600">LÍDER</button>
-                <button type="button" data-filter="ELDER" class="rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-600">DECANO</button>
-                <button type="button" data-filter="VIP" class="rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-600">VIP</button>
-                <button type="button" data-filter="MIEMBRO" class="rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-600">MIEMBRO</button>
+                <button type="button" data-filter="Todos" aria-pressed="true" class="rounded-full border border-pink-200 bg-pink-50 px-3 py-1.5 text-xs font-semibold text-pink-700">Todos</button>
+                <button type="button" data-filter="LÍDER" aria-pressed="false" class="rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-600">LÍDER</button>
+                <button type="button" data-filter="ELDER" aria-pressed="false" class="rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-600">DECANO</button>
+                <button type="button" data-filter="VIP" aria-pressed="false" class="rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-600">VIP</button>
+                <button type="button" data-filter="MIEMBRO" aria-pressed="false" class="rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-600">MIEMBRO</button>
               </div>
-              <div id="players-media-filters" class="kn-filter-row" aria-label="Filtrar por media de perfil">
+              <div id="players-media-filters" class="kn-filter-row" role="group" aria-label="Filtrar por media de perfil">
                 <span class="kn-filter-label">Perfil</span>
-                <button type="button" data-media-filter="Todos" class="rounded-full border border-pink-200 bg-pink-50 px-3 py-1.5 text-xs font-semibold text-pink-700">Todos</button>
-                <button type="button" data-media-filter="Con media" class="rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-600">Con media</button>
-                <button type="button" data-media-filter="Con foto" class="rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-600">Con foto</button>
-                <button type="button" data-media-filter="Con segunda foto" class="rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-600">Segunda foto</button>
-                <button type="button" data-media-filter="Con clip" class="rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-600">Con clip</button>
-                <button type="button" data-media-filter="Sin media" class="rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-600">Sin media</button>
+                <button type="button" data-media-filter="Todos" aria-pressed="true" class="rounded-full border border-pink-200 bg-pink-50 px-3 py-1.5 text-xs font-semibold text-pink-700">Todos</button>
+                <button type="button" data-media-filter="Con media" aria-pressed="false" class="rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-600">Con media</button>
+                <button type="button" data-media-filter="Con foto" aria-pressed="false" class="rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-600">Con foto</button>
+                <button type="button" data-media-filter="Con segunda foto" aria-pressed="false" class="rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-600">Segunda foto</button>
+                <button type="button" data-media-filter="Con clip" aria-pressed="false" class="rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-600">Con clip</button>
+                <button type="button" data-media-filter="Sin media" aria-pressed="false" class="rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-600">Sin media</button>
                 <button type="button" id="players-media-sort" class="kn-media-sort-button rounded-full border border-gray-200 bg-white px-3 py-1.5 text-xs font-semibold text-gray-600" aria-pressed="false">Media primero</button>
               </div>
             </div>
@@ -1336,6 +1336,7 @@
 
         filterButtons.forEach(button => {
           const isActive = button.dataset.filter === playersRosterState.roleFilter;
+          button.setAttribute('aria-pressed', String(isActive));
           button.className = isActive
             ? 'rounded-full border border-pink-200 bg-pink-50 px-3 py-1.5 text-xs font-semibold text-pink-700'
             : 'rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-600';
@@ -1343,6 +1344,7 @@
 
         mediaFilterButtons.forEach(button => {
           const isActive = button.dataset.mediaFilter === playersRosterState.mediaFilter;
+          button.setAttribute('aria-pressed', String(isActive));
           button.className = isActive
             ? 'rounded-full border border-pink-200 bg-pink-50 px-3 py-1.5 text-xs font-semibold text-pink-700'
             : 'rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-semibold text-gray-600';
