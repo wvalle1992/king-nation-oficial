@@ -958,6 +958,7 @@ body.kn-modal-open{
   color:#64748b;
   font-weight:650;
   line-height:1.6;
+  text-align:center;
 }
 
 #players-roster.grid{
@@ -983,16 +984,84 @@ body.kn-modal-open{
   overflow:hidden;
   isolation:isolate;
   min-width:0;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+  border-color:rgba(148,163,184,.22) !important;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.98), rgba(248,250,252,.92)),
+    radial-gradient(circle at 18% 0%, color-mix(in srgb, var(--kn-card-accent) 10%, transparent), transparent 34%) !important;
 }
 
 .kn-player-card::before{
   content:"";
   position:absolute;
   inset:0 0 auto;
-  height:4px;
-  background:linear-gradient(90deg, transparent, var(--kn-card-accent), transparent);
-  opacity:0;
+  height:5px;
+  background:linear-gradient(90deg, var(--kn-card-accent), color-mix(in srgb, var(--kn-card-accent) 34%, white), transparent);
+  opacity:.55;
   transition:opacity .18s ease;
+}
+
+.kn-player-card > .flex{
+  gap:14px !important;
+  align-items:flex-start !important;
+}
+
+.kn-player-card > .flex img{
+  width:60px !important;
+  height:60px !important;
+  border-radius:18px !important;
+  border-color:color-mix(in srgb, var(--kn-card-accent) 28%, #e2e8f0) !important;
+  background:#f8fafc !important;
+  box-shadow:0 10px 22px rgba(15,23,42,.10);
+}
+
+.kn-player-card h3{
+  color:#0f172a !important;
+  font-family:"Sora","Manrope",sans-serif;
+  font-size:16px !important;
+  line-height:1.25;
+  letter-spacing:0;
+}
+
+.kn-player-card h3 + span,
+.kn-player-card h3 ~ span{
+  max-width:44%;
+  justify-content:center;
+  border-color:rgba(99,102,241,.22) !important;
+  background:#f5f7ff !important;
+  color:#3730a3 !important;
+  line-height:1.2;
+  text-align:center;
+}
+
+.kn-player-card p{
+  line-height:1.35;
+}
+
+.kn-player-card > .grid{
+  margin-top:0 !important;
+  gap:10px !important;
+}
+
+.kn-player-card > .grid > div{
+  border:1px solid rgba(148,163,184,.18);
+  border-radius:16px !important;
+  background:rgba(255,255,255,.72) !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.9);
+}
+
+.kn-player-card > .grid > div > span:first-child{
+  color:#64748b !important;
+  font-size:10px !important;
+  font-weight:900;
+  letter-spacing:.06em;
+}
+
+.kn-player-card > .grid > div > span:last-child{
+  color:#334155 !important;
+  font-weight:800;
 }
 
 .kn-player-card--media{
@@ -1028,8 +1097,8 @@ body.kn-modal-open{
   align-items:center;
   width:max-content;
   max-width:100%;
-  margin-bottom:10px;
-  padding:6px 10px;
+  margin-bottom:0;
+  padding:7px 11px;
   border:1px solid rgba(14,165,233,.26);
   border:1px solid color-mix(in srgb, var(--kn-card-accent) 38%, white);
   border-radius:999px;
@@ -1038,6 +1107,7 @@ body.kn-modal-open{
   color:#0f172a;
   font-size:11px;
   font-weight:900;
+  line-height:1;
   text-transform:uppercase;
   box-shadow:0 10px 24px rgba(14,165,233,.12);
   box-shadow:0 10px 24px color-mix(in srgb, var(--kn-card-accent) 18%, transparent);
@@ -1047,7 +1117,7 @@ body.kn-modal-open{
   display:flex;
   flex-wrap:wrap;
   gap:7px;
-  margin-top:14px;
+  margin-top:0;
   min-width:0;
 }
 
@@ -1055,14 +1125,15 @@ body.kn-modal-open{
   display:inline-flex;
   align-items:center;
   gap:5px;
-  min-height:28px;
-  padding:5px 9px;
+  min-height:30px;
+  padding:6px 10px;
   border:1px solid rgba(148,163,184,.24);
   border-radius:999px;
   background:#f8fafc;
   color:#475569;
   font-size:11px;
   font-weight:800;
+  line-height:1;
   white-space:nowrap;
 }
 
@@ -1128,7 +1199,7 @@ body.kn-modal-open{
   justify-content:center;
   gap:8px;
   width:100%;
-  min-height:42px;
+  min-height:44px;
   border:1px solid rgba(14,165,233,.28);
   border:1px solid color-mix(in srgb, var(--kn-card-accent) 40%, white);
   border-radius:16px;
@@ -1137,6 +1208,7 @@ body.kn-modal-open{
   color:#0f172a;
   font-size:13px;
   font-weight:900;
+  line-height:1.2;
   box-shadow:0 12px 26px rgba(14,165,233,.12);
   box-shadow:0 12px 26px color-mix(in srgb, var(--kn-card-accent) 16%, transparent);
   transition:transform .16s ease, box-shadow .16s ease, border-color .16s ease;
@@ -1369,6 +1441,40 @@ body.kn-modal-open{
 
   #players-roster.grid{
     gap:16px;
+  }
+
+  .kn-player-card{
+    gap:12px;
+    padding:14px !important;
+  }
+
+  .kn-player-card > .flex{
+    gap:12px !important;
+  }
+
+  .kn-player-card > .flex img{
+    width:54px !important;
+    height:54px !important;
+    border-radius:16px !important;
+  }
+
+  .kn-player-card > .flex .justify-between{
+    flex-wrap:wrap;
+    gap:8px !important;
+  }
+
+  .kn-player-card h3{
+    flex-basis:100%;
+    white-space:normal;
+  }
+
+  .kn-player-card h3 + span,
+  .kn-player-card h3 ~ span{
+    max-width:100%;
+  }
+
+  .kn-player-card > .grid{
+    gap:8px !important;
   }
 
   #players-roster.grid > div,
