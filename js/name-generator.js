@@ -111,6 +111,7 @@ function App(){
   const [insertInv,setInsertInv] = React.useState(true);
   const [smallCaps,setSmallCaps] = React.useState(true);
   const [addKNSuffix,setAddKNSuffix] = React.useState(false);
+  const [statusMessage,setStatusMessage] = React.useState("");
   const styledCore = React.useMemo(() => {
     // Initials v2 is the new default (SoʟᴅɑᴅoそӃɪɴɢ). Initials v1 is preserved above.
     if (INITIALS_V2) return buildInitialsV2Styled({ base: baseName, gender, insertInvisibleSpace: insertInv, smallCaps });
@@ -129,18 +130,29 @@ function App(){
     if(platform==="whatsapp"){
       const wa = /Android|iPhone|iPad/i.test(navigator.userAgent) ? "https://wa.me/?text=" : "https://api.whatsapp.com/send?text=";
       window.open(wa+encoded, "_blank");
+      setStatusMessage("Compartir por WhatsApp abierto.");
     }else if(platform==="x"){
       window.open("https://twitter.com/intent/tweet?text="+encoded, "_blank");
+      setStatusMessage("Compartir por X abierto.");
     }else if(platform==="native"){
-      if(navigator.share) navigator.share({ text: plain }).catch(()=>{}); else alert("Compartir nativo no soportado");
+      if(navigator.share) {
+        navigator.share({ text: plain })
+          .then(()=>setStatusMessage("Compartido desde el dispositivo."))
+          .catch(()=>setStatusMessage("No se completó el compartir nativo."));
+      } else {
+        setStatusMessage("Compartir nativo no está disponible en este dispositivo.");
+      }
     }
+  };
+  const copyText = (text, message) => {
+    navigator.clipboard.writeText(text).then(()=>setStatusMessage(message));
   };
   const copyLinkWithSettings = () => {
     const url = new URL(window.location.href); const qp = url.searchParams;
     qp.set("name", baseName || ""); qp.set("gender", gender);
     qp.set("inv", insertInv?"1":"0"); qp.set("sc", smallCaps?"1":"0"); qp.set("kn", addKNSuffix?"1":"0");
     url.search = qp.toString();
-    navigator.clipboard.writeText(url.toString()).then(()=>alert("Enlace con ajustes copiado."));
+    copyText(url.toString(), "Enlace con ajustes copiado.");
   };
   React.useEffect(() => () => {
     tooltipTimersRef.current.forEach((timerId) => window.clearTimeout(timerId));
@@ -165,8 +177,8 @@ function App(){
             <div className="kn-section-brand">
               <img src="./assets/king-nation-logo-display.png" alt="" className="kn-logo kn-section-badge" aria-hidden="true" />
               <div>
-                <h1 className="kn-section-title">Generador de Nombres</h1>
-                <p className="kn-section-subtitle">Crea un nombre estilizado para Free Fire, compártelo rápido y copia tanto la versión decorada como la versión ASCII.</p>
+                <h1 className="kn-section-title">Crea tu nombre King</h1>
+                <p className="kn-section-subtitle">Crea un nombre estilizado para Free Fire y conserva una versión ASCII de respaldo por si los símbolos no se muestran bien.</p>
               </div>
             </div>
           </header>
@@ -178,7 +190,7 @@ function App(){
                 <input className="kn-input" placeholder="Ej.: Soldado" value={baseName} onChange={(e)=>setBaseName(e.target.value)} />
               </div>
               <div>
-                <label className="kn-field-label">Prefijo</label>
+                <label className="kn-field-label">Clan / estilo</label>
                 <select value={gender} onChange={(e)=>setGender(e.target.value)} className="kn-select">
                   <option value="king">King</option>
                   <option value="queen">Queen</option>
@@ -207,6 +219,7 @@ function App(){
                   <button onClick={(event)=>{showTooltipBriefly(event); share("native", styled);}} className="icon-btn" aria-label="Compartir" data-tooltip="Compartir"><IcoShare/></button>
                   <button onClick={(event)=>{showTooltipBriefly(event); copyLinkWithSettings();}} className="icon-btn" aria-label="Copiar enlace" data-tooltip="Copiar enlace"><IcoLink/></button>
                 </div>
+                <p className="namegen-status" aria-live="polite" role="status">{statusMessage}</p>
               </div>
             </div>
           </section>
@@ -214,7 +227,8 @@ function App(){
           <div className="namegen-output-grid">
             <section className="kn-panel namegen-output-card">
               <h3 className="kn-helper-title">Estilizado</h3>
-              <button onClick={()=>navigator.clipboard.writeText(styled).then(()=>alert('¡Copiado!'))} className="kn-btn-icon namegen-copy-btn" aria-label="Copiar estilizado">
+              <p className="kn-helper-text">Para pegarlo en Free Fire cuando los símbolos se vean bien.</p>
+              <button onClick={()=>copyText(styled, "Nombre estilizado copiado.")} className="kn-btn-icon namegen-copy-btn" aria-label="Copiar nombre estilizado para Free Fire" title="Copiar nombre estilizado para Free Fire">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="w-5 h-5"><rect x="9" y="9" width="10" height="12" rx="2"/><path d="M5 15V7a2 2 0 0 1 2-2h8"/></svg>
               </button>
               <textarea className="kn-textarea namegen-textarea" style={{fontFamily:GLYPH_FONT}} readOnly value={styled}></textarea>
@@ -222,7 +236,8 @@ function App(){
 
             <section className="kn-panel namegen-output-card">
               <h3 className="kn-helper-title">ASCII</h3>
-              <button onClick={()=>navigator.clipboard.writeText(asciiOut).then(()=>alert('¡Copiado!'))} className="kn-btn-icon namegen-copy-btn" aria-label="Copiar ASCII">
+              <p className="kn-helper-text">Respaldo seguro si los símbolos no aparecen correctamente.</p>
+              <button onClick={()=>copyText(asciiOut, "Nombre ASCII copiado.")} className="kn-btn-icon namegen-copy-btn" aria-label="Copiar nombre ASCII de respaldo" title="Copiar nombre ASCII de respaldo">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="w-5 h-5"><rect x="9" y="9" width="10" height="12" rx="2"/><path d="M5 15V7a2 2 0 0 1 2-2h8"/></svg>
               </button>
               <textarea className="kn-textarea namegen-textarea" readOnly value={asciiOut}></textarea>
