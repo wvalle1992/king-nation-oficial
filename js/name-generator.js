@@ -163,7 +163,7 @@ function App(){
         <section className="kn-card namegen-shell">
           <header className="kn-section-head">
             <div className="kn-section-brand">
-              <img src="./assets/king-nation-logo.png" alt="" className="kn-logo kn-section-badge" aria-hidden="true" />
+              <img src="./assets/king-nation-logo-display.png" alt="" className="kn-logo kn-section-badge" aria-hidden="true" />
               <div>
                 <h1 className="kn-section-title">Generador de Nombres</h1>
                 <p className="kn-section-subtitle">Crea un nombre estilizado para Free Fire, compártelo rápido y copia tanto la versión decorada como la versión ASCII.</p>
@@ -242,7 +242,7 @@ function App(){
 
           <footer className="namegen-footer">
             <div className="namegen-footer-brand">
-              <img src="./assets/king-nation-logo.png" alt="King Nation Logo" />
+              <img src="./assets/king-nation-logo-display.png" alt="King Nation Logo" />
               <strong>King Nation</strong>
             </div>
             <span>Hecho para el Clan King Nation</span>
