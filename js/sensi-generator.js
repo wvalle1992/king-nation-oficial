@@ -358,7 +358,6 @@ $q.addEventListener('keydown', (e)=>{
     validate(); if(!document.getElementById('btnShow').disabled){ e.preventDefault(); render(); }
   }
 });
-window.addEventListener('keydown', (e)=>{ if(e.key==='Enter' && !document.getElementById('btnShow').disabled){ e.preventDefault(); render(); } });
 fillProfiles();
 fillBrands();
 fillModels();
