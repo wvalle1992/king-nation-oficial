@@ -186,18 +186,18 @@ function App(){
           <section className="kn-panel" aria-label="Controles del generador">
             <div className="namegen-controls-grid">
               <div>
-                <label className="kn-field-label">Nombre base</label>
-                <input className="kn-input" placeholder="Ej.: Soldado" value={baseName} onChange={(e)=>setBaseName(e.target.value)} />
+                <label className="kn-field-label" htmlFor="namegen-base-name">Nombre base</label>
+                <input id="namegen-base-name" className="kn-input" placeholder="Ej.: Soldado" value={baseName} onChange={(e)=>setBaseName(e.target.value)} />
               </div>
               <div>
-                <label className="kn-field-label">Clan / estilo</label>
-                <select value={gender} onChange={(e)=>setGender(e.target.value)} className="kn-select">
+                <label className="kn-field-label" htmlFor="namegen-style">Clan / estilo</label>
+                <select id="namegen-style" value={gender} onChange={(e)=>setGender(e.target.value)} className="kn-select">
                   <option value="king">King</option>
                   <option value="queen">Queen</option>
                   <option value="none">Sin King/Queen</option>
                 </select>
               </div>
-              <button className="kn-btn kn-btn-secondary" onClick={()=>{setBaseName("Soldado"); setGender("king"); setInsertInv(true); setSmallCaps(true); setAddKNSuffix(false);}}>
+              <button type="button" className="kn-btn kn-btn-secondary" onClick={()=>{setBaseName("Soldado"); setGender("king"); setInsertInv(true); setSmallCaps(true); setAddKNSuffix(false);}}>
                 Restablecer
               </button>
             </div>
@@ -214,10 +214,10 @@ function App(){
                 <h2 className="kn-helper-title">Acciones</h2>
                 <p className="kn-helper-text">Comparte el nombre actual o genera un enlace con tus ajustes activos sin salir de la página.</p>
                 <div className="namegen-social">
-                  <button onClick={(event)=>{showTooltipBriefly(event); share("whatsapp", styled);}} className="icon-btn" aria-label="Compartir por WhatsApp" data-tooltip="Compartir por WhatsApp"><IcoWA/></button>
-                  <button onClick={(event)=>{showTooltipBriefly(event); share("x", styled);}} className="icon-btn" aria-label="Compartir por X" data-tooltip="Compartir por X"><IcoX/></button>
-                  <button onClick={(event)=>{showTooltipBriefly(event); share("native", styled);}} className="icon-btn" aria-label="Compartir" data-tooltip="Compartir"><IcoShare/></button>
-                  <button onClick={(event)=>{showTooltipBriefly(event); copyLinkWithSettings();}} className="icon-btn" aria-label="Copiar enlace" data-tooltip="Copiar enlace"><IcoLink/></button>
+                  <button type="button" onClick={(event)=>{showTooltipBriefly(event); share("whatsapp", styled);}} className="icon-btn" aria-label="Compartir por WhatsApp" data-tooltip="Compartir por WhatsApp"><IcoWA/></button>
+                  <button type="button" onClick={(event)=>{showTooltipBriefly(event); share("x", styled);}} className="icon-btn" aria-label="Compartir por X" data-tooltip="Compartir por X"><IcoX/></button>
+                  <button type="button" onClick={(event)=>{showTooltipBriefly(event); share("native", styled);}} className="icon-btn" aria-label="Compartir" data-tooltip="Compartir"><IcoShare/></button>
+                  <button type="button" onClick={(event)=>{showTooltipBriefly(event); copyLinkWithSettings();}} className="icon-btn" aria-label="Copiar enlace" data-tooltip="Copiar enlace"><IcoLink/></button>
                 </div>
                 <p className="namegen-status" aria-live="polite" role="status">{statusMessage}</p>
               </div>
@@ -226,21 +226,21 @@ function App(){
 
           <div className="namegen-output-grid">
             <section className="kn-panel namegen-output-card">
-              <h3 className="kn-helper-title">Estilizado</h3>
+              <h3 id="namegen-styled-output-label" className="kn-helper-title">Estilizado</h3>
               <p className="kn-helper-text">Para pegarlo en Free Fire cuando los símbolos se vean bien.</p>
-              <button onClick={()=>copyText(styled, "Nombre estilizado copiado.")} className="kn-btn-icon namegen-copy-btn" aria-label="Copiar nombre estilizado para Free Fire" title="Copiar nombre estilizado para Free Fire">
+              <button type="button" onClick={()=>copyText(styled, "Nombre estilizado copiado.")} className="kn-btn-icon namegen-copy-btn" aria-label="Copiar nombre estilizado para Free Fire" title="Copiar nombre estilizado para Free Fire">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="w-5 h-5"><rect x="9" y="9" width="10" height="12" rx="2"/><path d="M5 15V7a2 2 0 0 1 2-2h8"/></svg>
               </button>
-              <textarea className="kn-textarea namegen-textarea" style={{fontFamily:GLYPH_FONT}} readOnly value={styled}></textarea>
+              <textarea className="kn-textarea namegen-textarea" style={{fontFamily:GLYPH_FONT}} readOnly value={styled} aria-labelledby="namegen-styled-output-label"></textarea>
             </section>
 
             <section className="kn-panel namegen-output-card">
-              <h3 className="kn-helper-title">ASCII</h3>
+              <h3 id="namegen-ascii-output-label" className="kn-helper-title">ASCII</h3>
               <p className="kn-helper-text">Respaldo seguro si los símbolos no aparecen correctamente.</p>
-              <button onClick={()=>copyText(asciiOut, "Nombre ASCII copiado.")} className="kn-btn-icon namegen-copy-btn" aria-label="Copiar nombre ASCII de respaldo" title="Copiar nombre ASCII de respaldo">
+              <button type="button" onClick={()=>copyText(asciiOut, "Nombre ASCII copiado.")} className="kn-btn-icon namegen-copy-btn" aria-label="Copiar nombre ASCII de respaldo" title="Copiar nombre ASCII de respaldo">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="w-5 h-5"><rect x="9" y="9" width="10" height="12" rx="2"/><path d="M5 15V7a2 2 0 0 1 2-2h8"/></svg>
               </button>
-              <textarea className="kn-textarea namegen-textarea" readOnly value={asciiOut}></textarea>
+              <textarea className="kn-textarea namegen-textarea" readOnly value={asciiOut} aria-labelledby="namegen-ascii-output-label"></textarea>
             </section>
           </div>
 

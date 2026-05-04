@@ -119,10 +119,10 @@
             <h2 class="mt-1 text-xl font-extrabold text-gray-800">Conecta Discord para acceder a tus herramientas King Nation.</h2>
             <p class="mt-2 text-sm leading-6 text-gray-600">Este acceso conecta tu perfil de la comunidad con tus opciones de nombre, Sensi y jugador.</p>
             <div class="mt-4 flex flex-wrap gap-3">
-              <button id="discord-login-btn" class="kn-action-btn kn-btn-discord rounded-xl border border-indigo-200 bg-indigo-50 px-4 py-2 text-sm font-semibold text-indigo-700 shadow-sm transition hover:bg-indigo-100">
+              <button id="discord-login-btn" type="button" class="kn-action-btn kn-btn-discord rounded-xl border border-indigo-200 bg-indigo-50 px-4 py-2 text-sm font-semibold text-indigo-700 shadow-sm transition hover:bg-indigo-100">
                 Entrar con Discord
               </button>
-              <button id="signout-btn" class="kn-action-btn kn-btn-neutral hidden rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-gray-700 shadow-sm transition hover:bg-gray-50">
+              <button id="signout-btn" type="button" class="kn-action-btn kn-btn-neutral hidden rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-gray-700 shadow-sm transition hover:bg-gray-50">
                 Cerrar sesión
               </button>
             </div>
@@ -152,9 +152,9 @@
     </section>
 
     <nav class="tabs kn-tabs-shell kn-primary-tabs" role="tablist" aria-label="Herramientas">
-      <button class="tabbtn" id="tab-name" role="tab" aria-controls="panel-name" aria-selected="true">Generador de Nombres</button>
-      <button class="tabbtn" id="tab-sensi" role="tab" aria-controls="panel-sensi" aria-selected="false">Sensi por Modelo</button>
-      <button class="tabbtn" id="tab-players" role="tab" aria-controls="panel-players" aria-selected="false">Legión</button>
+      <button class="tabbtn" id="tab-name" type="button" role="tab" aria-controls="panel-name" aria-selected="true">Generador de Nombres</button>
+      <button class="tabbtn" id="tab-sensi" type="button" role="tab" aria-controls="panel-sensi" aria-selected="false">Sensi por Modelo</button>
+      <button class="tabbtn" id="tab-players" type="button" role="tab" aria-controls="panel-players" aria-selected="false">Legión</button>
     </nav>
 
     <!-- Panel: Name Generator -->
@@ -168,7 +168,7 @@
     </section>
 
     <!-- Panel: Sensi Finder -->
-    <section id="panel-sensi" class="panel kn-tool-panel" role="tabpanel" aria-labelledby="tab-sensi">
+    <section id="panel-sensi" class="panel kn-tool-panel" role="tabpanel" aria-labelledby="tab-sensi" hidden>
       <div class="sensi-scope">
         <div class="wrap">
           <div class="kn-panel-heading">
@@ -227,9 +227,9 @@
                   </select>
                 </div>
                 <div class="kn-sensi-actions">
-                  <button id="btnShow" class="btn btn-primary" disabled>Mostrar</button>
-                  <button id="btnCopy" class="btn" disabled>Copiar Sensi</button>
-                  <button id="btnClear" class="btn btn-ghost">Limpiar</button>
+                  <button id="btnShow" type="button" class="btn btn-primary" disabled>Mostrar</button>
+                  <button id="btnCopy" type="button" class="btn" disabled>Copiar Sensi</button>
+                  <button id="btnClear" type="button" class="btn btn-ghost">Limpiar</button>
                 </div>
               </section>
             </div>
@@ -248,7 +248,7 @@
                   <thead><tr><th>Ajuste</th><th>Valor</th></tr></thead>
                   <tbody></tbody>
                 </table>
-                <div class="kn-sensi-export-actions" aria-label="Exportar Sensi">
+                <div class="kn-sensi-export-actions" role="group" aria-label="Exportar Sensi">
                   <button id="btnCopySensi" class="btn btn-primary" type="button">Copiar Sensi</button>
                   <button id="btnWhatsAppSensi" class="btn" type="button">WhatsApp</button>
                   <button id="btnShareSensi" class="btn" type="button">Compartir</button>
@@ -272,7 +272,7 @@
       </div>
     </section>
 
-    <section id="panel-players" class="panel kn-tool-panel" role="tabpanel" aria-labelledby="tab-players">
+    <section id="panel-players" class="panel kn-tool-panel" role="tabpanel" aria-labelledby="tab-players" hidden>
       <div class="space-y-5">
         <div class="kn-panel-heading kn-players-heading">
           <div>
@@ -531,10 +531,12 @@
 
       if (tabName) {
         tabName.classList.add('hidden');
+        tabName.setAttribute('aria-selected', 'false');
       }
 
       if (tabSensi) {
         tabSensi.classList.add('hidden');
+        tabSensi.setAttribute('aria-selected', 'false');
       }
 
       if (tabPlayers) {
@@ -544,14 +546,17 @@
 
       if (panelName) {
         panelName.classList.remove('active');
+        panelName.hidden = true;
       }
 
       if (panelSensi) {
         panelSensi.classList.remove('active');
+        panelSensi.hidden = true;
       }
 
       if (panelPlayers) {
         panelPlayers.classList.add('active');
+        panelPlayers.hidden = false;
       }
 
       if (signOutButton) {

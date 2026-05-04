@@ -38,6 +38,11 @@
       link.classList.toggle('shadow-md', isActive && isAvailable);
       link.setAttribute('aria-disabled', isAvailable ? 'false' : 'true');
       link.setAttribute('aria-current', isActive && isAvailable ? 'page' : 'false');
+      if (isAvailable) {
+        link.removeAttribute('tabindex');
+      } else {
+        link.setAttribute('tabindex', '-1');
+      }
     });
   }
 
@@ -53,6 +58,7 @@
       const isSelected = tab.id === selectedTab.id;
       tab.btn.setAttribute('aria-selected', isSelected ? 'true' : 'false');
       tab.panel.classList.toggle('active', isSelected);
+      tab.panel.hidden = !isSelected;
     });
 
     updateNavState(selectedTab.id);
